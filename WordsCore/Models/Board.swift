@@ -24,6 +24,26 @@ extension Board {
     func tiles(at spots: [Spot]) -> [Tile] {
         spots.compactMap(tile)
     }
+
+    func leftDiff(against: Board) -> [Spot] {
+        zip(spots, against.spots).reduce(into: []) { buffer, row in
+            zip(row.0, row.1).forEach { oldSpot, newSpot in
+                if oldSpot != newSpot {
+                    buffer.append(oldSpot)
+                }
+            }
+        }
+    }
+    
+    func rightDiff(against: Board) -> [Spot] {
+        zip(spots, against.spots).reduce(into: []) { buffer, row in
+            zip(row.0, row.1).forEach { oldSpot, newSpot in
+                if oldSpot != newSpot {
+                    buffer.append(newSpot)
+                }
+            }
+        }
+    }
 }
 
 public extension Sequence where Element == [Spot] {

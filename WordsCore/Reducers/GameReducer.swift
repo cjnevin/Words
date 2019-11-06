@@ -21,15 +21,19 @@ public let gameReducer: Reducer<GameState, GameAction> = Reducer { state, action
         })
 
     case let placeTile as RackAction.Place:
-        guard let heldTile = state.turn.heldTile else {
-            preconditionFailure("Held tile should not be null.")
+        guard var player = state.currentPlayer else {
+            preconditionFailure("No current player.")
         }
+        guard let heldTile = state.turn.heldTile else {
+            return
+        }
+        precondition(player.tiles.contains(heldTile), "Player is not holding this tile.")
         var spot = placeTile.spot
         if spot.tile == nil {
             spot.tile = heldTile
             state.turn.board.spots[placeTile.spot.row][placeTile.spot.column] = spot
-        } else {
-            state.players[state.playerIndex].tiles.append(heldTile)
+            player.remove(tiles: [heldTile])
+            state.currentPlayer = player
         }
         state.turn.heldTile = nil
 
@@ -38,17 +42,23 @@ public let gameReducer: Reducer<GameState, GameAction> = Reducer { state, action
             preconditionFailure("No current player.")
         }
         precondition(player.tiles.contains(pickUpTile.tile), "Player is not holding this tile.")
-        precondition(state.turn.heldTile == nil, "Held tile should be null.")
         state.turn.heldTile = pickUpTile.tile
-        player.remove(tiles: [pickUpTile.tile])
-        state.currentPlayer = player
 
     case let returnTile as RackAction.Return:
+        guard var player = state.currentPlayer else {
+            preconditionFailure("No current player.")
+        }
+        guard let tile = returnTile.spot.tile else {
+            preconditionFailure("Return tile should not be null.")
+        }
         var spot = returnTile.spot
         spot.tile = nil
         state.turn.board.spots[returnTile.spot.row][returnTile.spot.column] = spot
+        player.tiles.append(tile)
+        state.currentPlayer = player
 
     case is RackAction.ReturnAll:
+        state.restoreRack()
         state.turn.board = state.board
 
     case is RackAction.Shuffle:
@@ -92,7 +102,7 @@ public let gameReducer: Reducer<GameState, GameAction> = Reducer { state, action
 
     case is TurnAction.Skip:
         precondition(state.currentPlayer != nil, "No current player.")
-        precondition(state.turn.heldTile == nil, "Player is holding a tile.")
+        state.restoreRack()
         state.nextPlayer()
 
     default:

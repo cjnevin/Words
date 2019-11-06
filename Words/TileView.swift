@@ -12,18 +12,19 @@ import WordsCore
 struct TileView: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     var tile: Tile
+    var isSelected: Bool
+    var onSelection: () -> Void
 
     var body: some View {
-        tile.backgroundColor
-            .overlay(tile.text)
-            .shadow(color: tile.lineColor, radius: 1, x: 0, y: 0)
-            .aspectRatio(1, contentMode: .fit)
+        Button(action: onSelection) {
+            tile.view(isSelected: isSelected)
+        }
     }
 }
 
 struct TileView_Previews: PreviewProvider {
     static var previews: some View {
-        TileView(tile: Tile(face: "A", value: 1))
+        TileView(tile: Tile(face: "A", value: 1), isSelected: false, onSelection: { })
     }
 }
 
@@ -38,19 +39,20 @@ extension Tile {
         Tile(face: "G", value: 1)
     ]
 
-    var text: some View {
-        Text(face).font(.largeTitle).minimumScaleFactor(0.01).foregroundColor(foregroundColor)
-    }
+    func view(isSelected: Bool) -> some View {
+        let suffix = isSelected ? "Selected" : ""
+        let backgroundColor = Color("tile" + suffix)
+        let foregroundColor = Color("tileForeground" + suffix)
+        let lineColor = Color("tileLine" + suffix)
 
-    var backgroundColor: Color {
-        Color("tile")
-    }
+        let text = Text(face)
+            .font(.largeTitle)
+            .minimumScaleFactor(0.01)
+            .foregroundColor(foregroundColor)
 
-    var foregroundColor: Color {
-        Color("tileForeground")
-    }
-
-    var lineColor: Color {
-        Color("tileLine")
+        return backgroundColor
+            .overlay(text)
+            .shadow(color: lineColor, radius: 1, x: 0, y: 0)
+            .aspectRatio(1, contentMode: .fit)
     }
 }

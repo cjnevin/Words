@@ -25,6 +25,10 @@ public struct GameState: Codable {
         return turn.board
     }
 
+    public var heldTile: Tile? {
+        return turn.heldTile
+    }
+
     var board: Board = Board()
     public internal(set) var players: [Player] = []
     var playerIndex: Int = 0
@@ -33,6 +37,11 @@ public struct GameState: Codable {
     
     public var canSubmit: Bool {
         return turn.canSubmit
+    }
+
+    mutating func restoreRack() {
+        let tiles = board.rightDiff(against: turn.board).compactMap { $0.tile }
+        currentPlayer?.tiles.append(contentsOf: tiles)
     }
 
     mutating func nextPlayer() {

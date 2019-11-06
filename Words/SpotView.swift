@@ -13,11 +13,14 @@ struct SpotView: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
 
     var spot: Spot
+    var onSelection: () -> Void
 
     var body: some View {
-        spot.backgroundColor
-            .overlay(spot.text.minimumScaleFactor(0.01))
-            .shadow(color: spot.lineColor, radius: 1, x: 0, y: 0)
+        Button(action: onSelection) {
+            spot.backgroundColor
+                .overlay(spot.text.minimumScaleFactor(0.01))
+                .shadow(color: spot.lineColor, radius: 1, x: 0, y: 0)
+        }
     }
 }
 
@@ -28,9 +31,9 @@ struct SquareView_Previews: PreviewProvider {
 
     static var previews: some View {
         VStack {
-            SpotView(spot: spot).colorScheme(.dark)
+            SpotView(spot: spot, onSelection: { }).colorScheme(.dark)
             
-            SpotView(spot: spot).colorScheme(.light)
+            SpotView(spot: spot, onSelection: { }).colorScheme(.light)
         }
     }
 }

@@ -11,11 +11,12 @@ import WordsCore
 
 struct BoardView: View {
     var board: Board
+    var onSpotSelection: (Spot) -> Void
 
     var body: some View {
         VStack(spacing: 0) {
             ForEach(board.spots) { row in
-                RowView(spots: row)
+                RowView(onSpotSelection: self.onSpotSelection, spots: row)
             }
         }.aspectRatio(1, contentMode: .fit)
     }
@@ -24,9 +25,9 @@ struct BoardView: View {
 struct BoardView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            BoardView(board: Board(spots: .defaultLayout)).colorScheme(.dark)
+            BoardView(board: Board(spots: .defaultLayout), onSpotSelection: { _ in }).colorScheme(.dark)
 
-            BoardView(board: Board(spots: .defaultLayout)).colorScheme(.light)
+            BoardView(board: Board(spots: .defaultLayout), onSpotSelection: { _ in }).colorScheme(.light)
         }
     }
 }

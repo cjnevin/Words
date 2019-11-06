@@ -13,11 +13,15 @@ struct RackView: View {
     @EnvironmentObject var device: Device
 
     var tiles: [Tile]
+    var selectedTile: Tile?
+    var onTileSelection: (Tile) -> Void
 
     var body: some View {
         Stack(verticalIfPortrait: false) {
             ForEach(tiles) { tile in
-                TileView(tile: tile)
+                TileView(tile: tile, isSelected: tile == self.selectedTile) {
+                    self.onTileSelection(tile)
+                }
             }
         }
     }
@@ -26,9 +30,9 @@ struct RackView: View {
 struct RackView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            RackView(tiles: Tile.preview).colorScheme(.dark)
+            RackView(tiles: Tile.preview, onTileSelection: { _ in }).colorScheme(.dark)
 
-            RackView(tiles: Tile.preview).colorScheme(.light)
+            RackView(tiles: Tile.preview, onTileSelection: { _ in }).colorScheme(.light)
         }.environmentObject(Device())
     }
 }

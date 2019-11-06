@@ -15,7 +15,10 @@ struct GameView: ConnectedView {
         let players: [Player]
         let current: Player
         let board: Board
+        let heldTile: Tile?
         let tiles: [Tile]
+        let tileSelection: (Tile) -> Void
+        let spotSelection: (Spot) -> Void
         let shuffle: () -> Void
         let skip: () -> Void
     }
@@ -28,30 +31,43 @@ struct GameView: ConnectedView {
             players: state.players,
             current: state.currentPlayer!,
             board: state.latestBoard,
+            heldTile: state.heldTile,
             tiles: state.currentPlayer?.tiles ?? [],
+            tileSelection: { store.send(RackAction.PickUp(tile: $0)) },
+            spotSelection: { spot in
+                store.send(spot.tile == nil ? RackAction.Place(at: spot) : RackAction.Return(from: spot))
+        },
             shuffle: { store.send(RackAction.Shuffle()) },
             skip: { store.send(TurnAction.Skip()) }
         )
     }
 
+    func menu(props: Props) -> some View {
+        Stack(verticalIfPortrait: false) {
+            Button(action: props.shuffle) {
+                Image(systemName: "shuffle")
+            }
+            Spacer()
+            Button(action: props.skip) {
+                Image(systemName: "arrow.uturn.right")
+            }
+        }.padding()
+    }
+
+    func content(props: Props) -> some View {
+        Stack {
+            Spacer()
+            ScoreboardView(players: props.players, current: props.current)
+            BoardView(board: props.board, onSpotSelection: props.spotSelection)
+            RackView(tiles: props.tiles, selectedTile: props.heldTile, onTileSelection: props.tileSelection)
+            Spacer()
+        }
+    }
+
     func innerBody(props: Props) -> some View {
         Stack {
-            Stack(verticalIfPortrait: false) {
-                Button(action: props.shuffle) {
-                    Image(systemName: "shuffle")
-                }
-                Spacer()
-                Button(action: props.skip) {
-                    Image(systemName: "arrow.uturn.right")
-                }
-            }.padding()
-            Stack {
-                Spacer()
-                ScoreboardView(players: props.players, current: props.current)
-                BoardView(board: props.board)
-                RackView(tiles: props.tiles)
-                Spacer()
-            }
+            menu(props: props)
+            content(props: props)
         }.padding(4)
     }
 

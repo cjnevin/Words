@@ -10,12 +10,15 @@ import SwiftUI
 import WordsCore
 
 struct RowView: View {
+    var onSpotSelection: (Spot) -> Void
     var spots: [Spot]
-
+    
     var body: some View {
         HStack(spacing: 0) {
             ForEach(spots) { spot in
-                SpotView(spot: spot)
+                SpotView(spot: spot) {
+                    self.onSpotSelection(spot)
+                }
             }
         }
     }
@@ -24,22 +27,26 @@ struct RowView: View {
 struct RowView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            RowView(spots: [
-                Spot(row: 0, column: 0, middle: false, multiplier: 1, wordMultiplier: 1, tile: nil),
-                Spot(row: 0, column: 1, middle: false, multiplier: 2, wordMultiplier: 1, tile: nil),
-                Spot(row: 0, column: 2, middle: false, multiplier: 1, wordMultiplier: 2, tile: nil),
-                Spot(row: 0, column: 3, middle: false, multiplier: 3, wordMultiplier: 1, tile: nil),
-                Spot(row: 0, column: 4, middle: false, multiplier: 1, wordMultiplier: 3, tile: nil),
-                Spot(row: 0, column: 5, middle: false, multiplier: 1, wordMultiplier: 1, tile: .init(face: "A", value: 1))
+            RowView(
+                onSpotSelection: { _ in },
+                spots: [
+                    Spot(row: 0, column: 0, middle: false, multiplier: 1, wordMultiplier: 1, tile: nil),
+                    Spot(row: 0, column: 1, middle: false, multiplier: 2, wordMultiplier: 1, tile: nil),
+                    Spot(row: 0, column: 2, middle: false, multiplier: 1, wordMultiplier: 2, tile: nil),
+                    Spot(row: 0, column: 3, middle: false, multiplier: 3, wordMultiplier: 1, tile: nil),
+                    Spot(row: 0, column: 4, middle: false, multiplier: 1, wordMultiplier: 3, tile: nil),
+                    Spot(row: 0, column: 5, middle: false, multiplier: 1, wordMultiplier: 1, tile: .init(face: "A", value: 1))
             ]).colorScheme(.dark)
-
-            RowView(spots: [
-                Spot(row: 0, column: 0, middle: false, multiplier: 1, wordMultiplier: 1, tile: nil),
-                Spot(row: 0, column: 1, middle: false, multiplier: 2, wordMultiplier: 1, tile: nil),
-                Spot(row: 0, column: 2, middle: false, multiplier: 1, wordMultiplier: 2, tile: nil),
-                Spot(row: 0, column: 3, middle: false, multiplier: 3, wordMultiplier: 1, tile: nil),
-                Spot(row: 0, column: 4, middle: false, multiplier: 1, wordMultiplier: 3, tile: nil),
-                Spot(row: 0, column: 5, middle: false, multiplier: 1, wordMultiplier: 1, tile: .init(face: "A", value: 1))
+            
+            RowView(
+                onSpotSelection: { _ in },
+                spots: [
+                    Spot(row: 0, column: 0, middle: false, multiplier: 1, wordMultiplier: 1, tile: nil),
+                    Spot(row: 0, column: 1, middle: false, multiplier: 2, wordMultiplier: 1, tile: nil),
+                    Spot(row: 0, column: 2, middle: false, multiplier: 1, wordMultiplier: 2, tile: nil),
+                    Spot(row: 0, column: 3, middle: false, multiplier: 3, wordMultiplier: 1, tile: nil),
+                    Spot(row: 0, column: 4, middle: false, multiplier: 1, wordMultiplier: 3, tile: nil),
+                    Spot(row: 0, column: 5, middle: false, multiplier: 1, wordMultiplier: 1, tile: .init(face: "A", value: 1))
             ]).colorScheme(.light)
         }
     }

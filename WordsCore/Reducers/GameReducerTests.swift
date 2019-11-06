@@ -25,8 +25,8 @@ class GameReducerTests: XCTestCase {
     }
     
     func testSwapTilesReturnsDifferentTiles() {
-        let swappingPlayer = Player(tiles: [.a, .b, .c, .d, .e, .f, .g])
-        let nextPlayer = Player(tiles: [.h, .i])
+        let swappingPlayer = Player(name: "Player 1", tiles: [.a, .b, .c, .d, .e, .f, .g])
+        let nextPlayer = Player(name: "Player 2", tiles: [.h, .i])
         let action = TurnAction.Exchange(tiles: [.a, .b, .c])
         let initialState = GameState(
             players: [swappingPlayer, nextPlayer],
@@ -51,12 +51,11 @@ class GameReducerTests: XCTestCase {
     }
 
     func testPickUpSetsHeldTile() {
-        let state = GameState(players: [.init(tiles: [.a], score: 0)])
+        let state = GameState(players: [.init(name: "Player 1", tiles: [.a], score: 0)])
         let action = RackAction.PickUp(tile: .a)
         let store = Store(initialState: state, reducer: gameReducer, dependencies: GameDependencies.mocked)
         store.send(action)
         XCTAssertEqual(store.state.turn.heldTile, .a)
-        XCTAssertTrue(store.state.currentPlayer!.tiles.isEmpty)
     }
 
     func testPlaceAtOccupiedSpot() {
@@ -67,19 +66,18 @@ class GameReducerTests: XCTestCase {
             .empty(row: 2, columns: 3)
         ])
         let action = RackAction.Place(at: oldSpot)
-        let state = GameState(board: oldBoard, players: [.init()], turn: .init(board: oldBoard, heldTile: .b))
+        let state = GameState(board: oldBoard, players: [.init(name: "Player 1", tiles: [.b])], turn: .init(board: oldBoard, heldTile: .b))
         let store = Store(initialState: state, reducer: gameReducer, dependencies: GameDependencies.mocked)
         store.send(action)
         XCTAssertEqual(store.state.turn.board, store.state.board)
         XCTAssertEqual(store.state.currentPlayer?.tiles, [.b])
         XCTAssertNil(store.state.turn.heldTile)
-        XCTAssertTrue(state.currentPlayer!.tiles.isEmpty)
     }
 
     func testPlaceAtFreeSpot() {
         let oldBoard = Board(spots: .empty(rows: 3, columns: 3))
         let action = RackAction.Place(at: .empty(1, 1))
-        let state = GameState(board: oldBoard, players: [.init()], turn: .init(board: oldBoard, heldTile: .a))
+        let state = GameState(board: oldBoard, players: [.init(name: "Player 1", tiles: [.a])], turn: .init(board: oldBoard, heldTile: .a))
         let store = GameStore(initialState: state, reducer: gameReducer, dependencies: GameDependencies.mocked)
         store.send(action)
         XCTAssertNotEqual(store.state.turn.board, store.state.board)
@@ -97,7 +95,7 @@ class GameReducerTests: XCTestCase {
         ])
         let spot = Spot(row: 1, column: 2, middle: false, multiplier: 1, wordMultiplier: 1, tile: .a)
         let action = RackAction.Return(from: spot)
-        let initialState = GameState(board: oldBoard, turn: .init(board: newBoard))
+        let initialState = GameState(board: oldBoard, players: [.init(name: "Player 1")], turn: .init(board: newBoard))
         let store = GameStore(initialState: initialState, reducer: gameReducer, dependencies: GameDependencies.mocked)
         store.send(action)
         XCTAssertEqual(store.state.turn.board, store.state.board)
@@ -110,15 +108,16 @@ class GameReducerTests: XCTestCase {
             .filled(row: 1, tiles: [.a, .b, .c]),
             .empty(row: 2, columns: 3)
         ])
-        let initialState = GameState(board: oldBoard, turn: .init(board: newBoard))
+        let initialState = GameState(board: oldBoard, players: [.init(name: "Player 1")], turn: .init(board: newBoard))
         let action = RackAction.ReturnAll()
         let store = Store(initialState: initialState, reducer: gameReducer, dependencies: GameDependencies.mocked)
         store.send(action)
         XCTAssertEqual(store.state.turn.board, store.state.board)
+        XCTAssertEqual(store.state.currentPlayer!.tiles, [.a, .b, .c])
     }
 
     func testTilesAreShuffled() {
-        let player = Player(tiles: [.a, .b, .c, .d, .e, .f, .g], score: 0)
+        let player = Player(name: "Player 1", tiles: [.a, .b, .c, .d, .e, .f, .g], score: 0)
         let initialState = GameState(players: [player])
         let store = Store(initialState: initialState, reducer: gameReducer, dependencies: GameDependencies.mocked)
         let action = RackAction.Shuffle()
@@ -169,14 +168,34 @@ class GameReducerTests: XCTestCase {
     }
 
     func testSkipGoesToNextPlayer() {
-        let a = Player(tiles: [.a])
-        let b = Player(tiles: [.b])
+        let a = Player(name: "Player 1", tiles: [.a])
+        let b = Player(name: "Player 2", tiles: [.b])
         let initialState = GameState(players: [a, b])
         let store = Store(initialState: initialState, reducer: gameReducer, dependencies: GameDependencies.mocked)
         [a, b, a].forEach {
             XCTAssertEqual(store.state.currentPlayer, $0)
             store.send(TurnAction.Skip())
         }
+    }
+
+    func testSkipRestoresTilesBeforeSkipping() {
+        let oldBoard = Board(spots: .empty(rows: 3, columns: 3))
+        let newBoard = Board(spots: [
+            .empty(row: 0, columns: 3),
+            .filled(row: 1, tiles: [.a, .b, .c]),
+            .empty(row: 2, columns: 3)
+        ])
+        let a = Player(name: "Player 1", tiles: [])
+        let b = Player(name: "Player 2", tiles: [.b])
+        let initialState = GameState(board: oldBoard, players: [a, b], turn: .init(board: newBoard))
+        let store = Store(initialState: initialState, reducer: gameReducer, dependencies: GameDependencies.mocked)
+        XCTAssertEqual(store.state.currentPlayer, a)
+        XCTAssertTrue(store.state.currentPlayer!.tiles.isEmpty)
+        store.send(TurnAction.Skip())
+        XCTAssertEqual(store.state.currentPlayer, b)
+        store.send(TurnAction.Skip())
+        XCTAssertEqual(store.state.currentPlayer!.name, a.name)
+        XCTAssertEqual(store.state.currentPlayer!.tiles, [.a, .b, .c])
     }
 }
 
