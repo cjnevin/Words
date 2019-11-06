@@ -16,8 +16,9 @@ struct SquareView: View {
 
     var body: some View {
         spot.backgroundColor
-            .overlay(Text(spot.tile?.face ?? "").foregroundColor(spot.foregroundColor))
+            .overlay(spot.text.minimumScaleFactor(0.01))
             .shadow(color: spot.lineColor, radius: 1, x: 0, y: 0)
+            .aspectRatio(contentMode: .fit)
     }
 }
 
@@ -39,14 +40,29 @@ private extension Spot {
     private var name: String {
         if tile != nil {
             return "tile"
+        } else if middle {
+            return "center"
         }
         switch (multiplier, wordMultiplier) {
-        case (1, 2) where middle: return "center"
         case (2, _): return "doubleLetter"
         case (_, 2): return "doubleWord"
         case (3, _): return "tripleLetter"
         case (_, 3): return "tripleWord"
         default: return "default"
+        }
+    }
+
+    var text: Text {
+        if let face = tile?.face {
+            return Text(face)
+                .font(.headline)
+                .foregroundColor(foregroundColor)
+        } else if multiplier + wordMultiplier > 2 {
+            return Text(NSLocalizedString(name, comment: name))
+                .font(.caption)
+                .foregroundColor(foregroundColor)
+        } else {
+            return Text("")
         }
     }
 

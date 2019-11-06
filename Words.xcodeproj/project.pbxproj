@@ -22,6 +22,7 @@
 		837474E9237325D9005A4B06 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837474E8237325D9005A4B06 /* BoardView.swift */; };
 		837474EB23732D41005A4B06 /* RackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837474EA23732D41005A4B06 /* RackView.swift */; };
 		837474ED23732D56005A4B06 /* TileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837474EC23732D56005A4B06 /* TileView.swift */; };
+		837474F323733736005A4B06 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 837474F223733736005A4B06 /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,6 +95,7 @@
 		837474E8237325D9005A4B06 /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
 		837474EA23732D41005A4B06 /* RackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RackView.swift; sourceTree = "<group>"; };
 		837474EC23732D56005A4B06 /* TileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileView.swift; sourceTree = "<group>"; };
+		837474F223733736005A4B06 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +143,7 @@
 				837474EC23732D56005A4B06 /* TileView.swift */,
 				8374748B237313A6005A4B06 /* Assets.xcassets */,
 				83747490237313A6005A4B06 /* LaunchScreen.storyboard */,
+				837474F223733736005A4B06 /* Localizable.strings */,
 				83747493237313A6005A4B06 /* Info.plist */,
 				8374748D237313A6005A4B06 /* Preview Content */,
 			);
@@ -275,6 +278,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				83747492237313A6005A4B06 /* LaunchScreen.storyboard in Resources */,
+				837474F323733736005A4B06 /* Localizable.strings in Resources */,
 				8374748F237313A6005A4B06 /* Preview Assets.xcassets in Resources */,
 				8374748C237313A6005A4B06 /* Assets.xcassets in Resources */,
 			);

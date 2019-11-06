@@ -16,7 +16,6 @@ struct RowView: View {
         HStack(spacing: 0) {
             ForEach(spots) { spot in
                 SquareView(spot: spot)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             }
         }
     }
@@ -42,6 +41,8 @@ struct RowView_Previews: PreviewProvider {
                 Spot(row: 0, column: 4, middle: false, multiplier: 1, wordMultiplier: 3, tile: nil),
                 Spot(row: 0, column: 5, middle: false, multiplier: 1, wordMultiplier: 1, tile: .init(face: "A", value: 1))
             ]).colorScheme(.light)
+
+            Spacer()
         }
     }
 }

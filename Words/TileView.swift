@@ -14,11 +14,10 @@ struct TileView: View {
     var tile: Tile
 
     var body: some View {
-        tile.backgroundColor .overlay(Text(tile.face).foregroundColor(tile.foregroundColor))
+        tile.backgroundColor
+            .overlay(tile.text)
             .shadow(color: tile.lineColor, radius: 1, x: 0, y: 0)
-            .frame(maxWidth: .infinity,
-                   maxHeight: 60,
-                   alignment: .center)
+            .aspectRatio(contentMode: .fit)
     }
 }
 
@@ -38,6 +37,10 @@ extension Tile {
         Tile(face: "F", value: 1),
         Tile(face: "G", value: 1)
     ]
+
+    var text: some View {
+        Text(face).font(.largeTitle).minimumScaleFactor(0.01).foregroundColor(foregroundColor)
+    }
 
     var backgroundColor: Color {
         Color("tile")

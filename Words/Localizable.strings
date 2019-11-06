@@ -1,0 +1,13 @@
+/* 
+  Localizable.strings
+  Words
+
+  Created by Chris on 06/11/2019.
+  Copyright © 2019 Chris. All rights reserved.
+*/
+"doubleLetter"="DL";
+"doubleWord"="DW";
+"tripleLetter"="TL";
+"tripleWord"="TW";
+"doubleLetter"="DL";
+"center"="★";
