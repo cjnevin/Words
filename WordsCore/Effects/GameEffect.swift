@@ -10,11 +10,16 @@ import Foundation
 import Combine
 import Redux
 
-struct ValidationEffect: Effect {
+public struct ValidationEffect: Effect {
     let oldBoard: Board
     let newBoard: Board
 
-    func mapToAction(dependencies: GameDependencies) -> AnyPublisher<GameAction, Never> {
+    init(oldBoard: Board, newBoard: Board) {
+        self.oldBoard = oldBoard
+        self.newBoard = newBoard
+    }
+
+    public func mapToAction(dependencies: GameDependencies) -> AnyPublisher<GameAction, Never> {
         let subject = PassthroughSubject<GameAction, Never>()
         dependencies.backgroundDispatch {
             let candidates = CompoundPlacement(oldBoard: self.oldBoard, newBoard: self.newBoard).candidates(on: self.newBoard)
@@ -32,5 +37,12 @@ struct ValidationEffect: Effect {
             }
         }
         return subject.eraseToAnyPublisher()
+    }
+}
+
+public extension ValidationEffect {
+    init(state: GameState) {
+        oldBoard = state.board
+        newBoard = state.turn.board
     }
 }

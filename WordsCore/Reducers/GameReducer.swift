@@ -94,7 +94,7 @@ public let gameReducer: Reducer<GameState, GameAction> = Reducer { state, action
         guard var player = state.currentPlayer else {
             preconditionFailure("No current player.")
         }
-        precondition(state.turn.canSubmit)
+        precondition(state.turn.canSubmit, "Submission not possible.")
         player.score += state.turn.score
         state.currentPlayer = player
         state.board = state.turn.board

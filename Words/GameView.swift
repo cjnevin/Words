@@ -17,10 +17,13 @@ struct GameView: ConnectedView {
         let board: Board
         let heldTile: Tile?
         let tiles: [Tile]
+        let canSubmit: Bool
+
         let tileSelection: (Tile) -> Void
         let spotSelection: (Spot) -> Void
         let shuffle: () -> Void
         let skip: () -> Void
+        let submit: () -> Void
     }
 
     @Environment(\.colorScheme) var colorScheme: ColorScheme
@@ -33,24 +36,48 @@ struct GameView: ConnectedView {
             board: state.latestBoard,
             heldTile: state.heldTile,
             tiles: state.currentPlayer?.tiles ?? [],
-            tileSelection: { store.send(RackAction.PickUp(tile: $0)) },
+            canSubmit: state.canSubmit,
+            tileSelection: {
+                store.send(RackAction.PickUp(tile: $0))
+                store.send(ValidationEffect(state: store.state))
+        },
             spotSelection: { spot in
                 store.send(spot.tile == nil ? RackAction.Place(at: spot) : RackAction.Return(from: spot))
+                store.send(ValidationEffect(state: store.state))
         },
             shuffle: { store.send(RackAction.Shuffle()) },
-            skip: { store.send(TurnAction.Skip()) }
+            skip: { store.send(TurnAction.Skip()) },
+            submit: { store.send(TurnAction.Submit()) }
         )
     }
 
     func menu(props: Props) -> some View {
-        Stack(verticalIfPortrait: false) {
+        Stack(verticalIfPortrait: false, spacing: 20) {
             Button(action: props.shuffle) {
-                Image(systemName: "shuffle")
+                VStack {
+                    Image(systemName: "shuffle")
+                    Text("Shuffle").font(.callout)
+                }
+            }
+            Button(action: props.shuffle) {
+                VStack {
+                    Image(systemName: "arrow.swap")
+                    Text("Swap").font(.callout)
+                }
             }
             Spacer()
             Button(action: props.skip) {
-                Image(systemName: "arrow.uturn.right")
+                VStack {
+                    Image(systemName: "arrow.uturn.right")
+                    Text("Skip").font(.callout)
+                }
             }
+            Button(action: props.submit) {
+                VStack {
+                    Image(systemName: "arrow.turn.up.right")
+                    Text("Submit").font(.callout)
+                }
+            }.disabled(!props.canSubmit)
         }.padding()
     }
 
