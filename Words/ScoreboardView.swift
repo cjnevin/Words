@@ -14,18 +14,12 @@ struct ScoreboardView: View {
     var players: [Player]
     var current: Player
 
-    @ViewBuilder
-    var playerViews: some View {
-        ForEach(players) { player in
-            PlayerView(isCurrent: player == self.current, player: player)
-        }
-    }
-
     var body: some View {
-        (device.isLandscape
-            ? AnyView(VStack(spacing: 10) { playerViews })
-            : AnyView(HStack(spacing: 10) { playerViews })
-        ).background(Color("background"))
+        Stack(verticalIfPortrait: false, spacing: 10) {
+            ForEach(players) { player in
+                PlayerView(isCurrent: player == self.current, player: player)
+            }
+        }.background(Color("background"))
     }
 }
 
@@ -38,7 +32,7 @@ struct ScoreboardView_Previews: PreviewProvider {
         let player5 = Player(name: "Player 5", tiles: Tile.preview, score: 500)
         let player6 = Player(name: "Player 6", tiles: Tile.preview, score: 300)
 
-        func makeScoreboardView() -> ScoreboardView {
+        func makeScoreboardView() -> some View {
             ScoreboardView(
                 players: [player1, player2, player3, player4, player5, player6],
                 current: player2
@@ -48,6 +42,6 @@ struct ScoreboardView_Previews: PreviewProvider {
         return VStack(spacing: 10) {
             makeScoreboardView().colorScheme(.dark)
             makeScoreboardView().colorScheme(.light)
-        }
+        }.environmentObject(Device())
     }
 }

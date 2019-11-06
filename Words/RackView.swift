@@ -14,17 +14,12 @@ struct RackView: View {
 
     var tiles: [Tile]
 
-    @ViewBuilder
-    var tileViews: some View {
-        ForEach(tiles) { tile in
-            TileView(tile: tile)
-        }
-    }
-    
     var body: some View {
-        device.isLandscape
-            ? AnyView(VStack { tileViews })
-            : AnyView(HStack { tileViews })
+        Stack(verticalIfPortrait: false) {
+            ForEach(tiles) { tile in
+                TileView(tile: tile)
+            }
+        }
     }
 }
 
@@ -34,6 +29,6 @@ struct RackView_Previews: PreviewProvider {
             RackView(tiles: Tile.preview).colorScheme(.dark)
 
             RackView(tiles: Tile.preview).colorScheme(.light)
-        }
+        }.environmentObject(Device())
     }
 }
