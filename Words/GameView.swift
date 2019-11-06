@@ -21,7 +21,7 @@ struct GameView: ConnectedView {
     }
 
     @Environment(\.colorScheme) var colorScheme: ColorScheme
-    @EnvironmentObject var store: GameStore
+    @EnvironmentObject var device: Device
 
     func map(state: GameState, store: GameStore) -> Props {
         return Props(
@@ -34,27 +34,60 @@ struct GameView: ConnectedView {
         )
     }
 
-    func body(props: Props) -> some View {
-        NavigationView {
-            Color("background")
-                .edgesIgnoringSafeArea(.all)
-                .overlay(
-                    VStack {
-                        ScoreboardView(players: props.players, current: props.current)
-                        BoardView(board: props.board)
-                        RackView(tiles: props.tiles)
-                        Spacer()
-                    }.padding(4)
-                )
-                .navigationBarItems(trailing: HStack {
-                    Button(action: props.shuffle) {
-                        Image(systemName: "shuffle")
-                    }
-                    Button(action: props.skip) {
-                        Image(systemName: "arrow.uturn.right")
-                    }
-                })
+    func shuffle(props: Props) -> some View {
+        Button(action: props.shuffle) {
+            Image(systemName: "shuffle")
         }
+    }
+
+    func skip(props: Props) -> some View {
+        Button(action: props.skip) {
+            Image(systemName: "arrow.uturn.right")
+        }
+    }
+
+    @ViewBuilder
+    func menu(props: Props) -> some View {
+        shuffle(props: props)
+        Spacer()
+        skip(props: props)
+    }
+
+    @ViewBuilder
+    func content(props: Props) -> some View {
+        Spacer()
+        ScoreboardView(players: props.players, current: props.current)
+        BoardView(board: props.board)
+        RackView(tiles: props.tiles)
+        Spacer()
+    }
+
+    func landscape(props: Props) -> some View {
+        HStack {
+            VStack {
+                menu(props: props)
+            }.padding()
+            content(props: props)
+        }.padding(4)
+    }
+
+    func portrait(props: Props) -> some View {
+        VStack {
+            HStack {
+                menu(props: props)
+            }.padding()
+            content(props: props)
+        }.padding(4)
+    }
+
+    func body(props: Props) -> some View {
+        Color("background")
+            .edgesIgnoringSafeArea(.all)
+        .overlay(
+            device.isLandscape
+                ? AnyView(landscape(props: props))
+                : AnyView(portrait(props: props))
+        )
     }
 }
 

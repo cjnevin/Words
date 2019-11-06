@@ -15,6 +15,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
+    let device = Device()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -24,15 +25,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Create the SwiftUI view that provides the window contents.
         let storeProvider = StoreProvider(store: .preview) {
             GameView()
-        }
+        }.environmentObject(device)
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
+            device.isLandscape = windowScene.interfaceOrientation.isLandscape
+
             let window = UIWindow(windowScene: windowScene)
             window.rootViewController = UIHostingController(rootView: storeProvider)
             self.window = window
             window.makeKeyAndVisible()
         }
+    }
+
+    func windowScene(_ windowScene: UIWindowScene, didUpdate previousCoordinateSpace: UICoordinateSpace, interfaceOrientation previousInterfaceOrientation: UIInterfaceOrientation, traitCollection previousTraitCollection: UITraitCollection) {
+        device.isLandscape = windowScene.interfaceOrientation.isLandscape
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

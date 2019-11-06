@@ -10,8 +10,8 @@
 		837474C0237315F7005A4B06 /* Redux.h in Headers */ = {isa = PBXBuildFile; fileRef = 837474BE237315F7005A4B06 /* Redux.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		837474CF2373164D005A4B06 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837474CE2373164D005A4B06 /* Store.swift */; };
 		837474DB23731808005A4B06 /* StoreProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837474DA23731808005A4B06 /* StoreProvider.swift */; };
-		837474DF237318D8005A4B06 /* StoreConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837474DE237318D8005A4B06 /* StoreConnector.swift */; };
-		837474E12373198E005A4B06 /* ConnectedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837474E02373198E005A4B06 /* ConnectedView.swift */; };
+		8374750523736A78005A4B06 /* StoreConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8374750323736A78005A4B06 /* StoreConnector.swift */; };
+		8374750623736A78005A4B06 /* ConnectedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8374750423736A78005A4B06 /* ConnectedView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,8 +20,8 @@
 		837474BF237315F7005A4B06 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		837474CE2373164D005A4B06 /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		837474DA23731808005A4B06 /* StoreProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreProvider.swift; sourceTree = "<group>"; };
-		837474DE237318D8005A4B06 /* StoreConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreConnector.swift; sourceTree = "<group>"; };
-		837474E02373198E005A4B06 /* ConnectedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectedView.swift; sourceTree = "<group>"; };
+		8374750323736A78005A4B06 /* StoreConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreConnector.swift; sourceTree = "<group>"; };
+		8374750423736A78005A4B06 /* ConnectedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectedView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,9 +55,9 @@
 			isa = PBXGroup;
 			children = (
 				837474BE237315F7005A4B06 /* Redux.h */,
-				837474E02373198E005A4B06 /* ConnectedView.swift */,
+				8374750423736A78005A4B06 /* ConnectedView.swift */,
 				837474CE2373164D005A4B06 /* Store.swift */,
-				837474DE237318D8005A4B06 /* StoreConnector.swift */,
+				8374750323736A78005A4B06 /* StoreConnector.swift */,
 				837474DA23731808005A4B06 /* StoreProvider.swift */,
 				837474BF237315F7005A4B06 /* Info.plist */,
 			);
@@ -144,8 +144,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				837474E12373198E005A4B06 /* ConnectedView.swift in Sources */,
-				837474DF237318D8005A4B06 /* StoreConnector.swift in Sources */,
+				8374750623736A78005A4B06 /* ConnectedView.swift in Sources */,
+				8374750523736A78005A4B06 /* StoreConnector.swift in Sources */,
 				837474DB23731808005A4B06 /* StoreProvider.swift in Sources */,
 				837474CF2373164D005A4B06 /* Store.swift in Sources */,
 			);

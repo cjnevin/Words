@@ -10,15 +10,22 @@ import SwiftUI
 import WordsCore
 
 struct ScoreboardView: View {
+    @EnvironmentObject var device: Device
     var players: [Player]
     var current: Player
 
+    @ViewBuilder
+    var playerViews: some View {
+        ForEach(players) { player in
+            PlayerView(isCurrent: player == self.current, player: player)
+        }
+    }
+
     var body: some View {
-        HStack(spacing: 10) {
-            ForEach(players) { player in
-                PlayerView(isCurrent: player == self.current, player: player)
-            }
-        }.background(Color("background"))
+        (device.isLandscape
+            ? AnyView(VStack(spacing: 10) { playerViews })
+            : AnyView(HStack(spacing: 10) { playerViews })
+        ).background(Color("background"))
     }
 }
 
