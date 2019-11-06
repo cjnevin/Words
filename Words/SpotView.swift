@@ -1,5 +1,5 @@
 //
-//  SquareView.swift
+//  SpotView.swift
 //  Words
 //
 //  Created by Chris on 06/11/2019.
@@ -9,7 +9,7 @@
 import SwiftUI
 import WordsCore
 
-struct SquareView: View {
+struct SpotView: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
 
     var spot: Spot
@@ -18,7 +18,6 @@ struct SquareView: View {
         spot.backgroundColor
             .overlay(spot.text.minimumScaleFactor(0.01))
             .shadow(color: spot.lineColor, radius: 1, x: 0, y: 0)
-            .aspectRatio(contentMode: .fit)
     }
 }
 
@@ -29,9 +28,9 @@ struct SquareView_Previews: PreviewProvider {
 
     static var previews: some View {
         VStack {
-            SquareView(spot: spot).colorScheme(.dark)
+            SpotView(spot: spot).colorScheme(.dark)
             
-            SquareView(spot: spot).colorScheme(.light)
+            SpotView(spot: spot).colorScheme(.light)
         }
     }
 }

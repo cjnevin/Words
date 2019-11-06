@@ -17,7 +17,7 @@ struct TileView: View {
         tile.backgroundColor
             .overlay(tile.text)
             .shadow(color: tile.lineColor, radius: 1, x: 0, y: 0)
-            .aspectRatio(contentMode: .fit)
+            .aspectRatio(1, contentMode: .fit)
     }
 }
 

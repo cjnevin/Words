@@ -17,7 +17,7 @@ struct BoardView: View {
             ForEach(board.spots) { row in
                 RowView(spots: row)
             }
-        }.aspectRatio(contentMode: .fit)
+        }.aspectRatio(1, contentMode: .fit)
     }
 }
 
