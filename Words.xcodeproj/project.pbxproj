@@ -23,6 +23,8 @@
 		837474EB23732D41005A4B06 /* RackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837474EA23732D41005A4B06 /* RackView.swift */; };
 		837474ED23732D56005A4B06 /* TileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837474EC23732D56005A4B06 /* TileView.swift */; };
 		837474F323733736005A4B06 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 837474F223733736005A4B06 /* Localizable.strings */; };
+		837474F623734BE0005A4B06 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837474F523734BE0005A4B06 /* PlayerView.swift */; };
+		837474F823734C56005A4B06 /* ScoreboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837474F723734C56005A4B06 /* ScoreboardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,6 +98,8 @@
 		837474EA23732D41005A4B06 /* RackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RackView.swift; sourceTree = "<group>"; };
 		837474EC23732D56005A4B06 /* TileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileView.swift; sourceTree = "<group>"; };
 		837474F223733736005A4B06 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		837474F523734BE0005A4B06 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		837474F723734C56005A4B06 /* ScoreboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreboardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +141,8 @@
 				837474D023731660005A4B06 /* Game.swift */,
 				83747489237313A3005A4B06 /* GameView.swift */,
 				837474E8237325D9005A4B06 /* BoardView.swift */,
+				837474F523734BE0005A4B06 /* PlayerView.swift */,
+				837474F723734C56005A4B06 /* ScoreboardView.swift */,
 				837474EA23732D41005A4B06 /* RackView.swift */,
 				837474E42373226D005A4B06 /* RowView.swift */,
 				837474E6237322CC005A4B06 /* SpotView.swift */,
@@ -294,11 +300,13 @@
 				837474E9237325D9005A4B06 /* BoardView.swift in Sources */,
 				83747486237313A3005A4B06 /* AppDelegate.swift in Sources */,
 				837474E52373226D005A4B06 /* RowView.swift in Sources */,
+				837474F623734BE0005A4B06 /* PlayerView.swift in Sources */,
 				837474D123731660005A4B06 /* Game.swift in Sources */,
 				837474ED23732D56005A4B06 /* TileView.swift in Sources */,
 				837474E7237322CD005A4B06 /* SpotView.swift in Sources */,
 				837474EB23732D41005A4B06 /* RackView.swift in Sources */,
 				83747488237313A3005A4B06 /* SceneDelegate.swift in Sources */,
+				837474F823734C56005A4B06 /* ScoreboardView.swift in Sources */,
 				8374748A237313A3005A4B06 /* GameView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

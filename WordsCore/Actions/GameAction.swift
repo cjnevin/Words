@@ -11,42 +11,58 @@ import Combine
 
 public protocol GameAction { }
 
-enum BagAction {
-    struct Reset: GameAction {
+public enum BagAction {
+    public struct Reset: GameAction {
         let distribution: [Int: (String, Int)]
     }
 }
 
-enum RackAction {
-    struct Place: GameAction {
+public enum RackAction {
+    public struct Place: GameAction {
         let spot: Spot
 
-        init(at spot: Spot) {
+        public init(at spot: Spot) {
             self.spot = spot
         }
     }
 
-    struct PickUp: GameAction {
+    public struct PickUp: GameAction {
         let tile: Tile
+
+        public init(tile: Tile) {
+            self.tile = tile
+        }
     }
 
-    struct Return: GameAction {
+    public struct Return: GameAction {
         let spot: Spot
+
+        public init(from spot: Spot) {
+            self.spot = spot
+        }
     }
 
-    struct ReturnAll: GameAction { }
+    public struct ReturnAll: GameAction {
+        public init() { }
+    }
 
-    struct Shuffle: GameAction { }
+    public struct Shuffle: GameAction {
+        public init() { }
+    }
 }
 
-enum TurnAction {
-    struct Exchange: GameAction {
+public enum TurnAction {
+    public struct Exchange: GameAction {
         let tiles: [Tile]
     }
     
-    struct Skip: GameAction { }
+    public struct Skip: GameAction {
+        public init() { }
+    }
 
-    struct Submit: GameAction { }
+    public struct Submit: GameAction {
+        public init() { }
+    }
 }
 
 enum ValidationAction {

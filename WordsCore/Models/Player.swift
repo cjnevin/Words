@@ -8,13 +8,15 @@
 
 import Foundation
 
-public struct Player: Codable, Equatable {
-    let id: String
+public struct Player: Codable, Equatable, Identifiable {
+    public let id: String
+    public let name: String
     public internal(set) var tiles: [Tile]
     public internal(set) var score: Int
 
-    public init(tiles: [Tile] = [], score: Int = 0) {
+    public init(name: String, tiles: [Tile] = [], score: Int = 0) {
         self.id = UUID().uuidString
+        self.name = name
         self.tiles = tiles
         self.score = score
     }

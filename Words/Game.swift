@@ -36,12 +36,16 @@ private struct RealWordValidator: WordValidator {
 
 private extension Sequence where Element == Player {
     static var preview: [Player] {
-        [.preview]
+        [.player1, .player2]
     }
 }
 
 private extension Player {
-    static var preview: Player {
-        Player(tiles: Tile.preview, score: 0)
+    static var player1: Player {
+        Player(name: "Player 1", tiles: Tile.preview, score: 100)
+    }
+
+    static var player2: Player {
+        Player(name: "Player 2", tiles: Tile.preview.reversed(), score: 250)
     }
 }

@@ -57,7 +57,7 @@ private extension Spot {
                 .font(.headline)
                 .foregroundColor(foregroundColor)
         } else if multiplier + wordMultiplier > 2 {
-            return Text(NSLocalizedString(name, comment: name))
+            return Text(LocalizedStringKey(name))
                 .font(.caption)
                 .foregroundColor(foregroundColor)
         } else {

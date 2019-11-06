@@ -12,8 +12,12 @@ import WordsCore
 
 struct GameView: ConnectedView {
     struct Props {
+        let players: [Player]
+        let current: Player
         let board: Board
         let tiles: [Tile]
+        let shuffle: () -> Void
+        let skip: () -> Void
     }
 
     @Environment(\.colorScheme) var colorScheme: ColorScheme
@@ -21,20 +25,36 @@ struct GameView: ConnectedView {
 
     func map(state: GameState, store: GameStore) -> Props {
         return Props(
+            players: state.players,
+            current: state.currentPlayer!,
             board: state.latestBoard,
-            tiles: state.currentPlayer?.tiles ?? []
+            tiles: state.currentPlayer?.tiles ?? [],
+            shuffle: { store.send(RackAction.Shuffle()) },
+            skip: { store.send(TurnAction.Skip()) }
         )
     }
 
     func body(props: Props) -> some View {
-        Color("background")
-            .edgesIgnoringSafeArea(.all)
-            .overlay(
-                VStack {
-                    BoardView(board: props.board)
-                    RackView(tiles: props.tiles)
-                }.padding(4)
-        )
+        NavigationView {
+            Color("background")
+                .edgesIgnoringSafeArea(.all)
+                .overlay(
+                    VStack {
+                        ScoreboardView(players: props.players, current: props.current)
+                        BoardView(board: props.board)
+                        RackView(tiles: props.tiles)
+                        Spacer()
+                    }.padding(4)
+                )
+                .navigationBarItems(trailing: HStack {
+                    Button(action: props.shuffle) {
+                        Image(systemName: "shuffle")
+                    }
+                    Button(action: props.skip) {
+                        Image(systemName: "arrow.uturn.right")
+                    }
+                })
+        }
     }
 }
 

@@ -96,7 +96,7 @@ class GameReducerTests: XCTestCase {
             .empty(row: 2, columns: 3)
         ])
         let spot = Spot(row: 1, column: 2, middle: false, multiplier: 1, wordMultiplier: 1, tile: .a)
-        let action = RackAction.Return(spot: spot)
+        let action = RackAction.Return(from: spot)
         let initialState = GameState(board: oldBoard, turn: .init(board: newBoard))
         let store = GameStore(initialState: initialState, reducer: gameReducer, dependencies: GameDependencies.mocked)
         store.send(action)

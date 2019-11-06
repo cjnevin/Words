@@ -39,6 +39,7 @@
 		837474D7237316D5005A4B06 /* Redux.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 837474D6237316D5005A4B06 /* Redux.framework */; };
 		837474D8237316D5005A4B06 /* Redux.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 837474D6237316D5005A4B06 /* Redux.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		837474E323731B63005A4B06 /* GameStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837474E223731B63005A4B06 /* GameStore.swift */; };
+		837474FA23734DE8005A4B06 /* Array+Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837474F923734DE8005A4B06 /* Array+Identifiable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,6 +101,7 @@
 		8374744F237310D9005A4B06 /* MockDependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockDependencies.swift; sourceTree = "<group>"; };
 		837474D6237316D5005A4B06 /* Redux.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Redux.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		837474E223731B63005A4B06 /* GameStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStore.swift; sourceTree = "<group>"; };
+		837474F923734DE8005A4B06 /* Array+Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Identifiable.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,6 +179,7 @@
 		8374742C237310D8005A4B06 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				837474F923734DE8005A4B06 /* Array+Identifiable.swift */,
 				8374742E237310D8005A4B06 /* Sequence+Intersection.swift */,
 				8374742D237310D8005A4B06 /* SequenceTests.swift */,
 			);
@@ -365,6 +368,7 @@
 				83747466237310D9005A4B06 /* GameReducer.swift in Sources */,
 				8374745F237310D9005A4B06 /* Tile.swift in Sources */,
 				837474E323731B63005A4B06 /* GameStore.swift in Sources */,
+				837474FA23734DE8005A4B06 /* Array+Identifiable.swift in Sources */,
 				83747452237310D9005A4B06 /* Sequence+Intersection.swift in Sources */,
 				83747453237310D9005A4B06 /* GameEffect.swift in Sources */,
 				83747459237310D9005A4B06 /* TileBag.swift in Sources */,

@@ -116,9 +116,3 @@ extension Sequence where Element == [Spot] {
         reduce(into: []) { $0 += $1.filled }
     }
 }
-
-extension Array: Identifiable where Element == Spot {
-    public var id: String {
-        return map { $0.id }.joined(separator: "|")
-    }
-}
