@@ -18,7 +18,7 @@ struct ScoreboardView: View {
             ForEach(players) { player in
                 PlayerView(isCurrent: player == self.current, player: player)
             }
-        }
+        }.background(Color("background"))
     }
 }
 
@@ -38,7 +38,7 @@ struct ScoreboardView_Previews: PreviewProvider {
             )
         }
 
-        return VStack {
+        return VStack(spacing: 10) {
             makeScoreboardView().colorScheme(.dark)
             makeScoreboardView().colorScheme(.light)
         }

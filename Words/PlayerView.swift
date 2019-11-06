@@ -15,14 +15,32 @@ struct PlayerView: View {
 
     var body: some View {
         VStack(spacing: 4) {
-            Text(player.name).font(isCurrent ? .headline : .subheadline)
+            Text(player.name)
+                .font(isCurrent ? .headline : .subheadline)
+                .foregroundColor(Color(isCurrent ? "playerNameCurrent" : "playerName"))
             Text(String(player.score))
-        }.padding(10).minimumScaleFactor(0.7).border(isCurrent ? Color.blue : Color.clear)
+                .foregroundColor(Color(isCurrent ? "playerScoreCurrent" : "playerScore"))
+        }
+        .padding()
+        .minimumScaleFactor(0.7)
+        .scaledToFit()
+        .border(Color(isCurrent ? "playerBorderCurrent" : "playerBorder"))
+        .background(Color("background"))
     }
 }
 
 struct PlayerView_Previews: PreviewProvider {
     static var previews: some View {
-        PlayerView(isCurrent: true, player: Player(name: "Player 1", tiles: Tile.preview, score: 100))
+        VStack(spacing: 10) {
+            HStack {
+                PlayerView(isCurrent: true, player: Player(name: "Player 1", tiles: Tile.preview, score: 100))
+                PlayerView(isCurrent: false, player: Player(name: "Player 2", tiles: Tile.preview, score: 200))
+            }.colorScheme(.dark)
+
+            HStack {
+                PlayerView(isCurrent: true, player: Player(name: "Player 1", tiles: Tile.preview, score: 100))
+                PlayerView(isCurrent: false, player: Player(name: "Player 2", tiles: Tile.preview, score: 200))
+            }.colorScheme(.light)
+        }
     }
 }
