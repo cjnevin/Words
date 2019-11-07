@@ -38,7 +38,7 @@ public let gameReducer: Reducer<GameState, GameAction> = Reducer { state, action
         state.turn.heldTile = nil
 
     case let pickUpTile as RackAction.PickUp:
-        guard var player = state.currentPlayer else {
+        guard let player = state.currentPlayer else {
             preconditionFailure("No current player.")
         }
         precondition(player.tiles.contains(pickUpTile.tile), "Player is not holding this tile.")

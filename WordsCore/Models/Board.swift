@@ -17,6 +17,15 @@ public struct Board: Equatable, Hashable, Codable {
 }
 
 extension Board {
+    var isEmpty: Bool {
+        for row in spots {
+            for column in row where column.tile != nil {
+                return false
+            }
+        }
+        return true
+    }
+
     func tile(at spot: Spot) -> Tile? {
         spots[spot.row][spot.column].tile
     }
@@ -34,7 +43,7 @@ extension Board {
             }
         }
     }
-    
+
     func rightDiff(against: Board) -> [Spot] {
         zip(spots, against.spots).reduce(into: []) { buffer, row in
             zip(row.0, row.1).forEach { oldSpot, newSpot in

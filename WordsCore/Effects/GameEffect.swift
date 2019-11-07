@@ -19,10 +19,15 @@ public struct ValidationEffect: Effect {
         self.newBoard = newBoard
     }
 
+    var intersect: Intersect {
+        oldBoard.isEmpty ? .withMiddle : .withExisting
+    }
+
     public func mapToAction(dependencies: GameDependencies) -> AnyPublisher<GameAction, Never> {
         let subject = PassthroughSubject<GameAction, Never>()
         dependencies.backgroundDispatch {
-            let candidates = CompoundPlacement(oldBoard: self.oldBoard, newBoard: self.newBoard).candidates(on: self.newBoard)
+            let candidates = CompoundPlacement(oldBoard: self.oldBoard, newBoard: self.newBoard)
+                .candidates(on: self.newBoard, intersect: self.intersect)
             switch candidates {
             case let .invalidPlacements(placements):
                 subject.send(ValidationAction.Misplaced(placements: placements))

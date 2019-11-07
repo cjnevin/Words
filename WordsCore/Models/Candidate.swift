@@ -39,6 +39,12 @@ extension Candidate {
         validator.validate(word: word) ? .validCandidates([self]) : .invalidCandidates([self])
     }
 
+    func calculateScore(oldBoard: Board, newBoard: Board) -> Int {
+        wordScore(value: letterScore(oldBoard: oldBoard, newBoard: newBoard),
+                  oldBoard: oldBoard,
+                  newBoard: newBoard)
+    }
+
     private func letterScore(oldBoard: Board, newBoard: Board) -> Int {
         spots.reduce(into: 0) { score, spot in
             let oldSpot = oldBoard.spots[spot.row][spot.column]
@@ -61,12 +67,6 @@ extension Candidate {
                 score *= newSpot.wordMultiplier
             }
         }
-    }
-
-    func calculateScore(oldBoard: Board, newBoard: Board) -> Int {
-        wordScore(value: letterScore(oldBoard: oldBoard, newBoard: newBoard),
-                  oldBoard: oldBoard,
-                  newBoard: newBoard)
     }
 }
 

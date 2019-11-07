@@ -11,6 +11,10 @@ import Foundation
 public struct Placement: Equatable, Hashable, Codable {
     var horizontal: [Spot] = []
     var vertical: [Spot] = []
+
+    var spots: [Spot] {
+        return horizontal + vertical
+    }
 }
 
 extension Placement {

@@ -76,6 +76,10 @@ extension Sequence where Element == Spot {
         let filled = oldFilled.union(diff)
         let h = diff.row.map { row in filled.filter { $0.row == row } }?.sorted() ?? []
         let v = diff.column.map { column in filled.filter { $0.column == column } }?.sorted() ?? []
+
+        // FIXME: Check each index is filled, i.e. row 8-10 no skipped spots
+        // TODO: Write a failing test first
+
         switch (h.count, v.count) {
         case (1..., 1): return Placement(horizontal: h, vertical: [])
         case (1, 1...): return Placement(horizontal: [], vertical: v)
