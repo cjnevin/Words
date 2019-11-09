@@ -147,21 +147,9 @@
 			isa = PBXGroup;
 			children = (
 				83747485237313A3005A4B06 /* AppDelegate.swift */,
-				837475072373749E005A4B06 /* Stack.swift */,
 				83747487237313A3005A4B06 /* SceneDelegate.swift */,
-				837474FB23735FB0005A4B06 /* Device.swift */,
-				837474D023731660005A4B06 /* Game.swift */,
-				83747489237313A3005A4B06 /* GameView.swift */,
-				83AAB23923775C5A00901526 /* GameMenuView.swift */,
-				837474E8237325D9005A4B06 /* BoardView.swift */,
-				83AAB2332377532200901526 /* ExchangeView.swift */,
-				83AAB2372377568600901526 /* ExchangeRackView.swift */,
-				837474F523734BE0005A4B06 /* PlayerView.swift */,
-				837474F723734C56005A4B06 /* ScoreboardView.swift */,
-				837474EA23732D41005A4B06 /* RackView.swift */,
-				837474E42373226D005A4B06 /* RowView.swift */,
-				837474E6237322CC005A4B06 /* SpotView.swift */,
-				837474EC23732D56005A4B06 /* TileView.swift */,
+				83AAB23C23775FCB00901526 /* Model */,
+				83AAB23B23775FB300901526 /* Views */,
 				8374748B237313A6005A4B06 /* Assets.xcassets */,
 				83747490237313A6005A4B06 /* LaunchScreen.storyboard */,
 				837474F223733736005A4B06 /* Localizable.strings */,
@@ -201,6 +189,34 @@
 				837474CB23731629005A4B06 /* Redux.framework */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		83AAB23B23775FB300901526 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				837475072373749E005A4B06 /* Stack.swift */,
+				83747489237313A3005A4B06 /* GameView.swift */,
+				83AAB23923775C5A00901526 /* GameMenuView.swift */,
+				837474E8237325D9005A4B06 /* BoardView.swift */,
+				83AAB2332377532200901526 /* ExchangeView.swift */,
+				83AAB2372377568600901526 /* ExchangeRackView.swift */,
+				837474F523734BE0005A4B06 /* PlayerView.swift */,
+				837474F723734C56005A4B06 /* ScoreboardView.swift */,
+				837474EA23732D41005A4B06 /* RackView.swift */,
+				837474E42373226D005A4B06 /* RowView.swift */,
+				837474E6237322CC005A4B06 /* SpotView.swift */,
+				837474EC23732D56005A4B06 /* TileView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		83AAB23C23775FCB00901526 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				837474D023731660005A4B06 /* Game.swift */,
+				837474FB23735FB0005A4B06 /* Device.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
