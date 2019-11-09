@@ -17,6 +17,16 @@ public struct Board: Equatable, Hashable, Codable {
 }
 
 extension Board {
+    mutating func lock() {
+        spots = spots.reduce(into: []) { buffer, rows in
+            buffer.append(rows.reduce(into: []) { columns, column in
+                var copy = column
+                copy.tile?.movable = false
+                columns.append(copy)
+            })
+        }
+    }
+
     func calculatePlacement(comparingWith newBoard: Board) -> PlacementResult {
         spots.filled.compoundPlacement(newBoard.spots.filled)
     }

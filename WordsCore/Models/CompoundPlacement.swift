@@ -16,15 +16,8 @@ struct CompoundPlacement: Equatable, Hashable {
 
 extension CompoundPlacement {
     func candidates(on board: Board) -> [Candidate] {
-        let mainCandidates = mainPlacement.candidates(on: board)
-        let horizontalCandidates = horizontalIntersections.map { $0.candidates(on: board) }
-        let verticalCandidates = verticalIntersections.map { $0.candidates(on: board) }
-        let intersections = horizontalCandidates + verticalCandidates
-
-        print("main", mainPlacement.spots.compactMap { $0.tile?.face })
-        print("hz", horizontalIntersections.map { $0.spots.compactMap { $0.tile?.face } })
-        print("vt", verticalIntersections.map { $0.spots.compactMap { $0.tile?.face } })
-
-        return mainCandidates + intersections.flatMap { $0 }
+        return mainPlacement.candidates(on: board)
+            + horizontalIntersections.flatMap { $0.candidates(on: board) }
+            + verticalIntersections.flatMap { $0.candidates(on: board) }
     }
 }

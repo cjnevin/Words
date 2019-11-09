@@ -26,6 +26,10 @@ public enum RackAction {
         }
     }
 
+    public struct Drop: GameAction {
+        public init() { }
+    }
+
     public struct PickUp: GameAction {
         let tile: Tile
 
@@ -49,13 +53,13 @@ public enum RackAction {
     public struct Shuffle: GameAction {
         public init() { }
     }
-}
 
-public enum TurnAction {
     public struct Exchange: GameAction {
         let tiles: [Tile]
     }
-    
+}
+
+public enum TurnAction {
     public struct Skip: GameAction {
         public init() { }
     }

@@ -16,10 +16,15 @@ struct SpotView: View {
     var onSelection: () -> Void
 
     var body: some View {
-        Button(action: onSelection) {
-            spot.backgroundColor
-                .overlay(spot.text.minimumScaleFactor(0.01))
-                .shadow(color: spot.lineColor, radius: 1, x: 0, y: 0)
+        let innerView = spot.backgroundColor
+            .overlay(spot.text.minimumScaleFactor(0.01))
+            .shadow(color: spot.lineColor, radius: 1, x: 0, y: 0)
+        if spot.interactive {
+            return AnyView(Button(action: onSelection) {
+                innerView
+            })
+        } else {
+            return AnyView(innerView)
         }
     }
 }

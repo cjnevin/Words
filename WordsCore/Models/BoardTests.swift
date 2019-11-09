@@ -58,4 +58,21 @@ class BoardTests: XCTestCase {
             }
         }
     }
+
+    func testLockedMakesTilesImmovable() {
+        var board = Board(pattern: """
+            -|A|-
+            -|B|-
+            -|C|-
+        """)
+        XCTAssertFalse(board.isLocked)
+        board.lock()
+        XCTAssertTrue(board.isLocked)
+    }
+}
+
+extension Board {
+    var isLocked: Bool {
+        !spots.filled.reduce(true) { $0 && ($1.tile?.movable ?? false) }
+    }
 }

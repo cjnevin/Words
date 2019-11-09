@@ -11,6 +11,12 @@ import XCTest
 import Redux
 @testable import WordsCore
 
+extension GameStore {
+    static func with(state: GameState) -> GameStore {
+        GameStore(initialState: state, reducer: GameReducer(), dependencies: GameDependencies.mocked, effectQueue: .main)
+    }
+}
+
 class GameReducerTests: XCTestCase {
     func testCreateBagGeneratesExpectedTiles() {
         let action = BagAction.Reset(distribution: [
@@ -18,7 +24,7 @@ class GameReducerTests: XCTestCase {
             2: ("B", 3),
             1: ("C", 3)
         ])
-        let store = GameStore(initialState: GameState(), reducer: GameReducer(), dependencies: GameDependencies.mocked, effectQueue: .main)
+        let store = GameStore.with(state: GameState())
         store.send(action)
         let faces = store.state.tileBag.tiles.map { $0.face }.sorted()
         XCTAssertEqual(faces, ["A", "A", "A", "B", "B", "C"])
@@ -32,7 +38,7 @@ class GameReducerTests: XCTestCase {
             players: [swappingPlayer, nextPlayer],
             tileBag: TileBag(tiles: [.d, .e, .f])
         )
-        let store = Store(initialState: initialState, reducer: GameReducer(), dependencies: GameDependencies.mocked, effectQueue: .main)
+        let store = GameStore.with(state: initialState)
         // This loop ensures we get random tiles that don't match our existing ones.
         var matching: Bool = true
         while matching {
@@ -50,10 +56,18 @@ class GameReducerTests: XCTestCase {
                        initialState.currentPlayer?.tiles.count)
     }
 
+    func testDropClearsHeldTile() {
+        let initialState = GameState(players: [.init(name: "Player 1", tiles: [.a], score: 0)], turn: .init(heldTile: .a))
+        let store = GameStore.with(state: initialState)
+        XCTAssertEqual(store.state.turn.heldTile, .a)
+        store.send(RackAction.Drop())
+        XCTAssertNil(store.state.turn.heldTile)
+    }
+
     func testPickUpSetsHeldTile() {
-        let state = GameState(players: [.init(name: "Player 1", tiles: [.a], score: 0)])
+        let initialState = GameState(players: [.init(name: "Player 1", tiles: [.a], score: 0)])
         let action = RackAction.PickUp(tile: .a)
-        let store = Store(initialState: state, reducer: GameReducer(), dependencies: GameDependencies.mocked, effectQueue: .main)
+        let store = GameStore.with(state: initialState)
         store.send(action)
         XCTAssertEqual(store.state.turn.heldTile, .a)
     }
@@ -66,8 +80,8 @@ class GameReducerTests: XCTestCase {
             .empty(row: 2, columns: 3)
         ])
         let action = RackAction.Place(at: oldSpot)
-        let state = GameState(board: oldBoard, players: [.init(name: "Player 1", tiles: [.b])], turn: .init(board: oldBoard, heldTile: .b))
-        let store = Store(initialState: state, reducer: GameReducer(), dependencies: GameDependencies.mocked, effectQueue: .main)
+        let initialState = GameState(board: oldBoard, players: [.init(name: "Player 1", tiles: [.b])], turn: .init(board: oldBoard, heldTile: .b))
+        let store = GameStore.with(state: initialState)
         store.send(action)
         XCTAssertEqual(store.state.turn.board, store.state.board)
         XCTAssertEqual(store.state.currentPlayer?.tiles, [.b])
@@ -77,8 +91,8 @@ class GameReducerTests: XCTestCase {
     func testPlaceAtFreeSpot() {
         let oldBoard = Board(spots: .empty(rows: 3, columns: 3))
         let action = RackAction.Place(at: .empty(1, 1))
-        let state = GameState(board: oldBoard, players: [.init(name: "Player 1", tiles: [.a])], turn: .init(board: oldBoard, heldTile: .a))
-        let store = GameStore(initialState: state, reducer: GameReducer(), dependencies: GameDependencies.mocked, effectQueue: .main)
+        let initialState = GameState(board: oldBoard, players: [.init(name: "Player 1", tiles: [.a])], turn: .init(board: oldBoard, heldTile: .a))
+        let store = GameStore.with(state: initialState)
         store.send(action)
         XCTAssertNotEqual(store.state.turn.board, store.state.board)
         XCTAssertEqual(store.state.turn.board.spots[1][1].tile, Tile.a)
@@ -96,7 +110,7 @@ class GameReducerTests: XCTestCase {
         let spot = Spot(row: 1, column: 2, middle: false, multiplier: 1, wordMultiplier: 1, tile: .a)
         let action = RackAction.Return(from: spot)
         let initialState = GameState(board: oldBoard, players: [.init(name: "Player 1")], turn: .init(board: newBoard))
-        let store = GameStore(initialState: initialState, reducer: GameReducer(), dependencies: GameDependencies.mocked, effectQueue: .main)
+        let store = GameStore.with(state: initialState)
         store.send(action)
         XCTAssertEqual(store.state.turn.board, store.state.board)
     }
@@ -110,7 +124,7 @@ class GameReducerTests: XCTestCase {
         ])
         let initialState = GameState(board: oldBoard, players: [.init(name: "Player 1")], turn: .init(board: newBoard))
         let action = RackAction.ReturnAll()
-        let store = Store(initialState: initialState, reducer: GameReducer(), dependencies: GameDependencies.mocked, effectQueue: .main)
+        let store = GameStore.with(state: initialState)
         store.send(action)
         XCTAssertEqual(store.state.turn.board, store.state.board)
         XCTAssertEqual(store.state.currentPlayer!.tiles, [.a, .b, .c])
@@ -119,7 +133,7 @@ class GameReducerTests: XCTestCase {
     func testTilesAreShuffled() {
         let player = Player(name: "Player 1", tiles: [.a, .b, .c, .d, .e, .f, .g], score: 0)
         let initialState = GameState(players: [player])
-        let store = Store(initialState: initialState, reducer: GameReducer(), dependencies: GameDependencies.mocked, effectQueue: .main)
+        let store = GameStore.with(state: initialState)
         let action = RackAction.Shuffle()
         var equal = true
         while equal {
@@ -132,14 +146,14 @@ class GameReducerTests: XCTestCase {
 
     func testValidClearsPlacementError() {
         let turn = GameState.Turn(placementError: .tileMisaligned)
-        let store = GameStore(initialState: .init(turn: turn), reducer: GameReducer(), dependencies: GameDependencies.mocked, effectQueue: .main)
+        let store = GameStore.with(state: .init(turn: turn))
         store.send(ValidationAction.Valid(score: 1))
         XCTAssertNil(store.state.turn.placementError)
         XCTAssertEqual(store.state.turn.score, 1)
     }
 
     func testInvalidClearsValidAndMisplaced() {
-        let store = GameStore(initialState: .init(), reducer: GameReducer(), dependencies: GameDependencies.mocked, effectQueue: .main)
+        let store = GameStore.with(state: .init())
         PlacementError.allCases.forEach { error in
             store.send(ValidationAction.Valid(score: 100))
             store.send(ValidationAction.Invalid(error: error))
@@ -152,7 +166,7 @@ class GameReducerTests: XCTestCase {
         let a = Player(name: "Player 1", tiles: [.a])
         let b = Player(name: "Player 2", tiles: [.b])
         let initialState = GameState(players: [a, b])
-        let store = Store(initialState: initialState, reducer: GameReducer(), dependencies: GameDependencies.mocked, effectQueue: .main)
+        let store = GameStore.with(state: initialState)
         [a, b, a].forEach {
             XCTAssertEqual(store.state.currentPlayer, $0)
             store.send(TurnAction.Skip())
@@ -170,7 +184,7 @@ class GameReducerTests: XCTestCase {
         let a = Player(name: "Player 1", tiles: [])
         let b = Player(name: "Player 2", tiles: [.b])
         let initialState = GameState(board: oldBoard, players: [a, b], turn: .init(board: newBoard))
-        let store = Store(initialState: initialState, reducer: GameReducer(), dependencies: GameDependencies.mocked, effectQueue: .main)
+        let store = GameStore.with(state: initialState)
         XCTAssertEqual(store.state.currentPlayer, a)
         XCTAssertTrue(store.state.currentPlayer!.tiles.isEmpty)
         store.send(TurnAction.Skip())
@@ -180,17 +194,39 @@ class GameReducerTests: XCTestCase {
         XCTAssertEqual(store.state.currentPlayer!.tiles, [.a, .b, .c])
         XCTAssertEqual(store.state.board, store.state.turn.board)
     }
+
+    func testSubmitLocksBoardAppliesScoreAndMovesToNextPlayer() {
+        let oldBoard = Board(pattern: """
+            -|-|-
+            -|-|-
+            -|-|-
+        """)
+        let newBoard = Board(pattern: """
+            -|-|-
+            A|B|C
+            -|-|-
+        """)
+        let a = Player(name: "Player 1", tiles: [])
+        let b = Player(name: "Player 2", tiles: [.b])
+        let initialState = GameState(board: oldBoard, players: [a, b], turn: .init(board: newBoard))
+        let store = GameStore.with(state: initialState)
+        store.send(ValidationAction.Valid(score: 10))
+        store.send(TurnAction.Submit())
+        XCTAssertTrue(store.state.board.isLocked)
+        XCTAssertEqual(store.state.currentPlayer, b)
+        XCTAssertEqual(store.state.players.first?.score, 10)
+    }
 }
 
 extension Tile {
-    static let a: Tile = Tile(id: "A0", face: "A", value: 1)
-    static let b: Tile = Tile(id: "B0", face: "B", value: 3)
-    static let c: Tile = Tile(id: "C0", face: "C", value: 3)
-    static let d: Tile = Tile(id: "D0", face: "D", value: 2)
-    static let e: Tile = Tile(id: "E0", face: "E", value: 1)
-    static let f: Tile = Tile(id: "F0", face: "F", value: 4)
-    static let g: Tile = Tile(id: "G0", face: "G", value: 2)
-    static let h: Tile = Tile(id: "H0", face: "H", value: 4)
-    static let i: Tile = Tile(id: "I0", face: "I", value: 1)
-    static let j: Tile = Tile(id: "J0", face: "J", value: 8)
+    static let a: Tile = Tile(id: "A0", face: "A", value: 1, movable: true)
+    static let b: Tile = Tile(id: "B0", face: "B", value: 3, movable: true)
+    static let c: Tile = Tile(id: "C0", face: "C", value: 3, movable: true)
+    static let d: Tile = Tile(id: "D0", face: "D", value: 2, movable: true)
+    static let e: Tile = Tile(id: "E0", face: "E", value: 1, movable: true)
+    static let f: Tile = Tile(id: "F0", face: "F", value: 4, movable: true)
+    static let g: Tile = Tile(id: "G0", face: "G", value: 2, movable: true)
+    static let h: Tile = Tile(id: "H0", face: "H", value: 4, movable: true)
+    static let i: Tile = Tile(id: "I0", face: "I", value: 1, movable: true)
+    static let j: Tile = Tile(id: "J0", face: "J", value: 8, movable: true)
 }

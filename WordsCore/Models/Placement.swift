@@ -19,9 +19,7 @@ public struct Placement: Equatable, Hashable, Codable {
 
 extension Placement {
     func candidates(on board: Board) -> [Candidate] {
-        [
-            Candidate(spots: horizontal, tiles: board.tiles(at: horizontal)),
-            Candidate(spots: vertical, tiles: board.tiles(at: vertical))
-        ].compactMap { $0 }
+        [Candidate(spots: horizontal, tiles: board.tiles(at: horizontal)),
+         Candidate(spots: vertical, tiles: board.tiles(at: vertical))].compactMap { $0 }
     }
 }

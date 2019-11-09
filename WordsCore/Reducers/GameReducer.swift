@@ -20,7 +20,7 @@ public struct GameReducer: Reducer {
                 let (amount, item) = keyValue
                 let (face, value) = item
                 tiles += (0..<amount).reduce(into: []) {
-                    $0.append(Tile(id: "\(face)\($1)", face: face, value: value))
+                    $0.append(Tile(id: "\(face)\($1)", face: face, value: value, movable: true))
                 }
             })
 
@@ -43,6 +43,11 @@ public struct GameReducer: Reducer {
             state.invalidateTurn()
             return ValidationEffect(oldBoard: state.board, newBoard: state.turn.board).eraseToAnyEffect()
 
+        case is RackAction.Drop:
+            precondition(state.turn.heldTile != nil)
+            state.turn.heldTile = nil
+            return ValidationEffect(oldBoard: state.board, newBoard: state.turn.board).eraseToAnyEffect()
+
         case let pickUpTile as RackAction.PickUp:
             guard let player = state.currentPlayer else {
                 preconditionFailure("No current player.")
@@ -57,6 +62,9 @@ public struct GameReducer: Reducer {
             }
             guard let tile = returnTile.spot.tile else {
                 preconditionFailure("Return tile should not be null.")
+            }
+            guard tile.movable else {
+                return NoEffect().eraseToAnyEffect()
             }
             var spot = returnTile.spot
             spot.tile = nil
@@ -75,15 +83,7 @@ public struct GameReducer: Reducer {
         case is RackAction.Shuffle:
             state.currentPlayer?.shuffle()
 
-        case let invalid as ValidationAction.Invalid:
-            state.turn.placementError = invalid.error
-            state.turn.score = 0
-
-        case let valid as ValidationAction.Valid:
-            state.turn.placementError = nil
-            state.turn.score = valid.score
-
-        case let exchangeTiles as TurnAction.Exchange:
+        case let exchangeTiles as RackAction.Exchange:
             guard var player = state.currentPlayer else {
                 preconditionFailure("No current player.")
             }
@@ -95,6 +95,14 @@ public struct GameReducer: Reducer {
             state.nextPlayer()
             return ValidationEffect(oldBoard: state.board, newBoard: state.turn.board).eraseToAnyEffect()
 
+        case let invalid as ValidationAction.Invalid:
+            state.turn.placementError = invalid.error
+            state.turn.score = 0
+
+        case let valid as ValidationAction.Valid:
+            state.turn.placementError = nil
+            state.turn.score = valid.score
+
         case is TurnAction.Submit:
             guard var player = state.currentPlayer else {
                 preconditionFailure("No current player.")
@@ -103,6 +111,7 @@ public struct GameReducer: Reducer {
             player.score += state.turn.score
             state.currentPlayer = player
             state.board = state.turn.board
+            state.board.lock()
             state.nextPlayer()
 
         case is TurnAction.Skip:
@@ -113,7 +122,6 @@ public struct GameReducer: Reducer {
         default:
             break
         }
-
         return NoEffect().eraseToAnyEffect()
     }
 }

@@ -39,8 +39,8 @@ struct GameView: ConnectedView {
             heldTile: state.heldTile,
             tiles: state.currentPlayer?.tiles ?? [],
             canSubmit: state.canSubmit,
-            tileSelection: {
-                dispatch(RackAction.PickUp(tile: $0))
+            tileSelection: { tile in
+                dispatch(state.heldTile == tile ? RackAction.Drop() : RackAction.PickUp(tile: tile))
         },
             spotSelection: { spot in
                 dispatch(spot.tile == nil ? RackAction.Place(at: spot) : RackAction.Return(from: spot))

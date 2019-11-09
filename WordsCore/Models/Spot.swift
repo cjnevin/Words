@@ -28,6 +28,10 @@ public struct Spot: Equatable, Hashable, Comparable, Codable, Identifiable {
     public let wordMultiplier: Int
     public internal(set) var tile: Tile?
 
+    public var interactive: Bool {
+        return tile?.movable ?? true
+    }
+
     var tileScore: Int {
         return multiplier * (tile?.value ?? 1)
     }
