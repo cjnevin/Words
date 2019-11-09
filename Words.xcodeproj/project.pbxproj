@@ -112,6 +112,7 @@
 		83AAB2372377568600901526 /* ExchangeRackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRackView.swift; sourceTree = "<group>"; };
 		83AAB23923775C5A00901526 /* GameMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameMenuView.swift; sourceTree = "<group>"; };
 		83AAB2422377613400901526 /* AnagramDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnagramDictionary.swift; sourceTree = "<group>"; };
+		83AAB24623776CE400901526 /* Words.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Words.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +149,7 @@
 		83747484237313A3005A4B06 /* Words */ = {
 			isa = PBXGroup;
 			children = (
+				83AAB24623776CE400901526 /* Words.entitlements */,
 				83747485237313A3005A4B06 /* AppDelegate.swift */,
 				83747487237313A3005A4B06 /* SceneDelegate.swift */,
 				83AAB2412377611F00901526 /* Dependencies */,
@@ -536,7 +538,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Words/Words.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Words/Preview Content\"";
 				DEVELOPMENT_TEAM = L5FA4QG79Y;
 				ENABLE_PREVIEWS = YES;
@@ -547,6 +551,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cjnevin.Words;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -556,7 +561,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Words/Words.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Words/Preview Content\"";
 				DEVELOPMENT_TEAM = L5FA4QG79Y;
 				ENABLE_PREVIEWS = YES;
@@ -567,6 +574,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cjnevin.Words;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
