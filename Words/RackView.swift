@@ -22,12 +22,14 @@ struct RackView: ConnectedView {
         let toggle: (Tile) -> Void
     }
 
-    func map(state: GameState, dispatch: @escaping (GameAction) -> Void) -> Props {
+    func map(state: GameState, send: @escaping (GameAction) -> Void) -> Props {
         return Props(
             selectedTiles: state.selectedTiles,
             unselectedTiles: state.rackTiles,
             toggle: { tile in
-                dispatch(state.selectedTiles.contains(tile) ? RackAction.Drop() : RackAction.PickUp(tile: tile))
+                send(state.selectedTiles.contains(tile)
+                    ? RackAction.Drop()
+                    : RackAction.PickUp(tile: tile))
         })
     }
 

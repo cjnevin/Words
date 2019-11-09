@@ -24,14 +24,13 @@ struct GameMenuView: ConnectedView {
         let submit: () -> Void
     }
 
-    func map(state: GameState, dispatch: @escaping (GameAction) -> Void) -> Props {
+    func map(state: GameState, send: @escaping (GameAction) -> Void) -> Props {
         Props(
             canSubmit: state.canSubmit,
-            exchange: { dispatch(RackAction.Exchange.Begin())
-        },
-            shuffle: { dispatch(RackAction.Shuffle()) },
-            skip: { dispatch(TurnAction.Skip()) },
-            submit: { dispatch(TurnAction.Submit()) }
+            exchange: { send(RackAction.Exchange.Begin()) },
+            shuffle: { send(RackAction.Shuffle()) },
+            skip: { send(TurnAction.Skip()) },
+            submit: { send(TurnAction.Submit()) }
         )
     }
 

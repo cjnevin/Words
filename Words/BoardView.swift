@@ -17,11 +17,11 @@ struct BoardView: ConnectedView {
         let select: (Spot) -> Void
     }
 
-    func map(state: GameState, dispatch: @escaping (GameAction) -> Void) -> Props {
+    func map(state: GameState, send: @escaping (GameAction) -> Void) -> Props {
         return Props(
             rows: state.latestBoard.spots,
             select: {
-                dispatch($0.tile == nil ? RackAction.Place(at: $0) : RackAction.Return(from: $0))
+                send($0.tile == nil ? RackAction.Place(at: $0) : RackAction.Return(from: $0))
         })
     }
 

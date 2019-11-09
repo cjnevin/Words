@@ -21,7 +21,7 @@ struct ScoreboardView: ConnectedView {
         let current: Player
     }
 
-    func map(state: GameState, dispatch: @escaping (GameAction) -> Void) -> Props {
+    func map(state: GameState, send: @escaping (GameAction) -> Void) -> Props {
         Props(players: state.players,
               current: state.currentPlayer!)
     }

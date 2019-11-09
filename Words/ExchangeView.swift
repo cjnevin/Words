@@ -24,13 +24,13 @@ struct ExchangeView: ConnectedView {
 
     @EnvironmentObject var device: Device
 
-    func map(state: GameState, dispatch: @escaping (GameAction) -> Void) -> Props {
+    func map(state: GameState, send: @escaping (GameAction) -> Void) -> Props {
         return Props(
             selectedTiles: state.selectedTiles,
             unselectedTiles: state.rackTiles,
-            exchangeToggle: { dispatch(RackAction.Exchange.Toggle(tile: $0)) },
-            exchangeEnd: { dispatch(RackAction.Exchange.End()) },
-            exchangeCancel: { dispatch(RackAction.Exchange.Cancel()) }
+            exchangeToggle: { send(RackAction.Exchange.Toggle(tile: $0)) },
+            exchangeEnd: { send(RackAction.Exchange.End()) },
+            exchangeCancel: { send(RackAction.Exchange.Cancel()) }
         )
     }
 

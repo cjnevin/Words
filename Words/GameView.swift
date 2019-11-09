@@ -20,7 +20,7 @@ struct GameView: ConnectedView {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @EnvironmentObject var device: Device
 
-    func map(state: GameState, dispatch: @escaping (GameAction) -> Void) -> Props {
+    func map(state: GameState, send: @escaping (GameAction) -> Void) -> Props {
         return Props(isExchanging: state.isExchanging)
     }
 
