@@ -17,7 +17,8 @@ extension GameStore {
             board: Board(spots: .defaultLayout),
             players: .preview),
         reducer: GameReducer(),
-        dependencies: .real)
+        dependencies: .real,
+        effectQueue: .global())
     }
 }
 

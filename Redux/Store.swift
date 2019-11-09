@@ -17,7 +17,7 @@ public final class Store<R: Reducer>: ObservableObject {
     private let dependencies: R.E.Dependencies
     private var cancellables: Set<AnyCancellable> = []
 
-    public init(initialState: R.State, reducer: R, dependencies: R.E.Dependencies, effectQueue: DispatchQueue = .global()) {
+    public init(initialState: R.State, reducer: R, dependencies: R.E.Dependencies, effectQueue: DispatchQueue) {
         self.effectQueue = effectQueue
         self.state = initialState
         self.reducer = reducer
