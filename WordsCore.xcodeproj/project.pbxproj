@@ -41,6 +41,7 @@
 		837474FA23734DE8005A4B06 /* Array+Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837474F923734DE8005A4B06 /* Array+Identifiable.swift */; };
 		83AAB2202376ECBA00901526 /* BoardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AAB21C2376EC3300901526 /* BoardTests.swift */; };
 		83AAB2302377367A00901526 /* ActionDebugMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AAB22F2377367A00901526 /* ActionDebugMiddleware.swift */; };
+		83AAB245237764BA00901526 /* WordValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AAB244237764B900901526 /* WordValidator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,6 +105,7 @@
 		837474F923734DE8005A4B06 /* Array+Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Identifiable.swift"; sourceTree = "<group>"; };
 		83AAB21C2376EC3300901526 /* BoardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardTests.swift; sourceTree = "<group>"; };
 		83AAB22F2377367A00901526 /* ActionDebugMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionDebugMiddleware.swift; sourceTree = "<group>"; };
+		83AAB244237764B900901526 /* WordValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordValidator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -244,6 +246,7 @@
 			children = (
 				8374744D237310D9005A4B06 /* GameDependencies.swift */,
 				8374744F237310D9005A4B06 /* MockDependencies.swift */,
+				83AAB244237764B900901526 /* WordValidator.swift */,
 			);
 			path = Dependencies;
 			sourceTree = "<group>";
@@ -385,6 +388,7 @@
 				83747459237310D9005A4B06 /* TileBag.swift in Sources */,
 				83747460237310D9005A4B06 /* CandidateValidationResult.swift in Sources */,
 				83747456237310D9005A4B06 /* Board.swift in Sources */,
+				83AAB245237764BA00901526 /* WordValidator.swift in Sources */,
 				83747454237310D9005A4B06 /* Candidate.swift in Sources */,
 				83747458237310D9005A4B06 /* Placement.swift in Sources */,
 				83747450237310D9005A4B06 /* GameAction.swift in Sources */,

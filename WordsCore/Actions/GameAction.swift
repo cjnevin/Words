@@ -94,6 +94,10 @@ public enum TurnAction {
 }
 
 enum ValidationAction {
+    struct Incorrect: GameAction {
+        let candidates: [Candidate]
+    }
+
     struct Invalid: GameAction {
         let error: PlacementError
     }

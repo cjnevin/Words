@@ -106,11 +106,18 @@ public struct GameReducer: Reducer {
             state.turn.isExchanging = false
             state.turn.exchangingTiles = []
 
+        case let incorrect as ValidationAction.Incorrect:
+            state.turn.invalidCandidates = incorrect.candidates
+            state.turn.placementError = nil
+            state.turn.score = 0
+
         case let invalid as ValidationAction.Invalid:
+            state.turn.invalidCandidates = []
             state.turn.placementError = invalid.error
             state.turn.score = 0
 
         case let valid as ValidationAction.Valid:
+            state.turn.invalidCandidates = []
             state.turn.placementError = nil
             state.turn.score = valid.score
 

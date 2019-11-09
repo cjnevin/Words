@@ -14,11 +14,15 @@ public struct GameState: Codable {
         var exchangingTiles: [Tile] = []
         var heldTile: Tile? = nil
         var isExchanging: Bool = false
+        var invalidCandidates: [Candidate] = []
         var placementError: PlacementError?
         var score: Int = 0
 
         var canSubmit: Bool {
-            return score > 0 && heldTile == nil
+            return score > 0
+                && heldTile == nil
+                && placementError == nil
+                && invalidCandidates.isEmpty
         }
     }
 

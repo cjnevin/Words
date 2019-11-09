@@ -28,8 +28,13 @@ public struct ValidationEffect: Effect {
             return Just(ValidationAction.Invalid(error: error)).eraseToAnyPublisher()
         case let .success(placement):
             let candidates = placement.candidates(on: self.newBoard)
-            let score = candidates.calculateScore(oldBoard: self.oldBoard, newBoard: self.newBoard)
-            return Just(ValidationAction.Valid(score: score)).eraseToAnyPublisher()
+            switch candidates.validate(with: dependencies.validator) {
+            case .invalidCandidates(let candidates):
+                return Just(ValidationAction.Incorrect(candidates: candidates)).eraseToAnyPublisher()
+            case .validCandidates(let candidates):
+                let score = candidates.calculateScore(oldBoard: self.oldBoard, newBoard: self.newBoard)
+                return Just(ValidationAction.Valid(score: score)).eraseToAnyPublisher()
+            }
         }
     }
 }

@@ -6,7 +6,7 @@
 //  Copyright © 2019 Chris. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import Redux
 import WordsCore
 
@@ -25,13 +25,12 @@ extension GameStore {
 
 extension GameDependencies {
     static var real: GameDependencies {
-        return GameDependencies(validator: RealWordValidator())
-    }
-}
-
-private struct RealWordValidator: WordValidator {
-    func validate(word: String) -> Bool {
-        return true
+        if let data = NSDataAsset(name: "dictionarySOWPODS")?.data,
+            let dictionary = AnagramDictionary(data: data) {
+            return GameDependencies(validator: dictionary)
+        } else {
+            return GameDependencies(validator: AnagramDictionary(words: [:]))
+        }
     }
 }
 

@@ -15,7 +15,3 @@ public struct GameDependencies {
         self.validator = validator
     }
 }
-
-public protocol WordValidator {
-    func validate(word: String) -> Bool
-}
