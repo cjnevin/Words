@@ -9,10 +9,28 @@
 import Foundation
 
 public struct Board: Equatable, Hashable, Codable {
+    public typealias Layout = [[Int]]
     public internal(set) var spots: [[Spot]] = []
 
     public init(spots: [[Spot]] = []) {
         self.spots = spots
+    }
+
+    public init(layout: Layout) {
+        let middle = layout.count / 2
+        self.spots = layout.enumerated().map { row, columns in
+            columns.enumerated().map { column, multiplier in
+                let letterMultiplier = Swift.max(1, multiplier < 4 ? multiplier : 1)
+                let wordMultiplier = multiplier > 3 ? multiplier - 2 : 1
+                return Spot(
+                    row: row,
+                    column: column,
+                    middle: row == middle && column == middle,
+                    multiplier: letterMultiplier,
+                    wordMultiplier: wordMultiplier,
+                    tile: nil)
+            }
+        }
     }
 }
 
@@ -67,11 +85,9 @@ extension Board {
             }
         }
     }
-}
-
-public extension Sequence where Element == [Spot] {
-    static var defaultLayout: [[Spot]] {
-        return spots(from: [
+    
+    public static var defaultLayout: Layout {
+        return [
             [5, 0, 0, 2, 0, 0, 0, 5, 0, 0, 0, 2, 0, 0, 5],
             [0, 3, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0, 3, 0],
             [0, 0, 3, 0, 0, 0, 2, 0, 2, 0, 0, 0, 3, 0, 0],
@@ -87,23 +103,6 @@ public extension Sequence where Element == [Spot] {
             [0, 0, 3, 0, 0, 0, 2, 0, 2, 0, 0, 0, 3, 0, 0],
             [0, 3, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0, 3, 0],
             [5, 0, 0, 2, 0, 0, 0, 5, 0, 0, 0, 2, 0, 0, 5]
-        ])
-    }
-
-    private static func spots(from layout: [[Int]]) -> [[Spot]] {
-        let middle = layout.count / 2
-        return layout.enumerated().map { row, columns in
-            columns.enumerated().map { column, multiplier in
-                let letterMultiplier = Swift.max(1, multiplier < 4 ? multiplier : 1)
-                let wordMultiplier = multiplier > 3 ? multiplier - 2 : 1
-                return Spot(
-                    row: row,
-                    column: column,
-                    middle: row == middle && column == middle,
-                    multiplier: letterMultiplier,
-                    wordMultiplier: wordMultiplier,
-                    tile: nil)
-            }
-        }
+        ]
     }
 }

@@ -15,9 +15,6 @@ public struct GameReducer: Reducer {
     public init() { }
     public func reduce(state: inout GameState, action: GameAction) -> GameEffect {
         switch action {
-        case let createBag as BagAction.Reset:
-            state.tileBag = .init(distribution: createBag.distribution)
-
         case let placeTile as RackAction.Place:
             guard var player = state.currentPlayer else {
                 preconditionFailure("No current player.")
@@ -103,6 +100,7 @@ public struct GameReducer: Reducer {
             }
             precondition(state.turn.canSubmit, "Submission not possible.")
             player.score += state.turn.score
+            state.tileBag.replenish(player: &player)
             state.currentPlayer = player
             state.board = state.turn.board
             state.board.lock()
@@ -112,6 +110,20 @@ public struct GameReducer: Reducer {
             precondition(state.currentPlayer != nil, "No current player.")
             state.restoreRack()
             state.nextPlayer()
+
+        case let newGame as TurnAction.NewGame:
+            var tileBag = TileBag(distribution: newGame.tileDistribution)
+            let players = newGame.players.map { name -> Player in
+                let tiles = (0..<tileBag.rack).compactMap { _ in tileBag.takeOne() }
+                return Player(name: name, tiles: tiles, score: 0)
+            }
+            let board = Board(layout: newGame.layout)
+            state = GameState(
+                board: board,
+                players: players,
+                playerIndex: 0,
+                tileBag: tileBag,
+                turn: .init(board: board))
 
         default:
             break

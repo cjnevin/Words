@@ -11,12 +11,6 @@ import Combine
 
 public protocol GameAction { }
 
-public enum BagAction {
-    public struct Reset: GameAction {
-        let distribution: [Int: (String, Int)]
-    }
-}
-
 public enum RackAction {
     public struct Place: GameAction {
         let spot: Spot
@@ -60,6 +54,21 @@ public enum RackAction {
 }
 
 public enum TurnAction {
+    public struct NewGame: GameAction {
+        let players: [String]
+        let layout: Board.Layout
+        let tileDistribution: TileBag.Distribution
+        
+        public init(
+            players: [String],
+            layout: Board.Layout = Board.defaultLayout,
+            tileDistribution: TileBag.Distribution = TileBag.defaultDistribution) {
+            self.players = players
+            self.layout = layout
+            self.tileDistribution = tileDistribution
+        }
+    }
+
     public struct Skip: GameAction {
         public init() { }
     }

@@ -18,16 +18,25 @@ extension GameStore {
 }
 
 class GameReducerTests: XCTestCase {
-    func testCreateBagGeneratesExpectedTiles() {
-        let action = BagAction.Reset(distribution: [
-            3: ("A", 1),
-            2: ("B", 3),
-            1: ("C", 3)
-        ])
+    func testNewGameIsSetupCorrectly() {
+        let distribution: TileBag.Distribution = .init(elements: [
+            .init(face: "A", value: 1, amount: 7),
+            .init(face: "B", value: 3, amount: 7),
+            .init(face: "C", value: 3, amount: 7)
+        ], rack: 7)
+        let action = TurnAction.NewGame(
+            players: ["Player1", "Player2"],
+            layout: Board.defaultLayout,
+            tileDistribution: distribution)
         let store = GameStore.with(state: GameState())
         store.send(action)
-        let faces = store.state.tileBag.tiles.map { $0.face }.sorted()
-        XCTAssertEqual(faces, ["A", "A", "A", "B", "B", "C"])
+        XCTAssertEqual(store.state.tileBag.tiles.count, 7, "7 tiles should remain")
+        XCTAssertEqual(store.state.players.first?.tiles.count, 7, "Player 1 should have 7 tiles")
+        XCTAssertEqual(store.state.players.first?.name, "Player1")
+        XCTAssertEqual(store.state.players.last?.tiles.count, 7, "Player 2 should have 7 tiles")
+        XCTAssertEqual(store.state.players.last?.name, "Player2")
+        XCTAssertEqual(store.state.board.spots.count, 15, "Board is incorrect size")
+        XCTAssertEqual(store.state.board, store.state.turn.board)
     }
     
     func testSwapTilesReturnsDifferentTiles() {
