@@ -17,7 +17,7 @@ struct RackView: View {
     var onTileSelection: (Tile) -> Void
 
     var body: some View {
-        Stack(verticalIfPortrait: false) {
+        Stack(verticalIfPortrait: false, idealDimension: 50, maximumDimension: 50) {
             ForEach(tiles) { tile in
                 TileView(tile: tile, isSelected: tile == self.selectedTile) {
                     self.onTileSelection(tile)
