@@ -38,7 +38,6 @@
 		837474782373114B005A4B06 /* Placement+TestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8374744A237310D9005A4B06 /* Placement+TestExtensions.swift */; };
 		837474D7237316D5005A4B06 /* Redux.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 837474D6237316D5005A4B06 /* Redux.framework */; };
 		837474D8237316D5005A4B06 /* Redux.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 837474D6237316D5005A4B06 /* Redux.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		837474E323731B63005A4B06 /* GameStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837474E223731B63005A4B06 /* GameStore.swift */; };
 		837474FA23734DE8005A4B06 /* Array+Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837474F923734DE8005A4B06 /* Array+Identifiable.swift */; };
 /* End PBXBuildFile section */
 
@@ -100,7 +99,6 @@
 		8374744D237310D9005A4B06 /* GameDependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameDependencies.swift; sourceTree = "<group>"; };
 		8374744F237310D9005A4B06 /* MockDependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockDependencies.swift; sourceTree = "<group>"; };
 		837474D6237316D5005A4B06 /* Redux.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Redux.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		837474E223731B63005A4B06 /* GameStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStore.swift; sourceTree = "<group>"; };
 		837474F923734DE8005A4B06 /* Array+Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Identifiable.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -205,7 +203,6 @@
 				8374743E237310D8005A4B06 /* CandidateValidationResult.swift */,
 				83747439237310D8005A4B06 /* CandidateValidationResultTests.swift */,
 				8374743B237310D8005A4B06 /* CompoundPlacement.swift */,
-				837474E223731B63005A4B06 /* GameStore.swift */,
 				83747436237310D8005A4B06 /* Placement.swift */,
 				8374744A237310D9005A4B06 /* Placement+TestExtensions.swift */,
 				8374743F237310D8005A4B06 /* PlacementTests.swift */,
@@ -367,7 +364,6 @@
 				8374745D237310D9005A4B06 /* CompoundPlacement.swift in Sources */,
 				83747466237310D9005A4B06 /* GameReducer.swift in Sources */,
 				8374745F237310D9005A4B06 /* Tile.swift in Sources */,
-				837474E323731B63005A4B06 /* GameStore.swift in Sources */,
 				837474FA23734DE8005A4B06 /* Array+Identifiable.swift in Sources */,
 				83747452237310D9005A4B06 /* Sequence+Intersection.swift in Sources */,
 				83747453237310D9005A4B06 /* GameEffect.swift in Sources */,

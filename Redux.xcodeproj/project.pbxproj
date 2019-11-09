@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		83175DAD2376A6E000207A56 /* Effect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83175DAC2376A6E000207A56 /* Effect.swift */; };
+		83175DAF2376A71E00207A56 /* Reducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83175DAE2376A71E00207A56 /* Reducer.swift */; };
 		837474C0237315F7005A4B06 /* Redux.h in Headers */ = {isa = PBXBuildFile; fileRef = 837474BE237315F7005A4B06 /* Redux.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		837474CF2373164D005A4B06 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837474CE2373164D005A4B06 /* Store.swift */; };
 		837474DB23731808005A4B06 /* StoreProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837474DA23731808005A4B06 /* StoreProvider.swift */; };
@@ -15,6 +17,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		83175DAC2376A6E000207A56 /* Effect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Effect.swift; sourceTree = "<group>"; };
+		83175DAE2376A71E00207A56 /* Reducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reducer.swift; sourceTree = "<group>"; };
 		837474BB237315F7005A4B06 /* Redux.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Redux.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		837474BE237315F7005A4B06 /* Redux.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Redux.h; sourceTree = "<group>"; };
 		837474BF237315F7005A4B06 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -56,6 +60,8 @@
 			children = (
 				837474BE237315F7005A4B06 /* Redux.h */,
 				8374750423736A78005A4B06 /* ConnectedView.swift */,
+				83175DAC2376A6E000207A56 /* Effect.swift */,
+				83175DAE2376A71E00207A56 /* Reducer.swift */,
 				837474CE2373164D005A4B06 /* Store.swift */,
 				8374750323736A78005A4B06 /* StoreConnector.swift */,
 				837474DA23731808005A4B06 /* StoreProvider.swift */,
@@ -144,7 +150,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83175DAD2376A6E000207A56 /* Effect.swift in Sources */,
 				8374750623736A78005A4B06 /* ConnectedView.swift in Sources */,
+				83175DAF2376A71E00207A56 /* Reducer.swift in Sources */,
 				8374750523736A78005A4B06 /* StoreConnector.swift in Sources */,
 				837474DB23731808005A4B06 /* StoreProvider.swift in Sources */,
 				837474CF2373164D005A4B06 /* Store.swift in Sources */,

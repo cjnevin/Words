@@ -11,6 +11,8 @@ import Combine
 
 public protocol GameAction { }
 
+public struct NoAction: GameAction { }
+
 public enum BagAction {
     public struct Reset: GameAction {
         let distribution: [Int: (String, Int)]

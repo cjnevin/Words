@@ -11,6 +11,8 @@ import SwiftUI
 import WordsCore
 
 struct GameView: ConnectedView {
+    typealias R = GameReducer
+
     struct Props {
         let players: [Player]
         let current: Player
@@ -29,7 +31,7 @@ struct GameView: ConnectedView {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @EnvironmentObject var device: Device
 
-    func map(state: GameState, store: GameStore) -> Props {
+    func map(state: GameState, dispatch: @escaping (GameAction) -> Void) -> Props {
         return Props(
             players: state.players,
             current: state.currentPlayer!,
@@ -38,16 +40,14 @@ struct GameView: ConnectedView {
             tiles: state.currentPlayer?.tiles ?? [],
             canSubmit: state.canSubmit,
             tileSelection: {
-                store.send(RackAction.PickUp(tile: $0))
-                store.send(ValidationEffect(state: store.state))
+                dispatch(RackAction.PickUp(tile: $0))
         },
             spotSelection: { spot in
-                store.send(spot.tile == nil ? RackAction.Place(at: spot) : RackAction.Return(from: spot))
-                store.send(ValidationEffect(state: store.state))
+                dispatch(spot.tile == nil ? RackAction.Place(at: spot) : RackAction.Return(from: spot))
         },
-            shuffle: { store.send(RackAction.Shuffle()) },
-            skip: { store.send(TurnAction.Skip()) },
-            submit: { store.send(TurnAction.Submit()) }
+            shuffle: { dispatch(RackAction.Shuffle()) },
+            skip: { dispatch(TurnAction.Skip()) },
+            submit: { dispatch(TurnAction.Submit()) }
         )
     }
 

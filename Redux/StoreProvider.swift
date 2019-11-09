@@ -9,11 +9,11 @@
 import Combine
 import SwiftUI
 
-public struct StoreProvider<State, Action, Dependencies, V: View>: View {
-    public let store: Store<State, Action, Dependencies>
+public struct StoreProvider<R: Reducer, V: View>: View {
+    public let store: Store<R>
     public let content: () -> V
 
-    public init(store: Store<State, Action, Dependencies>, content: @escaping () -> V) {
+    public init(store: Store<R>, content: @escaping () -> V) {
         self.store = store
         self.content = content
     }

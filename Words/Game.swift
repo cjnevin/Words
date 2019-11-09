@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Redux
 import WordsCore
 
 extension GameStore {
@@ -15,7 +16,7 @@ extension GameStore {
         initialState: GameState(
             board: Board(spots: .defaultLayout),
             players: .preview),
-        reducer: gameReducer,
+        reducer: GameReducer(),
         dependencies: .real)
     }
 }

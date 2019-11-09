@@ -10,6 +10,8 @@ import Foundation
 import Combine
 import Redux
 
+public typealias GameEffect = AnyEffect<GameAction, GameDependencies>
+
 public struct ValidationEffect: Effect {
     let oldBoard: Board
     let newBoard: Board
@@ -49,5 +51,11 @@ public extension ValidationEffect {
     init(state: GameState) {
         oldBoard = state.board
         newBoard = state.turn.board
+    }
+}
+
+public struct NoEffect: Effect {
+    public func mapToAction(dependencies: GameDependencies) -> AnyPublisher<GameAction, Never> {
+        Just(NoAction()).eraseToAnyPublisher()
     }
 }
