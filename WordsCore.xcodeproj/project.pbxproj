@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		83175DBE2376C13B00207A56 /* SpotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83175DBC2376C11000207A56 /* SpotTests.swift */; };
 		8374741A237310A1005A4B06 /* WordsCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83747410237310A1005A4B06 /* WordsCore.framework */; };
 		8374741F237310A1005A4B06 /* WordsCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8374741E237310A1005A4B06 /* WordsCoreTests.swift */; };
 		83747421237310A1005A4B06 /* WordsCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 83747413237310A1005A4B06 /* WordsCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -66,6 +67,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		83175DBC2376C11000207A56 /* SpotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotTests.swift; sourceTree = "<group>"; };
 		83747410237310A1005A4B06 /* WordsCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WordsCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		83747413237310A1005A4B06 /* WordsCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WordsCore.h; sourceTree = "<group>"; };
 		83747414237310A1005A4B06 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 				8374743F237310D8005A4B06 /* PlacementTests.swift */,
 				8374743C237310D8005A4B06 /* Player.swift */,
 				83747433237310D8005A4B06 /* Spot.swift */,
+				83175DBC2376C11000207A56 /* SpotTests.swift */,
 				8374744B237310D9005A4B06 /* Spot+TestExtensions.swift */,
 				8374743D237310D8005A4B06 /* Tile.swift */,
 				83747437237310D8005A4B06 /* TileBag.swift */,
@@ -395,6 +398,7 @@
 				8374746F237310F2005A4B06 /* CandidateTests.swift in Sources */,
 				8374747623731128005A4B06 /* Spot+TestExtensions.swift in Sources */,
 				83747472237310F2005A4B06 /* PlacementTests.swift in Sources */,
+				83175DBE2376C13B00207A56 /* SpotTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

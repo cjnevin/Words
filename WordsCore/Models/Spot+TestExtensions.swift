@@ -56,8 +56,16 @@ extension Sequence where Element == Spot {
         (0..<columns).reduce(into: []) { $0.append(Spot.empty(row, $1)) }
     }
 
+    static func empty(column: Int, rows: Int) -> [Spot] {
+        (0..<rows).reduce(into: []) { $0.append(Spot.empty($1, column)) }
+    }
+
     static func filled(row: Int, tiles: [Tile]) -> [Spot] {
         tiles.enumerated().reduce(into: []) { $0.append(Spot.tile($1.element, at: row, $1.offset)) }
+    }
+
+    static func filled(column: Int, tiles: [Tile]) -> [Spot] {
+        tiles.enumerated().reduce(into: []) { $0.append(Spot.tile($1.element, at: $1.offset, column)) }
     }
 }
 

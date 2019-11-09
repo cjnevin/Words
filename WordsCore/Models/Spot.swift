@@ -31,7 +31,7 @@ public struct Spot: Equatable, Hashable, Comparable, Codable, Identifiable {
     var tileScore: Int {
         return multiplier * (tile?.value ?? 1)
     }
-    
+
     public init(
         row: Int,
         column: Int,
@@ -69,21 +69,40 @@ extension Sequence where Element == Spot {
         reduce(into: []) { $0 += $1.tile != nil ? [$1] : [] }
     }
 
-    private func placement(newSpots: [Spot]) -> Placement {
-        let oldFilled = Set(self)
-        let newFilled = Set(newSpots)
-        let diff = newFilled.subtracting(oldFilled)
-        let filled = oldFilled.union(diff)
-        let h = diff.row.map { row in filled.filter { $0.row == row } }?.sorted() ?? []
-        let v = diff.column.map { column in filled.filter { $0.column == column } }?.sorted() ?? []
+    func placement(newSpots: [Spot]) -> Placement {
+        let newlyFilled = newSpots.filter { newSpot in
+            guard let oldSpot = self.first(where: { $0.row == newSpot.row && $0.column == newSpot.column }) else {
+                return true
+            }
+            return oldSpot.tile == nil && newSpot.tile != nil
+        }
 
-        // FIXME: Check each index is filled, i.e. row 8-10 no skipped spots
-        // TODO: Write a failing test first
+        let unionLeft = filter { oldSpot in
+            guard let newSpot = self.first(where: { $0.row == oldSpot.row && $0.column == oldSpot.column }) else {
+                return true
+            }
+            return (oldSpot.tile ?? newSpot.tile) != nil
+        }
 
-        switch (h.count, v.count) {
-        case (1..., 1): return Placement(horizontal: h, vertical: [])
-        case (1, 1...): return Placement(horizontal: [], vertical: v)
-        default: return Placement(horizontal: h, vertical: v)
+        let unionRight = newSpots.filter { newSpot in
+            guard let oldSpot = self.first(where: { $0.row == newSpot.row && $0.column == newSpot.column }) else {
+                return true
+            }
+            return (oldSpot.tile ?? newSpot.tile) != nil
+        }
+
+        let allFilled = Set(unionLeft + unionRight)
+
+        let matchingRow = newlyFilled.row.map { row in allFilled.filter { $0.row == row } }?.sorted() ?? []
+        let matchingColumn = newlyFilled.column.map { column in allFilled.filter { $0.column == column } }?.sorted() ?? []
+
+        let sequentialColumn = matchingRow.horizontal
+        let sequentialRow = matchingColumn.vertical
+
+        switch (sequentialColumn.count, sequentialRow.count) {
+        case (1..., 1): return Placement(horizontal: sequentialColumn, vertical: [])
+        case (1, 1...): return Placement(horizontal: [], vertical: sequentialRow)
+        default: return Placement(horizontal: sequentialColumn, vertical: sequentialRow)
         }
     }
 
@@ -118,5 +137,25 @@ extension Sequence where Element == Spot {
 extension Sequence where Element == [Spot] {
     var filled: [Spot] {
         reduce(into: []) { $0 += $1.filled }
+    }
+}
+
+extension Sequence where Element == Int {
+    var areSequential: Bool {
+        let all = Array(self)
+        guard let min = all.min(), let max = all.max(), min != max, (min...max).count == all.count else {
+            return false
+        }
+        return true
+    }
+}
+
+extension Sequence where Element == Spot {
+    var horizontal: [Spot] {
+        return columns.areSequential && row != nil ? Array(self) : []
+    }
+
+    var vertical: [Spot] {
+        return rows.areSequential && column != nil ? Array(self) : []
     }
 }
