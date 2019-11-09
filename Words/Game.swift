@@ -12,13 +12,15 @@ import WordsCore
 
 extension GameStore {
     static var preview: GameStore {
-        return GameStore(
-        initialState: GameState(
-            board: Board(spots: .defaultLayout),
-            players: .preview),
-        reducer: GameReducer(),
-        dependencies: .real,
-        effectQueue: .global())
+        let store = GameStore(
+            initialState: GameState(
+                board: Board(spots: .defaultLayout),
+                players: .preview),
+            reducer: GameReducer(),
+            dependencies: .real,
+            effectQueue: .global())
+        store.add(middleware: ActionDebugMiddleware())
+        return store
     }
 }
 

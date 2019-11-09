@@ -14,6 +14,7 @@
 		837474DB23731808005A4B06 /* StoreProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837474DA23731808005A4B06 /* StoreProvider.swift */; };
 		8374750523736A78005A4B06 /* StoreConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8374750323736A78005A4B06 /* StoreConnector.swift */; };
 		8374750623736A78005A4B06 /* ConnectedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8374750423736A78005A4B06 /* ConnectedView.swift */; };
+		83AAB2242377323B00901526 /* Middleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AAB2232377323B00901526 /* Middleware.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		837474DA23731808005A4B06 /* StoreProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreProvider.swift; sourceTree = "<group>"; };
 		8374750323736A78005A4B06 /* StoreConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreConnector.swift; sourceTree = "<group>"; };
 		8374750423736A78005A4B06 /* ConnectedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectedView.swift; sourceTree = "<group>"; };
+		83AAB2232377323B00901526 /* Middleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Middleware.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +64,7 @@
 				8374750423736A78005A4B06 /* ConnectedView.swift */,
 				83175DAC2376A6E000207A56 /* Effect.swift */,
 				83175DAE2376A71E00207A56 /* Reducer.swift */,
+				83AAB2232377323B00901526 /* Middleware.swift */,
 				837474CE2373164D005A4B06 /* Store.swift */,
 				8374750323736A78005A4B06 /* StoreConnector.swift */,
 				837474DA23731808005A4B06 /* StoreProvider.swift */,
@@ -156,6 +159,7 @@
 				8374750523736A78005A4B06 /* StoreConnector.swift in Sources */,
 				837474DB23731808005A4B06 /* StoreProvider.swift in Sources */,
 				837474CF2373164D005A4B06 /* Store.swift in Sources */,
+				83AAB2242377323B00901526 /* Middleware.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

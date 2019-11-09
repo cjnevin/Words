@@ -67,7 +67,3 @@ internal final class EffectBox<E: Effect>
         base.mapToAction(dependencies: dependencies)
     }
 }
-
-internal func abstractMethod(file: StaticString = #file, line: UInt = #line) -> Never {
-    fatalError("Abstract method call", file: file, line: line)
-}
