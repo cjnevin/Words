@@ -20,6 +20,17 @@ func hashValue(_ characters: [Character]) -> String {
 struct AnagramDictionary: WordValidator {
     private let words: Words
 
+    init?(data: Data) {
+        guard let words = try? JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as? Words else {
+            return nil
+        }
+        self = AnagramDictionary(words: words)
+    }
+
+    init(words: Words) {
+        self.words = words
+    }
+
     subscript(letters: [Character]) -> Anagrams? {
         return words[hashValue(letters)]
     }
@@ -27,22 +38,6 @@ struct AnagramDictionary: WordValidator {
     func validate(word: String) -> Bool {
         let lowercased = word.lowercased()
         return self[hashValue(lowercased)]?.contains(lowercased) ?? false
-    }
-
-    static func deserialize(_ data: Data) -> AnagramDictionary? {
-        guard let words = try? JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as? Words else {
-            return nil
-        }
-        return AnagramDictionary(words: words)
-    }
-
-    init?(data: Data) {
-        guard let _self = AnagramDictionary.deserialize(data) else { return nil }
-        self = _self
-    }
-
-    init(words: Words) {
-        self.words = words
     }
 }
 
