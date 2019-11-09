@@ -16,13 +16,7 @@ public struct GameReducer: Reducer {
     public func reduce(state: inout GameState, action: GameAction) -> GameEffect {
         switch action {
         case let createBag as BagAction.Reset:
-            state.tileBag.tiles = createBag.distribution.reduce(into: [], { tiles, keyValue in
-                let (amount, item) = keyValue
-                let (face, value) = item
-                tiles += (0..<amount).reduce(into: []) {
-                    $0.append(Tile(id: "\(face)\($1)", face: face, value: value, movable: true))
-                }
-            })
+            state.tileBag = .init(distribution: createBag.distribution)
 
         case let placeTile as RackAction.Place:
             guard var player = state.currentPlayer else {

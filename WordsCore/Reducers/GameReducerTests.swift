@@ -33,7 +33,7 @@ class GameReducerTests: XCTestCase {
     func testSwapTilesReturnsDifferentTiles() {
         let swappingPlayer = Player(name: "Player 1", tiles: [.a, .b, .c, .d, .e, .f, .g])
         let nextPlayer = Player(name: "Player 2", tiles: [.h, .i])
-        let action = TurnAction.Exchange(tiles: [.a, .b, .c])
+        let action = RackAction.Exchange(tiles: [.a, .b, .c])
         let initialState = GameState(
             players: [swappingPlayer, nextPlayer],
             tileBag: TileBag(tiles: [.d, .e, .f])
