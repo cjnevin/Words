@@ -27,6 +27,9 @@
 		837474F823734C56005A4B06 /* ScoreboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837474F723734C56005A4B06 /* ScoreboardView.swift */; };
 		837474FC23735FB0005A4B06 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837474FB23735FB0005A4B06 /* Device.swift */; };
 		837475082373749E005A4B06 /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837475072373749E005A4B06 /* Stack.swift */; };
+		83AAB2342377532200901526 /* ExchangeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AAB2332377532200901526 /* ExchangeView.swift */; };
+		83AAB2382377568600901526 /* ExchangeRackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AAB2372377568600901526 /* ExchangeRackView.swift */; };
+		83AAB23A23775C5A00901526 /* GameMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AAB23923775C5A00901526 /* GameMenuView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,6 +107,9 @@
 		837474F723734C56005A4B06 /* ScoreboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreboardView.swift; sourceTree = "<group>"; };
 		837474FB23735FB0005A4B06 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
 		837475072373749E005A4B06 /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
+		83AAB2332377532200901526 /* ExchangeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeView.swift; sourceTree = "<group>"; };
+		83AAB2372377568600901526 /* ExchangeRackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRackView.swift; sourceTree = "<group>"; };
+		83AAB23923775C5A00901526 /* GameMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameMenuView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,7 +152,10 @@
 				837474FB23735FB0005A4B06 /* Device.swift */,
 				837474D023731660005A4B06 /* Game.swift */,
 				83747489237313A3005A4B06 /* GameView.swift */,
+				83AAB23923775C5A00901526 /* GameMenuView.swift */,
 				837474E8237325D9005A4B06 /* BoardView.swift */,
+				83AAB2332377532200901526 /* ExchangeView.swift */,
+				83AAB2372377568600901526 /* ExchangeRackView.swift */,
 				837474F523734BE0005A4B06 /* PlayerView.swift */,
 				837474F723734C56005A4B06 /* ScoreboardView.swift */,
 				837474EA23732D41005A4B06 /* RackView.swift */,
@@ -304,13 +313,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				837474E9237325D9005A4B06 /* BoardView.swift in Sources */,
+				83AAB2342377532200901526 /* ExchangeView.swift in Sources */,
 				837475082373749E005A4B06 /* Stack.swift in Sources */,
 				83747486237313A3005A4B06 /* AppDelegate.swift in Sources */,
 				837474E52373226D005A4B06 /* RowView.swift in Sources */,
 				837474FC23735FB0005A4B06 /* Device.swift in Sources */,
 				837474F623734BE0005A4B06 /* PlayerView.swift in Sources */,
+				83AAB23A23775C5A00901526 /* GameMenuView.swift in Sources */,
 				837474D123731660005A4B06 /* Game.swift in Sources */,
 				837474ED23732D56005A4B06 /* TileView.swift in Sources */,
+				83AAB2382377568600901526 /* ExchangeRackView.swift in Sources */,
 				837474E7237322CD005A4B06 /* SpotView.swift in Sources */,
 				837474EB23732D41005A4B06 /* RackView.swift in Sources */,
 				83747488237313A3005A4B06 /* SceneDelegate.swift in Sources */,

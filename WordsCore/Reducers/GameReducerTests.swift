@@ -42,7 +42,11 @@ class GameReducerTests: XCTestCase {
     func testSwapTilesReturnsDifferentTiles() {
         let swappingPlayer = Player(name: "Player 1", tiles: [.a, .b, .c, .d, .e, .f, .g])
         let nextPlayer = Player(name: "Player 2", tiles: [.h, .i])
-        let action = RackAction.Exchange(tiles: [.a, .b, .c])
+        let begin = RackAction.Exchange.Begin()
+        let toggleA = RackAction.Exchange.Toggle(tile: .a)
+        let toggleB = RackAction.Exchange.Toggle(tile: .b)
+        let toggleC = RackAction.Exchange.Toggle(tile: .c)
+        let end = RackAction.Exchange.End()
         let initialState = GameState(
             players: [swappingPlayer, nextPlayer],
             tileBag: TileBag(tiles: [.d, .e, .f])
@@ -51,7 +55,11 @@ class GameReducerTests: XCTestCase {
         // This loop ensures we get random tiles that don't match our existing ones.
         var matching: Bool = true
         while matching {
-            store.send(action)
+            store.send(begin)
+            store.send(toggleA)
+            store.send(toggleB)
+            store.send(toggleC)
+            store.send(end)
             XCTAssertEqual(store.state.currentPlayer, nextPlayer)
             store.send(TurnAction.Skip())
             XCTAssertEqual(store.state.playerIndex, 0)

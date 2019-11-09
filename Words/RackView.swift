@@ -6,21 +6,36 @@
 //  Copyright © 2019 Chris. All rights reserved.
 //
 
+import Redux
 import SwiftUI
 import WordsCore
 
-struct RackView: View {
+struct RackView: ConnectedView {
+    typealias R = GameReducer
+
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     @EnvironmentObject var device: Device
 
-    var tiles: [Tile]
-    var selectedTile: Tile?
-    var onTileSelection: (Tile) -> Void
+    struct Props {
+        let selectedTiles: [Tile]
+        let unselectedTiles: [Tile]
+        let toggle: (Tile) -> Void
+    }
 
-    var body: some View {
+    func map(state: GameState, dispatch: @escaping (GameAction) -> Void) -> Props {
+        return Props(
+            selectedTiles: state.selectedTiles,
+            unselectedTiles: state.rackTiles,
+            toggle: { tile in
+                dispatch(state.selectedTiles.contains(tile) ? RackAction.Drop() : RackAction.PickUp(tile: tile))
+        })
+    }
+
+    func body(props: Props) -> some View {
         Stack(verticalIfPortrait: false, idealDimension: 50, maximumDimension: 50) {
-            ForEach(tiles) { tile in
-                TileView(tile: tile, isSelected: tile == self.selectedTile) {
-                    self.onTileSelection(tile)
+            ForEach(props.unselectedTiles) { tile in
+                TileView(tile: tile, isSelected: props.selectedTiles.contains(tile)) {
+                    props.toggle(tile)
                 }
             }
         }
@@ -30,9 +45,12 @@ struct RackView: View {
 struct RackView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            RackView(tiles: Tile.preview, onTileSelection: { _ in }).colorScheme(.dark)
-
-            RackView(tiles: Tile.preview, onTileSelection: { _ in }).colorScheme(.light)
+            StoreProvider(store: .default) {
+                RackView()
+            }.colorScheme(.dark)
+            StoreProvider(store: .default) {
+                RackView()
+            }.colorScheme(.light)
         }.environmentObject(Device())
     }
 }

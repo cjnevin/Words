@@ -11,7 +11,7 @@ import Foundation
 public struct Player: Codable, Equatable, Identifiable {
     public let id: String
     public let name: String
-    public internal(set) var tiles: [Tile]
+    var tiles: [Tile]
     public internal(set) var score: Int
 
     public init(name: String, tiles: [Tile] = [], score: Int = 0) {

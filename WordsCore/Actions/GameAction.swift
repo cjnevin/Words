@@ -48,8 +48,23 @@ public enum RackAction {
         public init() { }
     }
 
-    public struct Exchange: GameAction {
-        let tiles: [Tile]
+    public struct Exchange {
+        public struct Begin: GameAction {
+            public init() { }
+        }
+        public struct Toggle: GameAction {
+            let tile: Tile
+
+            public init(tile: Tile) {
+                self.tile = tile
+            }
+        }
+        public struct End: GameAction {
+            public init() { }
+        }
+        public struct Cancel: GameAction {
+            public init() { }
+        }
     }
 }
 

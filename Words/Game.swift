@@ -11,7 +11,7 @@ import Redux
 import WordsCore
 
 extension GameStore {
-    static var preview: GameStore {
+    static var `default`: GameStore {
         let store = GameStore(
             initialState: GameState(),
             reducer: GameReducer(),

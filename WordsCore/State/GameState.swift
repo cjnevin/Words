@@ -11,7 +11,9 @@ import Foundation
 public struct GameState: Codable {
     struct Turn: Codable {
         var board: Board = Board()
+        var exchangingTiles: [Tile] = []
         var heldTile: Tile? = nil
+        var isExchanging: Bool = false
         var placementError: PlacementError?
         var score: Int = 0
 
@@ -20,11 +22,32 @@ public struct GameState: Codable {
         }
     }
 
+    public var isExchanging: Bool {
+        return turn.isExchanging
+    }
+
+    public var rackTiles: [Tile] {
+        let playerTiles = currentPlayer?.tiles ?? []
+        if isExchanging {
+            return playerTiles.filter { !turn.exchangingTiles.contains($0) }
+        } else {
+            return playerTiles
+        }
+    }
+
+    public var selectedTiles: [Tile] {
+        if isExchanging {
+            return turn.exchangingTiles
+        } else {
+            return turn.heldTile.map { [$0] } ?? []
+        }
+    }
+
     public var latestBoard: Board {
         return turn.board
     }
 
-    public var heldTile: Tile? {
+    var heldTile: Tile? {
         return turn.heldTile
     }
 

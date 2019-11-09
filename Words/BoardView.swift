@@ -6,17 +6,29 @@
 //  Copyright © 2019 Chris. All rights reserved.
 //
 
+import Redux
 import SwiftUI
 import WordsCore
 
-struct BoardView: View {
-    var board: Board
-    var onSpotSelection: (Spot) -> Void
+struct BoardView: ConnectedView {
+    typealias R = GameReducer
+    struct Props {
+        let rows: [[Spot]]
+        let select: (Spot) -> Void
+    }
 
-    var body: some View {
+    func map(state: GameState, dispatch: @escaping (GameAction) -> Void) -> Props {
+        return Props(
+            rows: state.latestBoard.spots,
+            select: {
+                dispatch($0.tile == nil ? RackAction.Place(at: $0) : RackAction.Return(from: $0))
+        })
+    }
+
+    func body(props: Props) -> some View {
         VStack(spacing: 0) {
-            ForEach(board.spots) { row in
-                RowView(onSpotSelection: self.onSpotSelection, spots: row)
+            ForEach(props.rows) { row in
+                RowView(onSpotSelection: props.select, spots: row)
             }
         }.aspectRatio(1, contentMode: .fit)
     }
@@ -25,9 +37,12 @@ struct BoardView: View {
 struct BoardView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            BoardView(board: Board(spots: .defaultLayout), onSpotSelection: { _ in }).colorScheme(.dark)
-
-            BoardView(board: Board(spots: .defaultLayout), onSpotSelection: { _ in }).colorScheme(.light)
+            StoreProvider(store: .default) {
+                BoardView()
+            }.colorScheme(.dark)
+            StoreProvider(store: .default) {
+                BoardView()
+            }.colorScheme(.light)
         }
     }
 }

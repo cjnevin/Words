@@ -74,17 +74,37 @@ public struct GameReducer: Reducer {
         case is RackAction.Shuffle:
             state.currentPlayer?.shuffle()
 
-        case let exchangeTiles as RackAction.Exchange:
+        case is RackAction.Exchange.Begin:
+            state.turn.isExchanging = true
+
+        case let toggle as RackAction.Exchange.Toggle:
+            precondition(state.turn.isExchanging, "You must be exchanging to call this action.")
+            if let index = state.turn.exchangingTiles.firstIndex(of: toggle.tile) {
+                state.turn.exchangingTiles.remove(at: index)
+            } else {
+                state.turn.exchangingTiles.append(toggle.tile)
+            }
+
+        case is RackAction.Exchange.End:
+            precondition(state.turn.isExchanging, "You must be exchanging to call this action.")
             guard var player = state.currentPlayer else {
                 preconditionFailure("No current player.")
             }
-            state.tileBag.tiles += exchangeTiles.tiles
-            var copy = state
-            player.swap(tiles: exchangeTiles.tiles, replenish: { copy.tileBag.takeOne() })
-            copy.currentPlayer = player
-            state = copy
-            state.nextPlayer()
-            return ValidationEffect(oldBoard: state.board, newBoard: state.turn.board).eraseToAnyEffect()
+            if state.turn.exchangingTiles.isEmpty {
+                state.turn.isExchanging = false
+            } else {
+                state.tileBag.tiles += state.turn.exchangingTiles
+                var copy = state
+                player.swap(tiles: state.turn.exchangingTiles, replenish: { copy.tileBag.takeOne() })
+                copy.currentPlayer = player
+                state = copy
+                state.nextPlayer()
+                return ValidationEffect(oldBoard: state.board, newBoard: state.turn.board).eraseToAnyEffect()
+            }
+
+        case is RackAction.Exchange.Cancel:
+            state.turn.isExchanging = false
+            state.turn.exchangingTiles = []
 
         case let invalid as ValidationAction.Invalid:
             state.turn.placementError = invalid.error
