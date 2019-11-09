@@ -17,21 +17,23 @@ func hashValue(_ characters: [Character]) -> String {
     return String(characters.sorted())
 }
 
+typealias ValidatableWords = [String: [String]]
+
 struct AnagramDictionary: WordValidator {
-    private let words: Words
+    private let words: ValidatableWords
 
     init?(data: Data) {
-        guard let words = try? JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as? Words else {
+        guard let words = try? JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as? ValidatableWords else {
             return nil
         }
         self = AnagramDictionary(words: words)
     }
 
-    init(words: Words) {
+    init(words: ValidatableWords) {
         self.words = words
     }
 
-    subscript(letters: [Character]) -> Anagrams? {
+    subscript(letters: [Character]) -> [String]? {
         return words[hashValue(letters)]
     }
 
@@ -42,7 +44,7 @@ struct AnagramDictionary: WordValidator {
 }
 
 class AnagramBuilder {
-    private var words = Words()
+    private var words = ValidatableWords()
 
     func addWord(_ word: String) {
         let hash = hashValue(word)

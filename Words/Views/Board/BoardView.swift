@@ -12,6 +12,10 @@ import WordsCore
 
 struct BoardView: ConnectedView {
     typealias R = GameReducer
+
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+    @EnvironmentObject var device: Device
+
     struct Props {
         let rows: [[Spot]]
         let select: (Spot) -> Void
@@ -43,6 +47,6 @@ struct BoardView_Previews: PreviewProvider {
             StoreProvider(store: .default) {
                 BoardView()
             }.colorScheme(.light)
-        }
+        }.environmentObject(Device())
     }
 }

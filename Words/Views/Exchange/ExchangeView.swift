@@ -51,7 +51,7 @@ struct ExchangeView: ConnectedView {
                     }
                 }
             }
-        }
+        }.padding()
     }
 
     func exchangeContent(props: Props) -> some View {

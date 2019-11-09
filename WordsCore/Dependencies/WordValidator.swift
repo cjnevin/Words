@@ -8,38 +8,36 @@
 
 import Foundation
 
-public typealias Anagrams = [String]
-public typealias Words = [String: Anagrams]
 public typealias FixedLetters = [Int: Character]
 
 public protocol WordValidator {
     /// - letters: Letters to use in anagrams (including fixed letters).
     /// - returns: Anagrams for provided the letters.
-    subscript(letters: String) -> Anagrams? { get }
+    subscript(letters: String) -> [String]? { get }
     /// - letters: Letters to use in anagrams (including fixed letters).
     /// - fixedLetters: Index-Character dictionary for all spots that are currently filled.
     /// - returns: Anagrams for provided the letters where fixed letters match and remaining letters.
-    subscript(letters: String, fixedLetters: FixedLetters) -> Anagrams? { get }
+    subscript(letters: String, fixedLetters: FixedLetters) -> [String]? { get }
     /// - letters: Letters to use in anagrams (including fixed letters).
     /// - returns: Anagrams for provided the letters.
-    subscript(letters: [Character]) -> Anagrams? { get }
+    subscript(letters: [Character]) -> [String]? { get }
     /// - letters: Letters to use in anagrams (including fixed letters).
     /// - fixedLetters: Index-Character dictionary for all spots that are currently filled.
     /// - returns: Anagrams for provided the letters where fixed letters match and remaining letters.
-    subscript(letters: [Character], fixedLetters: FixedLetters) -> Anagrams? { get }
+    subscript(letters: [Character], fixedLetters: FixedLetters) -> [String]? { get }
     /// - parameter word: Word to check validity of.
     /// - returns: True if word is valid.
     func validate(word: String) -> Bool
 }
 
 public extension WordValidator {
-    subscript(letters: String) -> Anagrams? {
+    subscript(letters: String) -> [String]? {
         return self[Array(letters)]
     }
-    subscript(letters: String, fixedLetters: FixedLetters) -> Anagrams? {
+    subscript(letters: String, fixedLetters: FixedLetters) -> [String]? {
         return self[Array(letters), fixedLetters]
     }
-    subscript(letters: [Character], fixedLetters: FixedLetters) -> Anagrams? {
+    subscript(letters: [Character], fixedLetters: FixedLetters) -> [String]? {
         return self[letters]?.filter({ word in
             var remainingForWord = letters
             for (index, char) in word.enumerated() {
