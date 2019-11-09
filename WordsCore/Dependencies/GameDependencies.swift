@@ -9,13 +9,9 @@
 import Foundation
 
 public struct GameDependencies {
-    let backgroundDispatch: (@escaping () -> Void) -> Void
     let validator: WordValidator
 
-    public init(
-        backgroundDispatch: @escaping (@escaping () -> Void) -> Void,
-        validator: WordValidator) {
-        self.backgroundDispatch = backgroundDispatch
+    public init(validator: WordValidator) {
         self.validator = validator
     }
 }

@@ -130,41 +130,22 @@ class GameReducerTests: XCTestCase {
         XCTAssertNotEqual(store.state.currentPlayer?.tiles, initialState.currentPlayer?.tiles)
     }
 
-    func testValidClearsInvalidAndMisplaced() {
-        let candidate = Candidate(spots: [.empty(1, 1)], tiles: [.a])!
-        let turn = GameState.Turn(
-            misplacedSpots: [Placement(horizontal: .empty(row: 2, columns: 2), vertical: [])],
-            invalidCandidates: [candidate])
+    func testValidClearsPlacementError() {
+        let turn = GameState.Turn(placementError: .tileMisaligned)
         let store = GameStore(initialState: .init(turn: turn), reducer: GameReducer(), dependencies: GameDependencies.mocked)
         store.send(ValidationAction.Valid(score: 1))
-        XCTAssertTrue(store.state.turn.invalidCandidates.isEmpty)
-        XCTAssertTrue(store.state.turn.misplacedSpots.isEmpty)
+        XCTAssertNil(store.state.turn.placementError)
         XCTAssertEqual(store.state.turn.score, 1)
     }
 
     func testInvalidClearsValidAndMisplaced() {
-        let candidate = Candidate(spots: [.empty(1, 1)], tiles: [.a])!
-        let turn = GameState.Turn(
-            misplacedSpots: [Placement(horizontal: .empty(row: 2, columns: 2), vertical: [])],
-            score: 1)
-        let store = GameStore(initialState: .init(turn: turn), reducer: GameReducer(), dependencies: GameDependencies.mocked)
-        store.send(ValidationAction.Invalid(candidates: [candidate]))
-        XCTAssertEqual(store.state.turn.score, 0)
-        XCTAssertTrue(store.state.turn.misplacedSpots.isEmpty)
-        XCTAssertEqual(store.state.turn.invalidCandidates, [candidate])
-    }
-
-    func testMisplacedClearsValidAndInvalid() {
-        let candidate = Candidate(spots: [.empty(1, 1)], tiles: [.a])!
-        let placement = Placement(horizontal: .empty(row: 2, columns: 2), vertical: [])
-        let turn = GameState.Turn(
-            invalidCandidates: [candidate],
-            score: 1)
-        let store = GameStore(initialState: .init(turn: turn), reducer: GameReducer(), dependencies: GameDependencies.mocked)
-        store.send(ValidationAction.Misplaced(placements: [placement]))
-        XCTAssertEqual(store.state.turn.score, 0)
-        XCTAssertTrue(store.state.turn.invalidCandidates.isEmpty)
-        XCTAssertEqual(store.state.turn.misplacedSpots, [placement])
+        let store = GameStore(initialState: .init(), reducer: GameReducer(), dependencies: GameDependencies.mocked)
+        PlacementError.allCases.forEach { error in
+            store.send(ValidationAction.Valid(score: 100))
+            store.send(ValidationAction.Invalid(error: error))
+            XCTAssertEqual(store.state.turn.score, 0)
+            XCTAssertEqual(store.state.turn.placementError, error)
+        }
     }
 
     func testSkipGoesToNextPlayer() {

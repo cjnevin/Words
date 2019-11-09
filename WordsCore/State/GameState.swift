@@ -12,8 +12,7 @@ public struct GameState: Codable {
     struct Turn: Codable {
         var board: Board = Board()
         var heldTile: Tile? = nil
-        var misplacedSpots: [Placement] = []
-        var invalidCandidates: [Candidate] = []
+        var placementError: PlacementError?
         var score: Int = 0
 
         var canSubmit: Bool {
@@ -37,6 +36,11 @@ public struct GameState: Codable {
     
     public var canSubmit: Bool {
         return turn.canSubmit
+    }
+
+    mutating func invalidateTurn() {
+        turn.score = 0
+        turn.placementError = nil
     }
 
     mutating func restoreRack() {

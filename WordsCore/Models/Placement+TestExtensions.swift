@@ -16,6 +16,10 @@ extension Placement {
 }
 
 extension CompoundPlacement {
+    var mainFaces: String {
+        return mainPlacement.spots.compactMap { $0.tile?.face }.joined()
+    }
+
     var horizontalFaces: [String] {
         return horizontalIntersections.map { $0.horizontal.face }
     }

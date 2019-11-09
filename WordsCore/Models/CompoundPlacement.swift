@@ -14,35 +14,17 @@ struct CompoundPlacement: Equatable, Hashable {
     let verticalIntersections: [Placement]
 }
 
-enum Intersect {
-    case withExisting
-    case withMiddle
-}
-
 extension CompoundPlacement {
-    init(oldBoard: Board, newBoard: Board) {
-        self = oldBoard.spots.filled.compoundPlacement(newSpots: newBoard.spots.filled)
-    }
-
-    func candidates(on board: Board, intersect: Intersect) -> CandidateCollectionResult {
+    func candidates(on board: Board) -> [Candidate] {
         let mainCandidates = mainPlacement.candidates(on: board)
-        let containsMiddle = mainPlacement.spots.contains(where: { $0.middle })
-
         let horizontalCandidates = horizontalIntersections.map { $0.candidates(on: board) }
         let verticalCandidates = verticalIntersections.map { $0.candidates(on: board) }
         let intersections = horizontalCandidates + verticalCandidates
 
-        print(mainPlacement.spots.compactMap { $0.tile?.face })
-        print(horizontalIntersections.map { $0.spots.compactMap { $0.tile?.face } })
-        print(verticalIntersections.map { $0.spots.compactMap { $0.tile?.face } })
+        print("main", mainPlacement.spots.compactMap { $0.tile?.face })
+        print("hz", horizontalIntersections.map { $0.spots.compactMap { $0.tile?.face } })
+        print("vt", verticalIntersections.map { $0.spots.compactMap { $0.tile?.face } })
 
-        switch (intersect, intersections.isEmpty, containsMiddle) {
-        case (.withMiddle, true, true):
-            return mainCandidates
-        case (.withExisting, false, false):
-            return ([mainCandidates] + intersections).flattened()
-        default:
-            return .invalidPlacements([mainPlacement])
-        }
+        return mainCandidates + intersections.flatMap { $0 }
     }
 }

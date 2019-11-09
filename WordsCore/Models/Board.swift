@@ -17,6 +17,10 @@ public struct Board: Equatable, Hashable, Codable {
 }
 
 extension Board {
+    func calculatePlacement(comparingWith newBoard: Board) -> PlacementResult {
+        spots.filled.compoundPlacement(newBoard.spots.filled)
+    }
+
     var isEmpty: Bool {
         for row in spots {
             for column in row where column.tile != nil {

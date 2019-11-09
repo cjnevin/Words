@@ -37,4 +37,9 @@ class SequenceTests: XCTestCase {
         expect([1, 2, 3], matches: [], intersectingAt: 0)
         expect([1, 2, 3], matches: [], intersectingAt: 4)
     }
+
+    func testAreSequential() {
+        XCTAssertTrue([1, 2, 3].areSequential)
+        XCTAssertFalse([1, 3, 4].areSequential)
+    }
 }

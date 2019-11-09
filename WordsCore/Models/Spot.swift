@@ -69,14 +69,24 @@ extension Sequence where Element == Spot {
         reduce(into: []) { $0 += $1.tile != nil ? [$1] : [] }
     }
 
-    func placement(newSpots: [Spot]) -> Placement {
-        let newlyFilled = newSpots.filter { newSpot in
+    var isHorizontal: Bool {
+        row != nil
+    }
+
+    var isVertical: Bool {
+        column != nil
+    }
+
+    private func newlyFilled(_ newSpots: [Spot]) -> [Spot] {
+        newSpots.filter { newSpot in
             guard let oldSpot = self.first(where: { $0.row == newSpot.row && $0.column == newSpot.column }) else {
                 return true
             }
             return oldSpot.tile == nil && newSpot.tile != nil
         }
+    }
 
+    private func unionFilled(_ newSpots: [Spot]) -> [Spot] {
         let unionLeft = filter { oldSpot in
             guard let newSpot = self.first(where: { $0.row == oldSpot.row && $0.column == oldSpot.column }) else {
                 return true
@@ -91,10 +101,15 @@ extension Sequence where Element == Spot {
             return (oldSpot.tile ?? newSpot.tile) != nil
         }
 
-        let allFilled = Set(unionLeft + unionRight)
+        return Set(unionLeft + unionRight).sorted()
+    }
 
-        let matchingRow = newlyFilled.row.map { row in allFilled.filter { $0.row == row } }?.sorted() ?? []
-        let matchingColumn = newlyFilled.column.map { column in allFilled.filter { $0.column == column } }?.sorted() ?? []
+    func placement(newSpots: [Spot]) -> Placement {
+        let newlyFilled = self.newlyFilled(newSpots)
+        let unionFilled = self.unionFilled(newSpots)
+
+        let matchingRow = newlyFilled.row.map { row in unionFilled.filter { $0.row == row } }?.sorted() ?? []
+        let matchingColumn = newlyFilled.column.map { column in unionFilled.filter { $0.column == column } }?.sorted() ?? []
 
         let sequentialColumn = matchingRow.horizontal
         let sequentialRow = matchingColumn.vertical
@@ -106,31 +121,71 @@ extension Sequence where Element == Spot {
         }
     }
 
-    private func horizontalIntersections(for placement: Placement) -> [Placement] {
-        return placement.vertical.reduce(into: []) { buffer, item in
-            let sameRow = filter { $0.row == item.row }
-            if let intersection = sameRow.intersection(with: item, mapping: { $0.column })?.sorted() {
-                buffer.append(Placement(horizontal: intersection, vertical: []))
-            }
-        }
+    func `in`(column: Int) -> [Spot] {
+        filter { $0.column == column }
     }
 
-    private func verticalIntersections(for placement: Placement) -> [Placement] {
-        return placement.horizontal.reduce(into: [Placement]()) { buffer, item in
-            let sameColumn = filter { $0.column == item.column }
-            if let intersection = sameColumn.intersection(with: item, mapping: { $0.row })?.sorted() {
-                buffer.append(Placement(horizontal: [], vertical: intersection))
-            }
-        }
+    func `in`(row: Int) -> [Spot] {
+        filter { $0.row == row }
     }
 
-    func compoundPlacement(newSpots: [Spot]) -> CompoundPlacement {
-        let original = placement(newSpots: newSpots)
-        let filled = Array(Set(newSpots).union(Set(self)))
-        return CompoundPlacement(
-            mainPlacement: original,
-            horizontalIntersections: filled.horizontalIntersections(for: original),
-            verticalIntersections: filled.verticalIntersections(for: original))
+    func verticalIntersections(in filled: [Spot]) -> [Placement] {
+        compactMap { spot in
+            filled.in(column: spot.column)
+                .intersection(with: spot, mapping: { $0.row })?
+                .sorted()
+        }.map { Placement(horizontal: [], vertical: $0) }
+    }
+
+    func horizontalIntersections(in filled: [Spot]) -> [Placement] {
+        compactMap { spot in
+            filled.in(row: spot.row)
+                .intersection(with: spot, mapping: { $0.column })?
+                .sorted()
+        }.map { Placement(horizontal: $0, vertical: []) }
+    }
+
+    func compoundPlacement(_ allNewFilledSpots: [Spot]) -> PlacementResult {
+        let mainPlacement = placement(newSpots: allNewFilledSpots)
+        let newlyFilled = self.newlyFilled(mainPlacement.spots)
+        let unionFilled = self.unionFilled(mainPlacement.spots)
+
+        guard !newlyFilled.isEmpty else {
+            return .failure(.tileNotPlaced)
+        }
+
+        let allNewTilesInMainPlacement = newlyFilled.count == self.newlyFilled(allNewFilledSpots).count
+        guard allNewTilesInMainPlacement else {
+            return .failure(.tileMisaligned)
+        }
+
+        let intersectsMiddle = unionFilled.contains(where: { $0.middle })
+        guard intersectsMiddle else {
+            return .failure(.tileMustIntersectMiddle)
+        }
+
+        let isVertical = !mainPlacement.vertical.isEmpty
+        let horizontalIntersections = isVertical ? newlyFilled.horizontalIntersections(in: unionFilled) : []
+
+        let isHorizontal = !mainPlacement.horizontal.isEmpty
+        let verticalIntersections = isHorizontal ? newlyFilled.verticalIntersections(in: unionFilled) : []
+
+        if filled.isEmpty {
+            if !horizontalIntersections.isEmpty || !verticalIntersections.isEmpty {
+                return .failure(.tileCannotIntersectOnFirstPlay)
+            }
+        } else {
+            if mainPlacement.spots.count == newlyFilled.count, horizontalIntersections.isEmpty, verticalIntersections.isEmpty {
+                return .failure(.tileMustIntersectExistingTile)
+            }
+        }
+
+        let placement = CompoundPlacement(
+            mainPlacement: mainPlacement,
+            horizontalIntersections: horizontalIntersections,
+            verticalIntersections: verticalIntersections)
+
+        return .success(placement)
     }
 }
 

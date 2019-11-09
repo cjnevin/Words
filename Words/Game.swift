@@ -23,9 +23,7 @@ extension GameStore {
 
 extension GameDependencies {
     static var real: GameDependencies {
-        return GameDependencies(
-            backgroundDispatch: { DispatchQueue.global(qos: .background).async(execute: $0) },
-            validator: RealWordValidator())
+        return GameDependencies(validator: RealWordValidator())
     }
 }
 

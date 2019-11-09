@@ -11,8 +11,6 @@ import Combine
 
 public protocol GameAction { }
 
-public struct NoAction: GameAction { }
-
 public enum BagAction {
     public struct Reset: GameAction {
         let distribution: [Int: (String, Int)]
@@ -68,12 +66,8 @@ public enum TurnAction {
 }
 
 enum ValidationAction {
-    struct Misplaced: GameAction {
-        let placements: [Placement]
-    }
-
     struct Invalid: GameAction {
-        let candidates: [Candidate]
+        let error: PlacementError
     }
 
     struct Valid: GameAction {

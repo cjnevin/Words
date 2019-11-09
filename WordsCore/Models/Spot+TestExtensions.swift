@@ -36,14 +36,6 @@ extension Sequence where Element == Spot {
         }
     }
 
-    var isHorizontal: Bool {
-        row != nil
-    }
-
-    var isVertical: Bool {
-        column != nil
-    }
-
     var isAligned: Bool {
         isHorizontal || isVertical
     }
@@ -60,8 +52,8 @@ extension Sequence where Element == Spot {
         (0..<rows).reduce(into: []) { $0.append(Spot.empty($1, column)) }
     }
 
-    static func filled(row: Int, tiles: [Tile]) -> [Spot] {
-        tiles.enumerated().reduce(into: []) { $0.append(Spot.tile($1.element, at: row, $1.offset)) }
+    static func filled(row: Int, tiles: [Tile], middle: Bool = false) -> [Spot] {
+        tiles.enumerated().reduce(into: []) { $0.append(Spot.tile($1.element, at: row, $1.offset, middle: middle && $1.offset == tiles.count / 2)) }
     }
 
     static func filled(column: Int, tiles: [Tile]) -> [Spot] {

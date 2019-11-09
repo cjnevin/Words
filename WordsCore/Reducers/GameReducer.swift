@@ -40,6 +40,7 @@ public struct GameReducer: Reducer {
                 state.currentPlayer = player
             }
             state.turn.heldTile = nil
+            state.invalidateTurn()
             return ValidationEffect(oldBoard: state.board, newBoard: state.turn.board).eraseToAnyEffect()
 
         case let pickUpTile as RackAction.PickUp:
@@ -48,6 +49,7 @@ public struct GameReducer: Reducer {
             }
             precondition(player.tiles.contains(pickUpTile.tile), "Player is not holding this tile.")
             state.turn.heldTile = pickUpTile.tile
+            state.invalidateTurn()
 
         case let returnTile as RackAction.Return:
             guard var player = state.currentPlayer else {
@@ -59,6 +61,7 @@ public struct GameReducer: Reducer {
             var spot = returnTile.spot
             spot.tile = nil
             state.turn.board.spots[returnTile.spot.row][returnTile.spot.column] = spot
+            state.invalidateTurn()
             player.tiles.append(tile)
             state.currentPlayer = player
             return ValidationEffect(oldBoard: state.board, newBoard: state.turn.board).eraseToAnyEffect()
@@ -66,25 +69,19 @@ public struct GameReducer: Reducer {
         case is RackAction.ReturnAll:
             state.restoreRack()
             state.turn.board = state.board
+            state.invalidateTurn()
             return ValidationEffect(oldBoard: state.board, newBoard: state.turn.board).eraseToAnyEffect()
 
         case is RackAction.Shuffle:
             state.currentPlayer?.shuffle()
 
         case let invalid as ValidationAction.Invalid:
-            state.turn.invalidCandidates = invalid.candidates
+            state.turn.placementError = invalid.error
             state.turn.score = 0
-            state.turn.misplacedSpots = []
 
         case let valid as ValidationAction.Valid:
-            state.turn.invalidCandidates = []
+            state.turn.placementError = nil
             state.turn.score = valid.score
-            state.turn.misplacedSpots = []
-
-        case let misplaced as ValidationAction.Misplaced:
-            state.turn.invalidCandidates = []
-            state.turn.score = 0
-            state.turn.misplacedSpots = misplaced.placements
 
         case let exchangeTiles as TurnAction.Exchange:
             guard var player = state.currentPlayer else {
@@ -112,7 +109,6 @@ public struct GameReducer: Reducer {
             precondition(state.currentPlayer != nil, "No current player.")
             state.restoreRack()
             state.nextPlayer()
-            return ValidationEffect(oldBoard: state.board, newBoard: state.turn.board).eraseToAnyEffect()
 
         default:
             break

@@ -12,7 +12,6 @@ import Foundation
 extension GameDependencies {
     static var mocked: GameDependencies {
         return GameDependencies(
-            backgroundDispatch: { f in f() },
             validator: MockWordValidator()
         )
     }

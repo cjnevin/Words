@@ -21,29 +21,16 @@ public struct ValidationEffect: Effect {
         self.newBoard = newBoard
     }
 
-    var intersect: Intersect {
-        oldBoard.isEmpty ? .withMiddle : .withExisting
-    }
-
     public func mapToAction(dependencies: GameDependencies) -> AnyPublisher<GameAction, Never> {
-        let subject = PassthroughSubject<GameAction, Never>()
-        dependencies.backgroundDispatch {
-            let candidates = CompoundPlacement(oldBoard: self.oldBoard, newBoard: self.newBoard)
-                .candidates(on: self.newBoard, intersect: self.intersect)
-            switch candidates {
-            case let .invalidPlacements(placements):
-                subject.send(ValidationAction.Misplaced(placements: placements))
-            case let .candidates(candidates):
-                switch candidates.validate(with: dependencies.validator) {
-                case let .invalidCandidates(candidates):
-                    subject.send(ValidationAction.Invalid(candidates: candidates))
-                case let .validCandidates(candidates):
-                    let score = candidates.calculateScore(oldBoard: self.oldBoard, newBoard: self.newBoard)
-                    subject.send(ValidationAction.Valid(score: score))
-                }
-            }
+        let placementResult = self.oldBoard.calculatePlacement(comparingWith: self.newBoard)
+        switch placementResult {
+        case let .failure(error):
+            return Just(ValidationAction.Invalid(error: error)).eraseToAnyPublisher()
+        case let .success(placement):
+            let candidates = placement.candidates(on: self.newBoard)
+            let score = candidates.calculateScore(oldBoard: self.oldBoard, newBoard: self.newBoard)
+            return Just(ValidationAction.Valid(score: score)).eraseToAnyPublisher()
         }
-        return subject.eraseToAnyPublisher()
     }
 }
 
@@ -56,6 +43,6 @@ public extension ValidationEffect {
 
 public struct NoEffect: Effect {
     public func mapToAction(dependencies: GameDependencies) -> AnyPublisher<GameAction, Never> {
-        Just(NoAction()).eraseToAnyPublisher()
+        Empty().eraseToAnyPublisher()
     }
 }
