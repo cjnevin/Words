@@ -17,8 +17,10 @@ struct GameMenuView: ConnectedView {
     @EnvironmentObject var device: Device
 
     struct Props {
+        let canReturnAll: Bool
         let canSubmit: Bool
         let exchange: () -> Void
+        let returnAll: () -> Void
         let shuffle: () -> Void
         let skip: () -> Void
         let submit: () -> Void
@@ -26,8 +28,10 @@ struct GameMenuView: ConnectedView {
 
     func map(state: GameState, send: @escaping (GameAction) -> Void) -> Props {
         Props(
+            canReturnAll: state.canReturnAll,
             canSubmit: state.canSubmit,
             exchange: { send(RackAction.Exchange.Begin()) },
+            returnAll: { send(RackAction.ReturnAll()) },
             shuffle: { send(RackAction.Shuffle()) },
             skip: { send(TurnAction.Skip()) },
             submit: { send(TurnAction.Submit()) }
@@ -36,31 +40,38 @@ struct GameMenuView: ConnectedView {
 
     func body(props: Props) -> some View {
         Stack(verticalIfPortrait: false, spacing: 20) {
+            Button(action: props.submit) {
+                VStack {
+                    Image(systemName: "paperplane.fill")
+                    Text("Submit").font(device.menuFont)
+                }
+            }.disabled(!props.canSubmit)
+            Button(action: props.skip) {
+                VStack {
+                    Image(systemName: "arrow.uturn.right")
+                    Text("Skip").font(device.menuFont)
+                }
+            }
+            Spacer()
             Button(action: props.exchange) {
                 VStack {
                     Image(systemName: "arrow.swap")
-                    Text("Swap").font(.callout)
+                    Text("Swap").font(device.menuFont)
                 }
             }
             Button(action: props.shuffle) {
                 VStack {
                     Image(systemName: "shuffle")
-                    Text("Shuffle").font(.callout)
+                    Text("Shuffle").font(device.menuFont)
                 }
             }
-            Spacer()
-            Button(action: props.skip) {
+            Button(action: props.returnAll) {
                 VStack {
-                    Image(systemName: "arrow.uturn.right")
-                    Text("Skip").font(.callout)
+                    Image(systemName: "return")
+                    Text("Return All").font(device.menuFont)
                 }
-            }
-            Button(action: props.submit) {
-                VStack {
-                    Image(systemName: "paperplane.fill")
-                    Text("Submit").font(.callout)
-                }
-            }.disabled(!props.canSubmit)
+            }.disabled(!props.canReturnAll)
+
         }.padding()
     }
 }

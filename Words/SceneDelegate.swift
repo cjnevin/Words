@@ -25,7 +25,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Create the SwiftUI view that provides the window contents.
         let storeProvider = StoreProvider(store: .default) {
             GameView()
-        }.environmentObject(device)
+        }
+        .environmentObject(device)
+        .edgesIgnoringSafeArea(device.edges)
+        .statusBar(hidden: true)
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {

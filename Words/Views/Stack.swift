@@ -35,7 +35,7 @@ struct Stack<Content> : View where Content : View {
     }
 
     var isVertical: Bool {
-        device.isLandscape ? !verticalIfPortrait : verticalIfPortrait
+        device.kind == .mac ? false : (device.isLandscape ? !verticalIfPortrait : verticalIfPortrait)
     }
 
     var body: some View {

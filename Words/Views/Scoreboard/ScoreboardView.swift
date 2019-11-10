@@ -26,26 +26,35 @@ struct ScoreboardView: ConnectedView {
               current: state.currentPlayer!)
     }
 
-    func body(props: Props) -> some View {
-        Stack(verticalIfPortrait: false, spacing: 10) {
-            ForEach(props.players) { player in
-                PlayerView(isCurrent: player == props.current, player: player)
-            }
-        }.background(Color("background"))
+    @ViewBuilder
+    func content(props: Props) -> some View {
+        ForEach(props.players) { player in
+            PlayerView(isCurrent: player == props.current, player: player)
+        }
+    }
+
+    func body(props: Props) -> AnyView {
+        if device.kind == .mac {
+            return AnyView(VStack(spacing: 10) {
+                content(props: props)
+            })
+        } else {
+            return AnyView(Stack(verticalIfPortrait: false, spacing: 10) {
+                content(props: props)
+            })
+        }
     }
 }
 
 struct ScoreboardView_Previews: PreviewProvider {
     static var previews: some View {
-        func makeScoreboardView() -> some View {
+        return VStack(spacing: 10) {
             StoreProvider(store: .scoreboardPreview) {
                 ScoreboardView()
-            }
-        }
-
-        return VStack(spacing: 10) {
-            makeScoreboardView().colorScheme(.dark)
-            makeScoreboardView().colorScheme(.light)
+            }.colorScheme(.dark)
+            StoreProvider(store: .scoreboardPreview) {
+                ScoreboardView()
+            }.colorScheme(.light)
         }.environmentObject(Device())
     }
 }

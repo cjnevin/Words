@@ -60,7 +60,11 @@ public struct GameState: Codable {
     var playerIndex: Int = 0
     public internal(set) var tileBag: TileBag = TileBag()
     var turn: Turn = Turn()
-    
+
+    public var canReturnAll: Bool {
+        return turn.board != board
+    }
+
     public var canSubmit: Bool {
         return turn.canSubmit
     }

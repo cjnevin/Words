@@ -158,7 +158,7 @@ extension Sequence where Element == Spot {
             return .failure(.tileNotPlaced)
         }
 
-        let allNewTilesInMainPlacement = newlyFilled.count == self.newlyFilled(allNewFilledSpots).count
+        let allNewTilesInMainPlacement = Set(newlyFilled).count == self.newlyFilled(allNewFilledSpots).count
         guard allNewTilesInMainPlacement else {
             return .failure(.tileMisaligned)
         }

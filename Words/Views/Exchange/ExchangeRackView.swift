@@ -10,6 +10,8 @@ import SwiftUI
 import WordsCore
 
 struct ExchangeRackView: View {
+    @EnvironmentObject var device: Device
+
     var tiles: [Tile]
     var selectedTiles: [Tile]
     var onTileSelection: (Tile) -> Void
@@ -21,7 +23,8 @@ struct ExchangeRackView: View {
                     self.onTileSelection(tile)
                 }
             }
-        }.frame(idealHeight: 50, maxHeight: 50)
+        }.frame(idealHeight: device.tileDimension,
+                maxHeight: device.tileDimension)
     }
 }
 

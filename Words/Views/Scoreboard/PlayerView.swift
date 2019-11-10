@@ -22,8 +22,6 @@ struct PlayerView: View {
                 .foregroundColor(Color(isCurrent ? "playerScoreCurrent" : "playerScore"))
         }
         .padding()
-        .minimumScaleFactor(0.7)
-        .scaledToFit()
         .border(Color(isCurrent ? "playerBorderCurrent" : "playerBorder"))
         .background(Color("background"))
     }

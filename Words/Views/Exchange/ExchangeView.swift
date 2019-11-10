@@ -39,7 +39,7 @@ struct ExchangeView: ConnectedView {
             Button(action: props.exchangeCancel) {
                 VStack {
                     Image(systemName: "xmark")
-                    Text("Cancel").font(.callout)
+                    Text("Cancel").font(device.menuFont)
                 }
             }
             if !props.selectedTiles.isEmpty {
@@ -47,7 +47,7 @@ struct ExchangeView: ConnectedView {
                 Button(action: props.exchangeEnd) {
                     VStack {
                         Image(systemName: "arrow.swap")
-                        Text("Exchange").font(.callout)
+                        Text("Exchange").font(device.menuFont)
                     }
                 }
             }

@@ -24,21 +24,32 @@ struct GameView: ConnectedView {
         return Props(isExchanging: state.isExchanging)
     }
 
-    func innerBody(props: Props) -> some View {
-        Stack {
-            if props.isExchanging {
-                ExchangeView()
-            } else {
-                GameMenuView()
-                Stack {
-                    Spacer()
-                    ScoreboardView()
-                    BoardView()
-                    RackView()
-                    Spacer()
-                }
+    @ViewBuilder
+    func content(props: Props) -> some View {
+        if props.isExchanging {
+            ExchangeView()
+        } else {
+            Stack {
+                ScoreboardView()
+                Spacer()
+                BoardView()
+                Spacer()
+                RackView()
             }
-        }.padding(4)
+            GameMenuView()
+        }
+    }
+
+    func innerBody(props: Props) -> some View {
+        if device.kind == .mac {
+            return AnyView(VStack {
+                content(props: props)
+            }).padding(4)
+        } else {
+            return AnyView(Stack {
+                content(props: props)
+            }).padding(4)
+        }
     }
 
     func body(props: Props) -> some View {

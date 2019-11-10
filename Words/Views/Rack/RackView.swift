@@ -33,13 +33,32 @@ struct RackView: ConnectedView {
         })
     }
 
-    func body(props: Props) -> some View {
-        Stack(verticalIfPortrait: false, idealDimension: 50, maximumDimension: 50) {
-            ForEach(props.unselectedTiles) { tile in
-                TileView(tile: tile, isSelected: props.selectedTiles.contains(tile)) {
-                    props.toggle(tile)
-                }
+    @ViewBuilder
+    func content(props: Props) -> some View {
+        ForEach(props.unselectedTiles) { tile in
+            TileView(tile: tile, isSelected: props.selectedTiles.contains(tile)) {
+                props.toggle(tile)
             }
+        }
+    }
+
+    func body(props: Props) -> AnyView {
+        let dimension = device.tileDimension
+        switch device.kind {
+        case .mac:
+            return AnyView(
+                VStack {
+                    content(props: props)
+                }.frame(idealWidth: dimension, maxWidth: dimension)
+            )
+        default:
+            return AnyView(
+                Stack(verticalIfPortrait: false,
+                      idealDimension: dimension,
+                      maximumDimension: dimension) {
+                        content(props: props)
+                }
+            )
         }
     }
 }
