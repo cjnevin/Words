@@ -18,6 +18,10 @@ extension GameDependencies {
 }
 
 class MockWordValidator: WordValidator {
+    subscript(letters: [Character]) -> [String]? {
+        return nil
+    }
+
     var isValid: Bool = true
 
     func validate(word: String) -> Bool {
