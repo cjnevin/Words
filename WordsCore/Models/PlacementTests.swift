@@ -247,30 +247,103 @@ class PlacementTests: XCTestCase {
         }
     }
 
-    func testCornerPlaysAreValid() {
-        let oldBoard = Board(pattern: """
-            -|-|-|-|-
-            -|B|-|-|-
-            -|E|D|-|-
-            -|-|-|-|-
-            -|-|-|-|-
-        """)
-        let newBoard = Board(pattern: """
-            -|-|-|-|-
-            -|-|A|-|-
-            -|-|-|-|-
-            -|-|-|-|-
-            -|-|-|-|-
-        """)
+    func expectCorner(
+        horizontal: String,
+        vertical: String,
+        for oldBoard: Board,
+        newBoard: Board,
+        file: StaticString = #file,
+        line: UInt = #line) {
         let result = oldBoard.calculatePlacement(comparingWith: newBoard)
         switch result {
         case let .success(placement):
-            XCTAssertEqual(placement.mainPlacement.horizontal.faces, "BA")
-            XCTAssertEqual(placement.mainPlacement.vertical.faces, "AD")
+            XCTAssertEqual(placement.mainPlacement.horizontal.faces, horizontal)
+            XCTAssertEqual(placement.mainPlacement.vertical.faces, vertical)
             XCTAssertTrue(placement.verticalFaces.isEmpty, placement.verticalFaces.joined(separator: ", "))
             XCTAssertTrue(placement.horizontalFaces.isEmpty, placement.horizontalFaces.joined(separator: ", "))
-        default: XCTFail("Expected success")
+        default:
+            XCTFail("Expected success")
         }
+    }
+
+    func testTopRightCornerSingleTilePlayIsValid() {
+        expectCorner(
+            horizontal: "BA",
+            vertical: "AD",
+            for: Board(pattern: """
+                   -|-|-|-|-
+                   -|B|-|-|-
+                   -|E|D|-|-
+                   -|-|-|-|-
+                   -|-|-|-|-
+               """),
+            newBoard: Board(pattern: """
+                   -|-|-|-|-
+                   -|-|A|-|-
+                   -|-|-|-|-
+                   -|-|-|-|-
+                   -|-|-|-|-
+               """))
+    }
+
+    func testTopLeftCornerSingleTilePlayIsValid() {
+        expectCorner(
+            horizontal: "BA",
+            vertical: "BE",
+            for: Board(pattern: """
+                   -|-|-|-|-
+                   -|-|A|-|-
+                   -|E|D|-|-
+                   -|-|-|-|-
+                   -|-|-|-|-
+               """),
+            newBoard: Board(pattern: """
+                   -|-|-|-|-
+                   -|B|-|-|-
+                   -|-|-|-|-
+                   -|-|-|-|-
+                   -|-|-|-|-
+               """))
+    }
+
+    func testBottomLeftCornerSingleTilePlayIsValid() {
+        expectCorner(
+            horizontal: "ED",
+            vertical: "BE",
+            for: Board(pattern: """
+                   -|-|-|-|-
+                   -|B|A|-|-
+                   -|-|D|-|-
+                   -|-|-|-|-
+                   -|-|-|-|-
+               """),
+            newBoard: Board(pattern: """
+                   -|-|-|-|-
+                   -|-|-|-|-
+                   -|E|-|-|-
+                   -|-|-|-|-
+                   -|-|-|-|-
+               """))
+    }
+
+    func testBottomRightCornerSingleTilePlayIsValid() {
+        expectCorner(
+            horizontal: "ED",
+            vertical: "AD",
+            for: Board(pattern: """
+                   -|-|-|-|-
+                   -|B|A|-|-
+                   -|E|-|-|-
+                   -|-|-|-|-
+                   -|-|-|-|-
+               """),
+            newBoard: Board(pattern: """
+                   -|-|-|-|-
+                   -|-|-|-|-
+                   -|-|D|-|-
+                   -|-|-|-|-
+                   -|-|-|-|-
+               """))
     }
 }
 
