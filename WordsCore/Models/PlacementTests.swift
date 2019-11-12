@@ -246,4 +246,36 @@ class PlacementTests: XCTestCase {
         default: XCTFail("Expected success")
         }
     }
+
+    func testCornerPlaysAreValid() {
+        let oldBoard = Board(pattern: """
+            -|-|-|-|-
+            -|B|-|-|-
+            -|E|D|-|-
+            -|-|-|-|-
+            -|-|-|-|-
+        """)
+        let newBoard = Board(pattern: """
+            -|-|-|-|-
+            -|-|A|-|-
+            -|-|-|-|-
+            -|-|-|-|-
+            -|-|-|-|-
+        """)
+        let result = oldBoard.calculatePlacement(comparingWith: newBoard)
+        switch result {
+        case let .success(placement):
+            XCTAssertEqual(placement.mainPlacement.horizontal.faces, "BA")
+            XCTAssertEqual(placement.mainPlacement.vertical.faces, "AD")
+            XCTAssertTrue(placement.verticalFaces.isEmpty, placement.verticalFaces.joined(separator: ", "))
+            XCTAssertTrue(placement.horizontalFaces.isEmpty, placement.horizontalFaces.joined(separator: ", "))
+        default: XCTFail("Expected success")
+        }
+    }
+}
+
+extension Sequence where Element == Spot {
+    var faces: String {
+        sorted().compactMap { $0.tile?.face }.joined()
+    }
 }
