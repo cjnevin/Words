@@ -138,7 +138,9 @@ extension Sequence where Element == Spot {
             filled.in(column: spot.column)
                 .intersection(with: spot, mapping: { $0.row })?
                 .sorted()
-        }.map { Placement(horizontal: [], vertical: $0) }
+        }
+        .map { Placement(horizontal: [], vertical: $0) }
+        .unique
     }
 
     func horizontalIntersections(in filled: [Spot]) -> [Placement] {
@@ -146,7 +148,9 @@ extension Sequence where Element == Spot {
             filled.in(row: spot.row)
                 .intersection(with: spot, mapping: { $0.column })?
                 .sorted()
-        }.map { Placement(horizontal: $0, vertical: []) }
+        }
+        .map { Placement(horizontal: $0, vertical: []) }
+        .unique
     }
 
     func compoundPlacement(_ allNewFilledSpots: [Spot]) -> PlacementResult {
@@ -190,6 +194,12 @@ extension Sequence where Element == Spot {
             verticalIntersections: verticalIntersections)
 
         return .success(placement)
+    }
+}
+
+extension Sequence where Element: Hashable {
+    var unique: [Element] {
+        Array(Set(self))
     }
 }
 

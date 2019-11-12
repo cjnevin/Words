@@ -31,7 +31,7 @@ extension Sequence where Element: Hashable {
             intersecting.append(touching)
             i += 1
         }
-        intersecting = Array(Set(intersecting))
+        intersecting = intersecting.unique
         guard intersecting.count > 1 else {
             return nil
         }
