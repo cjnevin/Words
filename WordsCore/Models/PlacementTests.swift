@@ -247,6 +247,236 @@ class PlacementTests: XCTestCase {
         }
     }
 
+    func expectAdjacentHorizontalPlays(
+        horizontal: String,
+        verticalFaces: [String],
+        for oldBoard: Board,
+        newBoard: Board,
+        file: StaticString = #file,
+        line: UInt = #line) {
+            let result = oldBoard.calculatePlacement(comparingWith: newBoard)
+            switch result {
+            case let .success(placement):
+                XCTAssertEqual(placement.mainPlacement.horizontal.faces, horizontal, file: file, line: line)
+                XCTAssertTrue(placement.mainPlacement.vertical.faces.isEmpty, file: file, line: line)
+                XCTAssertEqual(placement.verticalFaces, verticalFaces, file: file, line: line)
+                XCTAssertTrue(placement.horizontalFaces.isEmpty, placement.horizontalFaces.joined(separator: ", "), file: file, line: line)
+            default:
+                XCTFail("Expected success", file: file, line: line)
+            }
+    }
+
+    func testAdjacentHorizontalPlaysOnTopRight() {
+        expectAdjacentHorizontalPlays(
+            horizontal: "AB",
+            verticalFaces: ["AS", "BE"],
+            for: Board(pattern: """
+                -|-|-|-|-|-|-
+                -|-|-|C|-|-|-
+                -|-|-|U|-|-|-
+                -|-|-|T|-|-|-
+                -|-|-|E|-|-|-
+                -|-|-|R|I|S|E
+                -|-|-|-|-|-|-
+            """),
+            newBoard: Board(pattern: """
+                -|-|-|-|-|-|-
+                -|-|-|C|-|-|-
+                -|-|-|U|-|-|-
+                -|-|-|T|-|-|-
+                -|-|-|E|-|A|B
+                -|-|-|R|I|S|E
+                -|-|-|-|-|-|-
+            """))
+    }
+
+    func testAdjacentHorizontalPlaysOnTopLeft() {
+        expectAdjacentHorizontalPlays(
+            horizontal: "AE",
+            verticalFaces: ["AS", "ET"],
+            for: Board(pattern: """
+                -|-|-|-|-|-|-
+                -|-|-|C|-|-|-
+                -|-|-|U|-|-|-
+                -|-|-|T|-|-|-
+                -|-|-|E|-|-|-
+                S|T|I|R|-|-|-
+                -|-|-|-|-|-|-
+            """),
+            newBoard: Board(pattern: """
+                -|-|-|-|-|-|-
+                -|-|-|C|-|-|-
+                -|-|-|U|-|-|-
+                -|-|-|T|-|-|-
+                A|E|-|E|-|-|-
+                S|T|I|R|-|-|-
+                -|-|-|-|-|-|-
+            """))
+    }
+
+    func testAdjacentHorizontalPlaysOnBottomLeft() {
+        expectAdjacentHorizontalPlays(
+            horizontal: "AE",
+            verticalFaces: ["TA", "HE"],
+            for: Board(pattern: """
+                -|-|-|-|-|-|-
+                T|H|I|S|-|-|-
+                -|-|-|A|-|-|-
+                -|-|-|U|-|-|-
+                -|-|-|T|-|-|-
+                -|-|-|E|-|-|-
+                -|-|-|-|-|-|-
+            """),
+            newBoard: Board(pattern: """
+                -|-|-|-|-|-|-
+                T|H|I|S|-|-|-
+                A|E|-|A|-|-|-
+                -|-|-|U|-|-|-
+                -|-|-|T|-|-|-
+                -|-|-|E|-|-|-
+                -|-|-|-|-|-|-
+            """))
+    }
+
+    func testAdjacentHorizontalPlaysOnBottomRight() {
+        expectAdjacentHorizontalPlays(
+            horizontal: "RE",
+            verticalFaces: ["AR", "RE"],
+            for: Board(pattern: """
+                -|-|-|-|-|-|-
+                -|-|-|S|T|I|R
+                -|-|-|A|-|-|-
+                -|-|-|U|-|-|-
+                -|-|-|T|-|-|-
+                -|-|-|E|-|-|-
+                -|-|-|-|-|-|-
+            """),
+            newBoard: Board(pattern: """
+                -|-|-|-|-|-|-
+                -|-|-|S|T|A|R
+                -|-|-|A|-|R|E
+                -|-|-|U|-|-|-
+                -|-|-|T|-|-|-
+                -|-|-|E|-|-|-
+                -|-|-|-|-|-|-
+            """))
+    }
+
+    func expectAdjacentVerticalPlays(
+        vertical: String,
+        horizontalFaces: [String],
+        for oldBoard: Board,
+        newBoard: Board,
+        file: StaticString = #file,
+        line: UInt = #line) {
+            let result = oldBoard.calculatePlacement(comparingWith: newBoard)
+            switch result {
+            case let .success(placement):
+                XCTAssertEqual(placement.mainPlacement.vertical.faces, vertical, file: file, line: line)
+                XCTAssertTrue(placement.mainPlacement.horizontal.faces.isEmpty, file: file, line: line)
+                XCTAssertEqual(placement.horizontalFaces, horizontalFaces, file: file, line: line)
+                XCTAssertTrue(placement.verticalFaces.isEmpty, placement.verticalFaces.joined(separator: ", "), file: file, line: line)
+            default:
+                XCTFail("Expected success", file: file, line: line)
+            }
+    }
+
+    func testAdjacentVerticalPlaysOnTopRight() {
+        expectAdjacentVerticalPlays(
+            vertical: "AB",
+            horizontalFaces: ["AS", "BE"],
+            for: Board(pattern: """
+                -|-|-|-|-|-|-
+                -|-|-|-|-|-|-
+                -|-|-|-|-|-|-
+                -|C|U|T|E|R|-
+                -|-|-|-|-|I|-
+                -|-|-|-|-|S|-
+                -|-|-|-|-|E|-
+            """),
+            newBoard: Board(pattern: """
+                -|-|-|-|-|-|-
+                -|-|-|-|-|-|-
+                -|-|-|-|-|-|-
+                -|C|U|T|E|R|-
+                -|-|-|-|-|I|-
+                -|-|-|-|A|S|-
+                -|-|-|-|B|E|-
+            """))
+    }
+
+    func testAdjacentVerticalPlaysOnTopLeft() {
+        expectAdjacentVerticalPlays(
+            vertical: "AE",
+            horizontalFaces: ["AS", "ET"],
+            for: Board(pattern: """
+                -|-|-|-|-|S|-
+                -|-|-|-|-|T|-
+                -|-|-|-|-|I|-
+                -|C|U|T|E|R|-
+                -|-|-|-|-|-|-
+                -|-|-|-|-|-|-
+                -|-|-|-|-|-|-
+            """),
+            newBoard: Board(pattern: """
+                -|-|-|-|A|S|-
+                -|-|-|-|E|T|-
+                -|-|-|-|-|I|-
+                -|C|U|T|E|R|-
+                -|-|-|-|-|-|-
+                -|-|-|-|-|-|-
+                -|-|-|-|-|-|-
+            """))
+    }
+
+    func testAdjacentVerticalPlaysOnBottomLeft() {
+        expectAdjacentVerticalPlays(
+            vertical: "AE",
+            horizontalFaces: ["TA", "HE"],
+            for: Board(pattern: """
+                -|T|-|-|-|-|-
+                -|H|-|-|-|-|-
+                -|I|-|-|-|-|-
+                -|S|A|U|T|E|-
+                -|-|-|-|-|-|-
+                -|-|-|-|-|-|-
+                -|-|-|-|-|-|-
+            """),
+            newBoard: Board(pattern: """
+                -|T|A|-|-|-|-
+                -|H|E|-|-|-|-
+                -|I|-|-|-|-|-
+                -|S|A|U|T|E|-
+                -|-|-|-|-|-|-
+                -|-|-|-|-|-|-
+                -|-|-|-|-|-|-
+            """))
+    }
+
+    func testAdjacentVerticalPlaysOnBottomRight() {
+        expectAdjacentVerticalPlays(
+            vertical: "RE",
+            horizontalFaces: ["AR", "RE"],
+            for: Board(pattern: """
+                -|-|-|-|-|-|-
+                -|-|-|-|-|-|-
+                -|-|-|-|-|-|-
+                -|S|A|U|T|E|-
+                -|T|-|-|-|-|-
+                -|I|-|-|-|-|-
+                -|R|-|-|-|-|-
+            """),
+            newBoard: Board(pattern: """
+                -|-|-|-|-|-|-
+                -|-|-|-|-|-|-
+                -|-|-|-|-|-|-
+                -|S|A|U|T|E|-
+                -|T|-|-|-|-|-
+                -|A|R|-|-|-|-
+                -|R|E|-|-|-|-
+            """))
+    }
+
     func expectCorner(
         horizontal: String,
         vertical: String,
@@ -257,12 +487,12 @@ class PlacementTests: XCTestCase {
         let result = oldBoard.calculatePlacement(comparingWith: newBoard)
         switch result {
         case let .success(placement):
-            XCTAssertEqual(placement.mainPlacement.horizontal.faces, horizontal)
-            XCTAssertEqual(placement.mainPlacement.vertical.faces, vertical)
-            XCTAssertTrue(placement.verticalFaces.isEmpty, placement.verticalFaces.joined(separator: ", "))
-            XCTAssertTrue(placement.horizontalFaces.isEmpty, placement.horizontalFaces.joined(separator: ", "))
+            XCTAssertEqual(placement.mainPlacement.horizontal.faces, horizontal, file: file, line: line)
+            XCTAssertEqual(placement.mainPlacement.vertical.faces, vertical, file: file, line: line)
+            XCTAssertTrue(placement.verticalFaces.isEmpty, placement.verticalFaces.joined(separator: ", "), file: file, line: line)
+            XCTAssertTrue(placement.horizontalFaces.isEmpty, placement.horizontalFaces.joined(separator: ", "), file: file, line: line)
         default:
-            XCTFail("Expected success")
+            XCTFail("Expected success", file: file, line: line)
         }
     }
 
