@@ -61,13 +61,19 @@ struct ScoreboardView_Previews: PreviewProvider {
 
 private extension GameStore {
     static var scoreboardPreview: GameStore {
+        let names = [
+            "A",
+            "Player 2",
+            "Test",
+            "S p a c e d"
+        ]
         let store = GameStore(
             initialState: GameState(),
             reducer: GameReducer(),
             dependencies: .real,
             effectQueue: .global())
         store.add(middleware: ActionDebugMiddleware())
-        store.send(TurnAction.NewGame(players: (0..<6).map { "Player \($0 + 1)" }))
+        store.send(TurnAction.NewGame(players: (0..<4).map { names[$0] }))
         return store
     }
 }

@@ -83,3 +83,30 @@ struct ExchangeView: ConnectedView {
     }
 }
 
+
+struct ExchangeView_Previews: PreviewProvider {
+    static var previews: some View {
+        return VStack {
+            exchangeInProgressPreview.colorScheme(.dark)
+            exchangeStartedPreview.colorScheme(.light)
+        }.environmentObject(Device())
+    }
+
+    static var exchangeInProgressPreview: some View {
+        let store: GameStore = .default
+        store.send([
+            RackAction.Exchange.Begin(),
+            RackAction.Exchange.Toggle(tile: store.state.rackTiles[0]),
+            RackAction.Exchange.Toggle(tile: store.state.rackTiles[1])
+        ])
+        return StoreProvider(store: store) {
+            ExchangeView().colorScheme(.dark)
+        }
+    }
+
+    static var exchangeStartedPreview: some View {
+        StoreProvider(store: .default) {
+            ExchangeView().colorScheme(.light)
+        }
+    }
+}

@@ -42,6 +42,10 @@ public final class Store<R: Reducer>: ObservableObject {
         receive(effect: effect)
     }
 
+    public func send(_ actions: [R.E.Action]) {
+        actions.forEach(send)
+    }
+
     private func receive(effect: R.E) {
         effect.mapToAction(dependencies: dependencies)
             .subscribe(on: effectQueue)

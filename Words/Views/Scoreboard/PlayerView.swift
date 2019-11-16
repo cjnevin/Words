@@ -9,17 +9,36 @@
 import SwiftUI
 import WordsCore
 
+struct PlayerNameView: View {
+    var isCurrent: Bool
+    var name: String
+
+    var body: some View {
+        Text(name)
+            .frame(maxHeight: 20, alignment: .center)
+            .font(isCurrent ? .headline : .subheadline)
+            .foregroundColor(Color(isCurrent ? "playerNameCurrent" : "playerName"))
+    }
+}
+
+struct PlayerScoreView: View {
+    var isCurrent: Bool
+    var score: Int
+
+    var body: some View {
+        Text(String(score))
+            .foregroundColor(Color(isCurrent ? "playerScoreCurrent" : "playerScore"))
+    }
+}
+
 struct PlayerView: View {
     var isCurrent: Bool
     var player: Player
 
     var body: some View {
         VStack(spacing: 4) {
-            Text(player.name)
-                .font(isCurrent ? .headline : .subheadline)
-                .foregroundColor(Color(isCurrent ? "playerNameCurrent" : "playerName"))
-            Text(String(player.score))
-                .foregroundColor(Color(isCurrent ? "playerScoreCurrent" : "playerScore"))
+            PlayerNameView(isCurrent: isCurrent, name: player.name)
+            PlayerScoreView(isCurrent: isCurrent, score: player.score)
         }
         .padding()
         .border(Color(isCurrent ? "playerBorderCurrent" : "playerBorder"))
