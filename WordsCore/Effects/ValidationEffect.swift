@@ -10,7 +10,7 @@ import Foundation
 import Combine
 import Redux
 
-public struct ValidationEffect: Effect {
+struct ValidationEffect: Effect {
     let oldBoard: Board
     let newBoard: Board
 
@@ -19,17 +19,16 @@ public struct ValidationEffect: Effect {
         newBoard = state.turn.board
     }
 
-    public func mapToAction(dependencies: GameDependencies) -> AnyPublisher<GameAction, Never> {
-        let placementResult = self.oldBoard.calculatePlacement(comparingWith: self.newBoard)
-        switch placementResult {
+    func mapToAction(dependencies: GameDependencies) -> AnyPublisher<GameAction, Never> {
+        switch oldBoard.calculatePlacement(comparingWith: newBoard) {
         case let .failure(error):
             return Just(ValidationAction.Invalid(error: error)).eraseToAnyPublisher()
         case let .success(placement):
-            switch placement.candidates(on: self.newBoard).validate(with: dependencies.validator) {
-            case .invalidCandidates(let candidates):
+            switch placement.candidates(on: newBoard).validate(with: dependencies.validator) {
+            case let .invalidCandidates(candidates):
                 return Just(ValidationAction.Incorrect(candidates: candidates)).eraseToAnyPublisher()
-            case .validCandidates(let candidates):
-                let score = candidates.calculateScore(oldBoard: self.oldBoard, newBoard: self.newBoard)
+            case let .validCandidates(candidates):
+                let score = candidates.calculateScore(oldBoard: oldBoard, newBoard: newBoard)
                 return Just(ValidationAction.Valid(score: score)).eraseToAnyPublisher()
             }
         }

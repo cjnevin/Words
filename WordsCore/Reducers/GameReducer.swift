@@ -20,7 +20,7 @@ public struct GameReducer: Reducer {
                 preconditionFailure("No current player.")
             }
             guard let heldTile = state.turn.heldTile else {
-                return NoEffect().eraseToAnyEffect()
+                return .none
             }
             precondition(player.tiles.contains(heldTile), "Player is not holding this tile.")
             var spot = placeTile.spot
@@ -32,12 +32,12 @@ public struct GameReducer: Reducer {
             }
             state.turn.heldTile = nil
             state.invalidateTurn()
-            return ValidationEffect(state: state).eraseToAnyEffect()
+            return .validate(state: state)
 
         case is RackAction.Drop:
             precondition(state.turn.heldTile != nil)
             state.turn.heldTile = nil
-            return ValidationEffect(state: state).eraseToAnyEffect()
+            return .validate(state: state)
 
         case let pickUpTile as RackAction.PickUp:
             guard let player = state.currentPlayer else {
@@ -55,7 +55,7 @@ public struct GameReducer: Reducer {
                 preconditionFailure("Return tile should not be null.")
             }
             guard tile.movable else {
-                return NoEffect().eraseToAnyEffect()
+                return .none
             }
             var spot = returnTile.spot
             spot.tile = nil
@@ -63,13 +63,13 @@ public struct GameReducer: Reducer {
             state.invalidateTurn()
             player.tiles.append(tile)
             state.currentPlayer = player
-            return ValidationEffect(state: state).eraseToAnyEffect()
+            return .validate(state: state)
 
         case is RackAction.ReturnAll:
             state.restoreRack()
             state.turn.board = state.board
             state.invalidateTurn()
-            return ValidationEffect(state: state).eraseToAnyEffect()
+            return .validate(state: state)
 
         case is RackAction.Shuffle:
             state.currentPlayer?.shuffle()
@@ -99,7 +99,7 @@ public struct GameReducer: Reducer {
                 copy.currentPlayer = player
                 state = copy
                 state.nextPlayer()
-                return ValidationEffect(state: state).eraseToAnyEffect()
+                return .validate(state: state)
             }
 
         case is RackAction.Exchange.Cancel:
@@ -155,6 +155,6 @@ public struct GameReducer: Reducer {
         default:
             break
         }
-        return NoEffect().eraseToAnyEffect()
+        return .none
     }
 }

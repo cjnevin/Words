@@ -10,8 +10,8 @@ import Foundation
 import Combine
 import Redux
 
-public struct NoEffect: Effect {
-    public func mapToAction(dependencies: GameDependencies) -> AnyPublisher<GameAction, Never> {
+struct NoEffect: Effect {
+    func mapToAction(dependencies: GameDependencies) -> AnyPublisher<GameAction, Never> {
         Empty().eraseToAnyPublisher()
     }
 }
