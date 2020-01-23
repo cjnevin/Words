@@ -16,9 +16,9 @@ public struct ValidationEffect: Effect {
     let oldBoard: Board
     let newBoard: Board
 
-    init(oldBoard: Board, newBoard: Board) {
-        self.oldBoard = oldBoard
-        self.newBoard = newBoard
+    init(state: GameState) {
+        oldBoard = state.board
+        newBoard = state.turn.board
     }
 
     public func mapToAction(dependencies: GameDependencies) -> AnyPublisher<GameAction, Never> {
@@ -27,8 +27,7 @@ public struct ValidationEffect: Effect {
         case let .failure(error):
             return Just(ValidationAction.Invalid(error: error)).eraseToAnyPublisher()
         case let .success(placement):
-            let candidates = placement.candidates(on: self.newBoard)
-            switch candidates.validate(with: dependencies.validator) {
+            switch placement.candidates(on: self.newBoard).validate(with: dependencies.validator) {
             case .invalidCandidates(let candidates):
                 return Just(ValidationAction.Incorrect(candidates: candidates)).eraseToAnyPublisher()
             case .validCandidates(let candidates):
@@ -36,13 +35,6 @@ public struct ValidationEffect: Effect {
                 return Just(ValidationAction.Valid(score: score)).eraseToAnyPublisher()
             }
         }
-    }
-}
-
-public extension ValidationEffect {
-    init(state: GameState) {
-        oldBoard = state.board
-        newBoard = state.turn.board
     }
 }
 

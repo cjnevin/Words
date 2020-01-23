@@ -32,12 +32,12 @@ public struct GameReducer: Reducer {
             }
             state.turn.heldTile = nil
             state.invalidateTurn()
-            return ValidationEffect(oldBoard: state.board, newBoard: state.turn.board).eraseToAnyEffect()
+            return ValidationEffect(state: state).eraseToAnyEffect()
 
         case is RackAction.Drop:
             precondition(state.turn.heldTile != nil)
             state.turn.heldTile = nil
-            return ValidationEffect(oldBoard: state.board, newBoard: state.turn.board).eraseToAnyEffect()
+            return ValidationEffect(state: state).eraseToAnyEffect()
 
         case let pickUpTile as RackAction.PickUp:
             guard let player = state.currentPlayer else {
@@ -63,13 +63,13 @@ public struct GameReducer: Reducer {
             state.invalidateTurn()
             player.tiles.append(tile)
             state.currentPlayer = player
-            return ValidationEffect(oldBoard: state.board, newBoard: state.turn.board).eraseToAnyEffect()
+            return ValidationEffect(state: state).eraseToAnyEffect()
 
         case is RackAction.ReturnAll:
             state.restoreRack()
             state.turn.board = state.board
             state.invalidateTurn()
-            return ValidationEffect(oldBoard: state.board, newBoard: state.turn.board).eraseToAnyEffect()
+            return ValidationEffect(state: state).eraseToAnyEffect()
 
         case is RackAction.Shuffle:
             state.currentPlayer?.shuffle()
@@ -99,7 +99,7 @@ public struct GameReducer: Reducer {
                 copy.currentPlayer = player
                 state = copy
                 state.nextPlayer()
-                return ValidationEffect(oldBoard: state.board, newBoard: state.turn.board).eraseToAnyEffect()
+                return ValidationEffect(state: state).eraseToAnyEffect()
             }
 
         case is RackAction.Exchange.Cancel:

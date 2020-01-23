@@ -48,7 +48,7 @@ public enum RackAction {
         public init() { }
     }
 
-    public struct Exchange {
+    public enum Exchange {
         public struct Begin: GameAction {
             public init() { }
         }
