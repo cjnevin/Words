@@ -8,16 +8,6 @@
 
 import Foundation
 
-public struct BoardSpot: Codable {
-    public enum Status: Int, Codable {
-        case `default`
-        case invalid
-        case valid
-    }
-    public let spot: Spot
-    public let status: Status
-}
-
 public struct GameState: Codable {
     struct Turn: Codable {
         var board: Board = Board()
