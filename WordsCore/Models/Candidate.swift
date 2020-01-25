@@ -71,6 +71,14 @@ extension Candidate {
 }
 
 extension Sequence where Element == Candidate {
+    var spots: [Spot] {
+        flatMap { $0.spots }
+    }
+
+    var words: [String] {
+        map { $0.word }
+    }
+
     func validate(with validator: WordValidator) -> CandidateValidationResult {
         map { $0.validate(with: validator) }.flattened()
     }

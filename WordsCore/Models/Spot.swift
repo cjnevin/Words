@@ -19,6 +19,12 @@ public struct Spot: Equatable, Hashable, Comparable, Codable, Identifiable {
         }
     }
 
+    public enum Status: Int, Codable {
+        case `default`
+        case valid
+        case invalid
+    }
+
     public var id: String { return "\(row), \(column)" }
 
     let row: Int
@@ -27,6 +33,7 @@ public struct Spot: Equatable, Hashable, Comparable, Codable, Identifiable {
     public let multiplier: Int
     public let wordMultiplier: Int
     public internal(set) var tile: Tile?
+    public internal(set) var status: Status = .default
 
     public var interactive: Bool {
         return tile?.movable ?? true

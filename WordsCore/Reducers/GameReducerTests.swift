@@ -164,16 +164,34 @@ class GameReducerTests: XCTestCase {
     func testValidClearsPlacementError() {
         let turn = GameState.Turn(placementError: .tileMisaligned)
         let store = GameStore.with(state: .init(turn: turn))
-        store.send(ValidationAction.Valid(score: 1))
+        let candidate = Candidate(spots: [.tile(.a, at: 1, 1)], tiles: [.a])!
+        store.send(ValidationAction.Valid(score: 1, candidates: [candidate]))
         XCTAssertNil(store.state.turn.placementError)
         XCTAssertEqual(store.state.turn.score, 1)
+        XCTAssertFalse(store.state.turn.validCandidates.isEmpty)
+        XCTAssertTrue(store.state.turn.invalidCandidates.isEmpty)
+    }
+
+    func testIncorrectClearsValidPlacements() {
+        let turn = GameState.Turn(placementError: .tileMisaligned)
+        let store = GameStore.with(state: .init(turn: turn))
+        let candidate = Candidate(spots: [.tile(.a, at: 1, 1)], tiles: [.a])!
+        store.send(ValidationAction.Valid(score: 1, candidates: [candidate]))
+        store.send(ValidationAction.Incorrect(candidates: [candidate]))
+        XCTAssertNil(store.state.turn.placementError)
+        XCTAssertEqual(store.state.turn.score, 0)
+        XCTAssertTrue(store.state.turn.validCandidates.isEmpty)
+        XCTAssertFalse(store.state.turn.invalidCandidates.isEmpty)
     }
 
     func testInvalidClearsValidAndMisplaced() {
         let store = GameStore.with(state: .init())
+        let candidate = Candidate(spots: [.tile(.a, at: 1, 1)], tiles: [.a])!
         PlacementError.allCases.forEach { error in
-            store.send(ValidationAction.Valid(score: 100))
+            store.send(ValidationAction.Valid(score: 100, candidates: [candidate]))
             store.send(ValidationAction.Invalid(error: error))
+            XCTAssertTrue(store.state.turn.validCandidates.isEmpty)
+            XCTAssertTrue(store.state.turn.invalidCandidates.isEmpty)
             XCTAssertEqual(store.state.turn.score, 0)
             XCTAssertEqual(store.state.turn.placementError, error)
         }
@@ -225,9 +243,10 @@ class GameReducerTests: XCTestCase {
         """)
         let a = Player(name: "Player 1", tiles: [])
         let b = Player(name: "Player 2", tiles: [.b])
+        let candidate = Candidate(spots: [.tile(.a, at: 1, 1)], tiles: [.a])!
         let initialState = GameState(board: oldBoard, players: [a, b], turn: .init(board: newBoard))
         let store = GameStore.with(state: initialState)
-        store.send(ValidationAction.Valid(score: 10))
+        store.send(ValidationAction.Valid(score: 10, candidates: [candidate]))
         store.send(TurnAction.Submit())
         XCTAssertTrue(store.state.board.isLocked)
         XCTAssertEqual(store.state.currentPlayer, b)

@@ -8,12 +8,23 @@
 
 import Foundation
 
+public struct BoardSpot: Codable {
+    public enum Status: Int, Codable {
+        case `default`
+        case invalid
+        case valid
+    }
+    public let spot: Spot
+    public let status: Status
+}
+
 public struct GameState: Codable {
     struct Turn: Codable {
         var board: Board = Board()
         var exchangingTiles: [Tile] = []
         var heldTile: Tile? = nil
         var isExchanging: Bool = false
+        var validCandidates: [Candidate] = []
         var invalidCandidates: [Candidate] = []
         var placementError: PlacementError?
         var score: Int = 0
@@ -27,7 +38,7 @@ public struct GameState: Codable {
     }
 
     public var isExchanging: Bool {
-        return turn.isExchanging
+        turn.isExchanging
     }
 
     public var rackTiles: [Tile] {
@@ -39,6 +50,10 @@ public struct GameState: Codable {
         }
     }
 
+    public var words: [String] {
+        turn.validCandidates.words
+    }
+
     public var selectedTiles: [Tile] {
         if isExchanging {
             return turn.exchangingTiles
@@ -47,12 +62,26 @@ public struct GameState: Codable {
         }
     }
 
-    public var latestBoard: Board {
-        return turn.board
+    public var spots: [[Spot]] {
+        let validSpots = turn.validCandidates.spots
+        let invalidSpots = turn.invalidCandidates.spots
+        return turn.board.spots.map { row in
+            row.map { column in
+                var copy = column
+                if validSpots.contains(column) {
+                    copy.status = .valid
+                } else if invalidSpots.contains(column) {
+                    copy.status = .invalid
+                } else {
+                    copy.status = .default
+                }
+                return copy
+            }
+        }
     }
 
     var heldTile: Tile? {
-        return turn.heldTile
+        turn.heldTile
     }
 
     var board: Board = Board()
@@ -62,11 +91,11 @@ public struct GameState: Codable {
     var turn: Turn = Turn()
 
     public var canReturnAll: Bool {
-        return turn.board != board
+        turn.board != board
     }
 
     public var canSubmit: Bool {
-        return turn.canSubmit
+        turn.canSubmit
     }
 
     mutating func invalidateTurn() {

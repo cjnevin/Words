@@ -29,7 +29,7 @@ struct ValidationEffect: Effect {
                 return Just(ValidationAction.Incorrect(candidates: candidates)).eraseToAnyPublisher()
             case let .validCandidates(candidates):
                 let score = candidates.calculateScore(oldBoard: oldBoard, newBoard: newBoard)
-                return Just(ValidationAction.Valid(score: score)).eraseToAnyPublisher()
+                return Just(ValidationAction.Valid(score: score, candidates: candidates)).eraseToAnyPublisher()
             }
         }
     }

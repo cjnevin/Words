@@ -104,5 +104,6 @@ enum ValidationAction {
 
     struct Valid: GameAction {
         let score: Int
+        let candidates: [Candidate]
     }
 }

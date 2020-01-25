@@ -74,7 +74,15 @@ private extension Spot {
     }
 
     var backgroundColor: Color {
-        return Color(name)
+        if name == "tile" {
+            switch status {
+            case .valid: return Color("validTile")
+            case .invalid: return Color("invalidTile")
+            default: return Color(name)
+            }
+        } else {
+            return Color(name)
+        }
     }
 
     var foregroundColor: Color {

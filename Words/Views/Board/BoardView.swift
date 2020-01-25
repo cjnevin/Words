@@ -23,7 +23,7 @@ struct BoardView: ConnectedView {
 
     func map(state: GameState, send: @escaping (GameAction) -> Void) -> Props {
         return Props(
-            rows: state.latestBoard.spots,
+            rows: state.spots,
             select: {
                 send($0.tile == nil ? RackAction.Place(at: $0) : RackAction.Return(from: $0))
         })
