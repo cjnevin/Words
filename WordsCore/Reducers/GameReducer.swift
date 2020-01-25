@@ -31,7 +31,7 @@ public struct GameReducer: Reducer {
                 state.currentPlayer = player
             }
             state.turn.heldTile = nil
-            state.invalidateTurn()
+            state.turn.placementError = nil
             return .validate(state: state)
 
         case is RackAction.Drop:
@@ -45,7 +45,7 @@ public struct GameReducer: Reducer {
             }
             precondition(player.tiles.contains(pickUpTile.tile), "Player is not holding this tile.")
             state.turn.heldTile = pickUpTile.tile
-            state.invalidateTurn()
+            state.turn.placementError = nil
 
         case let returnTile as RackAction.Return:
             guard var player = state.currentPlayer else {
@@ -60,7 +60,7 @@ public struct GameReducer: Reducer {
             var spot = returnTile.spot
             spot.tile = nil
             state.turn.board.spots[returnTile.spot.row][returnTile.spot.column] = spot
-            state.invalidateTurn()
+            state.turn.placementError = nil
             player.tiles.append(tile)
             state.currentPlayer = player
             return .validate(state: state)
@@ -68,7 +68,7 @@ public struct GameReducer: Reducer {
         case is RackAction.ReturnAll:
             state.restoreRack()
             state.turn.board = state.board
-            state.invalidateTurn()
+            state.turn.placementError = nil
             return .validate(state: state)
 
         case is RackAction.Shuffle:
@@ -107,22 +107,22 @@ public struct GameReducer: Reducer {
             state.turn.exchangingTiles = []
 
         case let incorrect as ValidationAction.Incorrect:
-            state.turn.validCandidates = []
-            state.turn.invalidCandidates = incorrect.candidates
+            state.update(candidates: incorrect.candidates, status: .invalid)
+            state.turn.words = []
             state.turn.placementError = nil
             state.turn.score = 0
 
         case let invalid as ValidationAction.Invalid:
-            state.turn.validCandidates = []
-            state.turn.invalidCandidates = []
+            state.update(candidates: [], status: .default)
+            state.turn.words = []
             state.turn.placementError = invalid.error
             state.turn.score = 0
 
         case let valid as ValidationAction.Valid:
-            state.turn.validCandidates = valid.candidates
-            state.turn.invalidCandidates = []
-            state.turn.placementError = nil
+            state.update(candidates: valid.candidates, status: .valid)
+            state.turn.words = valid.candidates.words
             state.turn.score = valid.score
+            state.turn.placementError = nil
 
         case is TurnAction.Submit:
             guard var player = state.currentPlayer else {
@@ -132,6 +132,7 @@ public struct GameReducer: Reducer {
             player.score += state.turn.score
             state.tileBag.replenish(player: &player)
             state.currentPlayer = player
+            state.update(candidates: [], status: .default)
             state.board = state.turn.board
             state.board.lock()
             state.nextPlayer()
@@ -159,5 +160,21 @@ public struct GameReducer: Reducer {
             break
         }
         return .none
+    }
+}
+
+extension GameState {
+    mutating func update(candidates: [Candidate], status: Spot.Status) {
+        turn.board.spots = turn.board.spots.map { row in
+            row.map { column in
+                var copy = column
+                if candidates.spots.contains(where: { $0.sameAs(column) }) {
+                    copy.status = status
+                } else {
+                    copy.status = .default
+                }
+                return copy
+            }
+        }
     }
 }

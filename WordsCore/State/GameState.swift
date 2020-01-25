@@ -24,16 +24,15 @@ public struct GameState: Codable {
         var exchangingTiles: [Tile] = []
         var heldTile: Tile? = nil
         var isExchanging: Bool = false
-        var validCandidates: [Candidate] = []
-        var invalidCandidates: [Candidate] = []
         var placementError: PlacementError?
         var score: Int = 0
+        var words: [String] = []
 
         var canSubmit: Bool {
             return score > 0
                 && heldTile == nil
                 && placementError == nil
-                && invalidCandidates.isEmpty
+                && !words.isEmpty
         }
     }
 
@@ -51,7 +50,7 @@ public struct GameState: Codable {
     }
 
     public var words: [String] {
-        turn.validCandidates.words
+        turn.words
     }
 
     public var selectedTiles: [Tile] {
@@ -62,22 +61,12 @@ public struct GameState: Codable {
         }
     }
 
+    public var tentativeScore: Int {
+        turn.score
+    }
+
     public var spots: [[Spot]] {
-        let validSpots = turn.validCandidates.spots
-        let invalidSpots = turn.invalidCandidates.spots
-        return turn.board.spots.map { row in
-            row.map { column in
-                var copy = column
-                if validSpots.contains(column) {
-                    copy.status = .valid
-                } else if invalidSpots.contains(column) {
-                    copy.status = .invalid
-                } else {
-                    copy.status = .default
-                }
-                return copy
-            }
-        }
+        turn.board.spots
     }
 
     var heldTile: Tile? {
@@ -96,11 +85,6 @@ public struct GameState: Codable {
 
     public var canSubmit: Bool {
         turn.canSubmit
-    }
-
-    mutating func invalidateTurn() {
-        turn.score = 0
-        turn.placementError = nil
     }
 
     mutating func restoreRack() {

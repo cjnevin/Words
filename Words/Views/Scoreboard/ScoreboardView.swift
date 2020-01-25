@@ -19,17 +19,19 @@ struct ScoreboardView: ConnectedView {
     struct Props {
         let players: [Player]
         let current: Player
+        let currentPlayerScore: Int
     }
 
     func map(state: GameState, send: @escaping (GameAction) -> Void) -> Props {
         Props(players: state.players,
-              current: state.currentPlayer!)
+              current: state.currentPlayer!,
+              currentPlayerScore: state.tentativeScore)
     }
 
     @ViewBuilder
     func content(props: Props) -> some View {
         ForEach(props.players) { player in
-            PlayerView(isCurrent: player == props.current, player: player)
+            PlayerView(isCurrent: player == props.current, tentativeScore: player == props.current ? props.currentPlayerScore : 0, player: player)
         }
     }
 

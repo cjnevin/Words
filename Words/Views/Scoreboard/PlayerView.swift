@@ -24,21 +24,23 @@ struct PlayerNameView: View {
 struct PlayerScoreView: View {
     var isCurrent: Bool
     var score: Int
+    var tentativeScore: Int
 
     var body: some View {
-        Text(String(score))
+        Text(String(score) + (tentativeScore > 0 ? " (+\(tentativeScore))" : ""))
             .foregroundColor(Color(isCurrent ? "playerScoreCurrent" : "playerScore"))
     }
 }
 
 struct PlayerView: View {
     var isCurrent: Bool
+    var tentativeScore: Int
     var player: Player
 
     var body: some View {
         VStack(spacing: 4) {
             PlayerNameView(isCurrent: isCurrent, name: player.name)
-            PlayerScoreView(isCurrent: isCurrent, score: player.score)
+            PlayerScoreView(isCurrent: isCurrent, score: player.score, tentativeScore: tentativeScore)
         }
         .padding()
         .border(Color(isCurrent ? "playerBorderCurrent" : "playerBorder"))
@@ -50,13 +52,13 @@ struct PlayerView_Previews: PreviewProvider {
     static var previews: some View {
         VStack(spacing: 10) {
             HStack {
-                PlayerView(isCurrent: true, player: Player(name: "Player 1", tiles: Tile.preview, score: 100))
-                PlayerView(isCurrent: false, player: Player(name: "Player 2", tiles: Tile.preview, score: 200))
+                PlayerView(isCurrent: true, tentativeScore: 10, player: Player(name: "Player 1", tiles: Tile.preview, score: 100))
+                PlayerView(isCurrent: false, tentativeScore: 0, player: Player(name: "Player 2", tiles: Tile.preview, score: 200))
             }.colorScheme(.dark)
 
             HStack {
-                PlayerView(isCurrent: true, player: Player(name: "Player 1", tiles: Tile.preview, score: 100))
-                PlayerView(isCurrent: false, player: Player(name: "Player 2", tiles: Tile.preview, score: 200))
+                PlayerView(isCurrent: true, tentativeScore: 0, player: Player(name: "Player 1", tiles: Tile.preview, score: 100))
+                PlayerView(isCurrent: false, tentativeScore: 0, player: Player(name: "Player 2", tiles: Tile.preview, score: 200))
             }.colorScheme(.light)
         }
     }
