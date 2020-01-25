@@ -42,6 +42,9 @@
 		83AAB2202376ECBA00901526 /* BoardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AAB21C2376EC3300901526 /* BoardTests.swift */; };
 		83AAB2302377367A00901526 /* ActionDebugMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AAB22F2377367A00901526 /* ActionDebugMiddleware.swift */; };
 		83AAB245237764BA00901526 /* WordValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AAB244237764B900901526 /* WordValidator.swift */; };
+		83E359A223DCDDF00036C63E /* RackAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E359A123DCDDF00036C63E /* RackAction.swift */; };
+		83E359A423DCDE040036C63E /* TurnAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E359A323DCDE040036C63E /* TurnAction.swift */; };
+		83E359A623DCDE1A0036C63E /* ValidationAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E359A523DCDE1A0036C63E /* ValidationAction.swift */; };
 		83F4847423DA23CE007369B0 /* ValidationEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F4847323DA23CE007369B0 /* ValidationEffect.swift */; };
 		83F4847923DA23ED007369B0 /* NoEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F4847823DA23ED007369B0 /* NoEffect.swift */; };
 /* End PBXBuildFile section */
@@ -108,6 +111,9 @@
 		83AAB21C2376EC3300901526 /* BoardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardTests.swift; sourceTree = "<group>"; };
 		83AAB22F2377367A00901526 /* ActionDebugMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionDebugMiddleware.swift; sourceTree = "<group>"; };
 		83AAB244237764B900901526 /* WordValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordValidator.swift; sourceTree = "<group>"; };
+		83E359A123DCDDF00036C63E /* RackAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RackAction.swift; sourceTree = "<group>"; };
+		83E359A323DCDE040036C63E /* TurnAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnAction.swift; sourceTree = "<group>"; };
+		83E359A523DCDE1A0036C63E /* ValidationAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationAction.swift; sourceTree = "<group>"; };
 		83F4847323DA23CE007369B0 /* ValidationEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationEffect.swift; sourceTree = "<group>"; };
 		83F4847823DA23ED007369B0 /* NoEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoEffect.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -181,6 +187,9 @@
 			isa = PBXGroup;
 			children = (
 				8374742B237310D8005A4B06 /* GameAction.swift */,
+				83E359A123DCDDF00036C63E /* RackAction.swift */,
+				83E359A323DCDE040036C63E /* TurnAction.swift */,
+				83E359A523DCDE1A0036C63E /* ValidationAction.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -384,9 +393,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				83747455237310D9005A4B06 /* Spot.swift in Sources */,
+				83E359A423DCDE040036C63E /* TurnAction.swift in Sources */,
 				8374745D237310D9005A4B06 /* CompoundPlacement.swift in Sources */,
 				83747466237310D9005A4B06 /* GameReducer.swift in Sources */,
 				83F4847923DA23ED007369B0 /* NoEffect.swift in Sources */,
+				83E359A223DCDDF00036C63E /* RackAction.swift in Sources */,
 				8374745F237310D9005A4B06 /* Tile.swift in Sources */,
 				837474FA23734DE8005A4B06 /* Array+Identifiable.swift in Sources */,
 				83F4847423DA23CE007369B0 /* ValidationEffect.swift in Sources */,
@@ -399,6 +410,7 @@
 				83AAB245237764BA00901526 /* WordValidator.swift in Sources */,
 				83747454237310D9005A4B06 /* Candidate.swift in Sources */,
 				83747458237310D9005A4B06 /* Placement.swift in Sources */,
+				83E359A623DCDE1A0036C63E /* ValidationAction.swift in Sources */,
 				83747450237310D9005A4B06 /* GameAction.swift in Sources */,
 				8374746A237310D9005A4B06 /* GameDependencies.swift in Sources */,
 				8374745A237310D9005A4B06 /* PlacementCollectionResult.swift in Sources */,
