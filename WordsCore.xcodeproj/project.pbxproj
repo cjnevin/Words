@@ -45,6 +45,7 @@
 		83E359A223DCDDF00036C63E /* RackAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E359A123DCDDF00036C63E /* RackAction.swift */; };
 		83E359A423DCDE040036C63E /* TurnAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E359A323DCDE040036C63E /* TurnAction.swift */; };
 		83E359A623DCDE1A0036C63E /* ValidationAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E359A523DCDE1A0036C63E /* ValidationAction.swift */; };
+		83E359A823DCDF250036C63E /* Array+Chunked.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E359A723DCDF250036C63E /* Array+Chunked.swift */; };
 		83F4847423DA23CE007369B0 /* ValidationEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F4847323DA23CE007369B0 /* ValidationEffect.swift */; };
 		83F4847923DA23ED007369B0 /* NoEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F4847823DA23ED007369B0 /* NoEffect.swift */; };
 /* End PBXBuildFile section */
@@ -114,6 +115,7 @@
 		83E359A123DCDDF00036C63E /* RackAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RackAction.swift; sourceTree = "<group>"; };
 		83E359A323DCDE040036C63E /* TurnAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnAction.swift; sourceTree = "<group>"; };
 		83E359A523DCDE1A0036C63E /* ValidationAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationAction.swift; sourceTree = "<group>"; };
+		83E359A723DCDF250036C63E /* Array+Chunked.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Chunked.swift"; sourceTree = "<group>"; };
 		83F4847323DA23CE007369B0 /* ValidationEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationEffect.swift; sourceTree = "<group>"; };
 		83F4847823DA23ED007369B0 /* NoEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoEffect.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -197,6 +199,7 @@
 		8374742C237310D8005A4B06 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				83E359A723DCDF250036C63E /* Array+Chunked.swift */,
 				837474F923734DE8005A4B06 /* Array+Identifiable.swift */,
 				8374742E237310D8005A4B06 /* Sequence+Intersection.swift */,
 				8374742D237310D8005A4B06 /* SequenceTests.swift */,
@@ -399,6 +402,7 @@
 				83F4847923DA23ED007369B0 /* NoEffect.swift in Sources */,
 				83E359A223DCDDF00036C63E /* RackAction.swift in Sources */,
 				8374745F237310D9005A4B06 /* Tile.swift in Sources */,
+				83E359A823DCDF250036C63E /* Array+Chunked.swift in Sources */,
 				837474FA23734DE8005A4B06 /* Array+Identifiable.swift in Sources */,
 				83F4847423DA23CE007369B0 /* ValidationEffect.swift in Sources */,
 				83AAB2302377367A00901526 /* ActionDebugMiddleware.swift in Sources */,
