@@ -49,16 +49,16 @@ public struct GameState: Codable {
         }
     }
 
-    public var words: [String] {
-        turn.words
-    }
-
     public var selectedTiles: [Tile] {
         if isExchanging {
             return turn.exchangingTiles
         } else {
             return turn.heldTile.map { [$0] } ?? []
         }
+    }
+
+    public var words: [String] {
+        turn.words
     }
 
     public var tentativeScore: Int {
