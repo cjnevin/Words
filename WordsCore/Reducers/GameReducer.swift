@@ -135,16 +135,16 @@ public struct GameReducer: Reducer {
             state.turn.score = 0
 
         case let valid as ValidationAction.Valid:
+            state.turn.board.spots = state.turn.board.spots
+                .update(spots: state.board.spots.status(.fixed), status: .fixed)
+                .update(spots: state.board.spots.status([.fixed, .valid]), status: [.fixed, .valid])
+                .update(spots: valid.candidates.spots, status: .valid)
+
             let playedAllTiles = state.turn.board.spots
                 .status(.valid)
                 .filter { $0.tile?.movable == true }
                 .unique
                 .count == 7
-
-            state.turn.board.spots = state.turn.board.spots
-                .update(spots: state.board.spots.status(.fixed), status: .fixed)
-                .update(spots: state.board.spots.status([.fixed, .valid]), status: [.fixed, .valid])
-                .update(spots: valid.candidates.spots, status: .valid)
             state.turn.words = valid.candidates.words
             state.turn.score = valid.score + (playedAllTiles ? 50 : 0)
             state.turn.placementError = nil
