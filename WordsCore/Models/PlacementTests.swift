@@ -67,7 +67,7 @@ class PlacementTests: XCTestCase {
         }
     }
 
-    func testIsHorizontalIfFilledRow() {
+    func testIsHorizontalIfFilledRowInMiddle() {
         let oldBoard = Board(pattern: """
             -|-|-
             A|-|C
@@ -75,7 +75,7 @@ class PlacementTests: XCTestCase {
         """)
         let newBoard = Board(pattern: """
             -|-|-
-            -|B|-
+            A|B|C
             -|-|-
         """)
         let result = oldBoard.calculatePlacement(comparingWith: newBoard)
@@ -88,21 +88,85 @@ class PlacementTests: XCTestCase {
         }
     }
 
-    func testIsVerticalIfFilledColumn() {
+    func testIsHorizontalIfFilledRow() {
+        let oldBoard = Board(pattern: """
+            -|A|-
+            -|C|-
+            -|E|-
+        """)
+        let newBoard = Board(pattern: """
+            -|A|-
+            I|C|E
+            -|E|-
+        """)
+        let result = oldBoard.calculatePlacement(comparingWith: newBoard)
+        switch result {
+        case let .success(placement):
+            XCTAssertEqual(placement.mainPlacement.spots.alignment, .horizontal)
+            XCTAssertTrue(placement.horizontalIntersections.isEmpty)
+            XCTAssertTrue(placement.verticalIntersections.isEmpty)
+        default: XCTFail("Expected success")
+        }
+    }
+
+    func testIsVerticalIfFilledColumnInMiddle() {
         let oldBoard = Board(pattern: """
             -|A|-
             -|-|-
             -|C|-
         """)
         let newBoard = Board(pattern: """
-            -|-|-
+            -|A|-
             -|B|-
-            -|-|-
+            -|C|-
         """)
         let result = oldBoard.calculatePlacement(comparingWith: newBoard)
         switch result {
         case let .success(placement):
             XCTAssertEqual(placement.mainPlacement.spots.alignment, .vertical)
+            XCTAssertTrue(placement.horizontalIntersections.isEmpty)
+            XCTAssertTrue(placement.verticalIntersections.isEmpty)
+        default: XCTFail("Expected success")
+        }
+    }
+
+    func testIsVerticalIfFilledColumn() {
+        let oldBoard = Board(pattern: """
+            -|-|-
+            A|C|E
+            -|-|-
+        """)
+        let newBoard = Board(pattern: """
+            -|I|-
+            A|C|E
+            -|E|-
+        """)
+        let result = oldBoard.calculatePlacement(comparingWith: newBoard)
+        switch result {
+        case let .success(placement):
+            XCTAssertEqual(placement.mainPlacement.spots.alignment, .vertical)
+            XCTAssertTrue(placement.horizontalIntersections.isEmpty)
+            XCTAssertTrue(placement.verticalIntersections.isEmpty)
+        default: XCTFail("Expected success")
+        }
+    }
+
+    func testIsBidirectionalIfFilledColumnAndRow() {
+        let oldBoard = Board(pattern: """
+            -|A|-
+            I|-|E
+            -|E|-
+        """)
+        let newBoard = Board(pattern: """
+            -|A|-
+            I|C|E
+            -|E|-
+        """)
+        let result = oldBoard.calculatePlacement(comparingWith: newBoard)
+        switch result {
+        case let .success(placement):
+            XCTAssertEqual(placement.mainPlacement.horizontal.faces, "ICE")
+            XCTAssertEqual(placement.mainPlacement.vertical.faces, "ACE")
             XCTAssertTrue(placement.horizontalIntersections.isEmpty)
             XCTAssertTrue(placement.verticalIntersections.isEmpty)
         default: XCTFail("Expected success")
@@ -220,9 +284,9 @@ class PlacementTests: XCTestCase {
             -|C|-
         """)
         let newBoard = Board(pattern: """
-            -|-|-
+            -|A|-
             D|B|E
-            -|-|-
+            -|C|-
         """)
         let result = oldBoard.calculatePlacement(comparingWith: newBoard)
         switch result {
@@ -244,7 +308,7 @@ class PlacementTests: XCTestCase {
         """)
         let newBoard = Board(pattern: """
             -|D|-
-            -|B|-
+            A|B|C
             -|E|-
         """)
         let result = oldBoard.calculatePlacement(comparingWith: newBoard)
@@ -266,9 +330,9 @@ class PlacementTests: XCTestCase {
             C|F|I
         """)
         let newBoard = Board(pattern: """
-            -|-|-
+            A|D|G
             B|E|H
-            -|-|-
+            C|F|I
         """)
         let result = oldBoard.calculatePlacement(comparingWith: newBoard)
         switch result {
@@ -289,9 +353,9 @@ class PlacementTests: XCTestCase {
             G|H|-
         """)
         let newBoard = Board(pattern: """
-            -|-|C
-            -|-|F
-            -|-|I
+            A|B|C
+            D|E|F
+            G|H|I
         """)
         let result = oldBoard.calculatePlacement(comparingWith: newBoard)
         switch result {
@@ -312,9 +376,9 @@ class PlacementTests: XCTestCase {
             G|-|-
         """)
         let newBoard = Board(pattern: """
-            -|-|C
-            -|-|F
-            -|-|I
+            A|B|C
+            D|E|F
+            G|-|I
         """)
         let result = oldBoard.calculatePlacement(comparingWith: newBoard)
         switch result {
@@ -335,8 +399,8 @@ class PlacementTests: XCTestCase {
             -|-|-
         """)
         let newBoard = Board(pattern: """
-            -|-|-
-            -|-|-
+            A|D|G
+            B|E|-
             C|F|I
         """)
         let result = oldBoard.calculatePlacement(comparingWith: newBoard)

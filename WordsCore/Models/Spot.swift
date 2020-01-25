@@ -109,19 +109,74 @@ extension Sequence where Element == Spot {
         }).sorted()
     }
 
-    func placement(newSpots: [Spot]) -> Placement {
-        let newlyFilled = self.newlyFilled(newSpots).sorted()
-        let sequentialColumn: [Spot]
-        let sequentialRow: [Spot]
-
-        if newlyFilled.count == 1 {
-            let unionFilled = self.unionFilled(newSpots)
-            sequentialColumn = (newlyFilled.row.map { row in unionFilled.filter { $0.row == row } }?.sorted() ?? []).horizontal
-            sequentialRow = (newlyFilled.column.map { column in unionFilled.filter { $0.column == column } }?.sorted() ?? []).vertical
-        } else {
-            sequentialColumn = newlyFilled.horizontal
-            sequentialRow = newlyFilled.vertical
+    func sequentialColumn(around: [Spot]) -> [Spot] {
+        guard let row = around.row, let min = around.min(), let max = around.max() else {
+            return []
         }
+        let inRow = filled.filter { $0.row == row }
+        var items: [Spot] = around
+        if let minColumn = inRow.columns.min() {
+            var index = min.column - 1
+            repeat {
+                if let first = inRow.first(where: { $0.column == index }) {
+                    items.append(first)
+                } else {
+                    break
+                }
+                index -= 1
+            } while index > minColumn
+        }
+        items.append(contentsOf: inRow.filter { $0.column > min.column && $0.column < max.column })
+        if let maxColumn = inRow.columns.max() {
+            var index = max.column + 1
+            repeat {
+                if let first = inRow.first(where: { $0.column == index }) {
+                    items.append(first)
+                } else {
+                    break
+                }
+                index += 1
+            } while index < maxColumn
+        }
+        return items.horizontal.sorted()
+    }
+
+    func sequentialRow(around: [Spot]) -> [Spot] {
+        guard let column = around.column, let min = around.min(), let max = around.max() else {
+            return []
+        }
+        let inColumn = filled.filter { $0.column == column }
+        var items: [Spot] = around
+        if let minRow = inColumn.rows.min() {
+            var index = min.row - 1
+            repeat {
+                if let first = inColumn.first(where: { $0.row == index }) {
+                    items.append(first)
+                } else {
+                    break
+                }
+                index -= 1
+            } while index > minRow
+        }
+        items.append(contentsOf: inColumn.filter { $0.row > min.row && $0.row < max.row })
+        if let maxRow = inColumn.rows.max() {
+            var index = max.row + 1
+            repeat {
+                if let first = inColumn.first(where: { $0.row == index }) {
+                    items.append(first)
+                } else {
+                    break
+                }
+                index += 1
+            } while index < maxRow
+        }
+        return items.vertical.sorted()
+    }
+
+    func placement(newSpots: [Spot]) -> Placement {
+        let newlyFilled = self.newlyFilled(newSpots)
+        let sequentialColumn = self.sequentialColumn(around: newlyFilled)
+        let sequentialRow = self.sequentialRow(around: newlyFilled)
 
         switch (sequentialColumn.count, sequentialRow.count) {
         case (1..., 1): return Placement(horizontal: sequentialColumn, vertical: [])
