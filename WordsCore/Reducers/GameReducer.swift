@@ -118,8 +118,8 @@ public struct GameReducer: Reducer {
         case let invalid as ValidationAction.Invalid:
             state.turn.board.spots = state.turn.board.spots
                 .update(spots: state.board.spots.status(.fixed), status: .fixed)
-                .update(spots: state.turn.board.spots.filled, status: .invalid)
                 .update(spots: state.board.spots.status([.fixed, .valid]), status: [.fixed, .valid])
+                .update(spots: state.turn.board.spots.doesNotContainStatus(.fixed), status: .invalid)
             state.turn.words = []
             state.turn.placementError = invalid.error
             state.turn.score = 0
@@ -141,10 +141,9 @@ public struct GameReducer: Reducer {
             player.score += state.turn.score
             state.tileBag.replenish(player: &player)
             state.currentPlayer = player
-            let valid = state.turn.board.spots.status(.valid)
             state.turn.board.spots = state.turn.board.spots
                 .update(spots: state.board.spots.status([.fixed, .valid]), status: .fixed)
-                .update(spots: valid, status: [.fixed, .valid])
+                .update(spots: state.turn.board.spots.status(.valid), status: [.fixed, .valid])
             state.board = state.turn.board
             state.board.lock()
             state.nextPlayer()

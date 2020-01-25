@@ -36,7 +36,7 @@ public struct Spot: Equatable, Hashable, Comparable, Codable, Identifiable {
     public let multiplier: Int
     public let wordMultiplier: Int
     public internal(set) var tile: Tile?
-    public internal(set) var status: Status = .fixed
+    public internal(set) var status: Status = []
 
     public var interactive: Bool {
         return tile?.movable ?? true
@@ -274,12 +274,8 @@ extension Sequence where Element: Hashable {
 }
 
 extension Sequence where Element == [Spot] {
-    func containsStatus(_ status: Spot.Status) -> [Spot] {
-        reduce(into: []) { $0 += $1.containsStatus(status) }
-    }
-
-    func notStatus(_ status: Spot.Status) -> [Spot] {
-        reduce(into: []) { $0 += $1.notStatus(status) }
+    func doesNotContainStatus(_ status: Spot.Status) -> [Spot] {
+        reduce(into: []) { $0 += $1.doesNotContainStatus(status) }
     }
 
     func status(_ status: Spot.Status) -> [Spot] {
@@ -290,28 +286,12 @@ extension Sequence where Element == [Spot] {
         reduce(into: []) { $0 += $1.filled }
     }
 
-    func isIn(spots: [Spot]) -> [[Spot]] {
-        map { $0.isIn(spots: spots) }
-    }
-
-    func notIn(spots: [Spot]) -> [[Spot]] {
-        map { $0.notIn(spots: spots) }
-    }
-
-    func replace(spots: [Spot]) -> [[Spot]] {
-        map { $0.replace(spots: spots) }
-    }
-
     func update(spots: [Spot], status: Spot.Status) -> [[Spot]] {
         map { $0.update(spots: spots, status: status) }
     }
 
-    func updateIf(_ oldStatus: Spot.Status, to newStatus: Spot.Status) -> [[Spot]] {
-        map { $0.updateIf(oldStatus, to: newStatus) }
-    }
-
-    func updateIfNot(_ oldStatus: Spot.Status, to newStatus: Spot.Status) -> [[Spot]] {
-        map { $0.updateIfNot(oldStatus, to: newStatus) }
+    func newlyFilled(_ newSpots: [Spot]) -> [[Spot]] {
+        map { $0.newlyFilled(newSpots) }
     }
 }
 
@@ -326,12 +306,8 @@ extension Sequence where Element == Int {
 }
 
 extension Sequence where Element == Spot {
-    func containsStatus(_ status: Spot.Status) -> [Spot] {
-        filter { $0.status.contains(status) }
-    }
-
-    func notStatus(_ status: Spot.Status) -> [Spot] {
-        filter { $0.status != status }
+    func doesNotContainStatus(_ status: Spot.Status) -> [Spot] {
+        filter { !$0.status.contains(status) }
     }
 
     func status(_ status: Spot.Status) -> [Spot] {
@@ -344,35 +320,6 @@ extension Sequence where Element == Spot {
 
     var vertical: [Spot] {
         return rows.areSequential && column != nil ? Array(self) : []
-    }
-
-    func isIn(spots: [Spot]) -> [Spot] {
-        compactMap { spot in
-            spots.contains { spot.sameAs($0) } ? spot : nil
-        }
-    }
-
-    func notIn(spots: [Spot]) -> [Spot] {
-        compactMap { spot in
-            spots.contains { !spot.sameAs($0) } ? spot : nil
-        }
-    }
-
-    func updateIf(_ oldStatus: Spot.Status, to newStatus: Spot.Status) -> [Spot] {
-        update(spots: status(oldStatus), status: newStatus)
-    }
-
-    func updateIfNot(_ oldStatus: Spot.Status, to newStatus: Spot.Status) -> [Spot] {
-        update(spots: notStatus(oldStatus), status: newStatus)
-    }
-
-    func replace(spots: [Spot]) -> [Spot] {
-        self.map { column in
-            if let spot = spots.first(where: { $0.sameAs(column) }) {
-                return spot
-            }
-            return column
-        }
     }
 
     func update(spots: [Spot], status: Spot.Status) -> [Spot] {
