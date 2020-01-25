@@ -36,8 +36,8 @@ struct GameView: ConnectedView {
                 ScoreboardView()
                 Spacer()
                 BoardView()
-                Spacer()
                 RackView()
+                Spacer()
             }
             GameMenuView()
         }
