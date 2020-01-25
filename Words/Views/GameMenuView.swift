@@ -17,8 +17,10 @@ struct GameMenuView: ConnectedView {
     @EnvironmentObject var device: Device
 
     struct Props {
+        let isGameOver: Bool
         let canReturnAll: Bool
         let canSubmit: Bool
+        let newGame: () -> Void
         let exchange: () -> Void
         let returnAll: () -> Void
         let shuffle: () -> Void
@@ -28,8 +30,10 @@ struct GameMenuView: ConnectedView {
 
     func map(state: GameState, send: @escaping (GameAction) -> Void) -> Props {
         Props(
+            isGameOver: state.isGameOver,
             canReturnAll: state.canReturnAll,
             canSubmit: state.canSubmit,
+            newGame: { send(TurnAction.NewGame(players: ["Player 1", "Player 2"])) },
             exchange: { send(RackAction.Exchange.Begin()) },
             returnAll: { send(RackAction.ReturnAll()) },
             shuffle: { send(RackAction.Shuffle()) },
@@ -38,7 +42,18 @@ struct GameMenuView: ConnectedView {
         )
     }
 
-    func body(props: Props) -> some View {
+    func gameOver(props: Props) -> some View {
+        Stack(verticalIfPortrait: false, spacing: 20) {
+            Button(action: props.newGame) {
+                VStack {
+                    Image(systemName: "plus.circle.fill")
+                    Text("New Game").font(device.menuFont)
+                }
+            }
+        }.padding()
+    }
+
+    func gameInProgress(props: Props) -> some View {
         Stack(verticalIfPortrait: false, spacing: 20) {
             Button(action: props.submit) {
                 VStack {
@@ -71,8 +86,15 @@ struct GameMenuView: ConnectedView {
                     Text("Return All").font(device.menuFont)
                 }
             }.disabled(!props.canReturnAll)
-
         }.padding()
+    }
+
+    func body(props: Props) -> some View {
+        if props.isGameOver {
+            return AnyView(gameOver(props: props))
+        } else {
+            return AnyView(gameInProgress(props: props))
+        }
     }
 }
 

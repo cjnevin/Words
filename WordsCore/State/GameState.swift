@@ -81,6 +81,7 @@ public struct GameState: Codable {
     }
 
     var board: Board = Board()
+    public internal(set) var isGameOver: Bool = false
     public internal(set) var players: [Player] = []
     var playerIndex: Int = 0
     public internal(set) var tileBag: TileBag = TileBag()
@@ -91,7 +92,7 @@ public struct GameState: Codable {
     }
 
     public var canSubmit: Bool {
-        turn.canSubmit
+        turn.canSubmit && !isGameOver
     }
 
     mutating func restoreRack() {
@@ -101,8 +102,13 @@ public struct GameState: Codable {
     }
 
     mutating func nextPlayer() {
-        playerIndex = (playerIndex + 1) % players.count
-        turn = .init(board: board)
+        if currentPlayer?.tiles.isEmpty == true {
+            isGameOver = true
+            turn = .init(board: board)
+        } else {
+            playerIndex = (playerIndex + 1) % players.count
+            turn = .init(board: board)
+        }
     }
 }
 
