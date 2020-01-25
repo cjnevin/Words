@@ -13,7 +13,7 @@ import XCTest
 class SequenceTests: XCTestCase {
     func expect(_ n: [Int], matches: [Int], intersectingAt: Int, line: UInt = #line) {
         let intersection = n.intersection(with: intersectingAt, mapping: { $0 })?.sorted()
-        XCTAssertEqual(intersection ?? [], matches)
+        XCTAssertEqual(intersection ?? [], matches, line: line)
     }
 
     func testIntersectionBreaksOnMissingAdjacentNumbers() {

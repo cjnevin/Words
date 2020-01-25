@@ -109,6 +109,110 @@ class PlacementTests: XCTestCase {
         }
     }
 
+    func testIsHorizontalIfFilledRowIntersectsWordFromRight() {
+        let oldBoard = Board(pattern: """
+            -|-|A|-|-
+            -|-|C|-|-
+            -|-|E|-|-
+            -|-|-|-|-
+            -|-|-|-|-
+        """)
+        let newBoard = Board(pattern: """
+            -|-|A|-|-
+            -|-|C|-|-
+            -|-|E|A|R
+            -|-|-|-|-
+            -|-|-|-|-
+        """)
+        let result = oldBoard.calculatePlacement(comparingWith: newBoard)
+        switch result {
+        case let .success(placement):
+            XCTAssertEqual(placement.mainPlacement.spots.alignment, .horizontal)
+            XCTAssertTrue(placement.horizontalIntersections.isEmpty)
+            XCTAssertTrue(placement.verticalIntersections.isEmpty)
+            XCTAssertEqual(placement.mainFaces, "EAR")
+        default: XCTFail("Expected success")
+        }
+    }
+
+    func testIsHorizontalIfFilledRowIntersectsWordFromLeft() {
+        let oldBoard = Board(pattern: """
+            -|-|A|-|-
+            -|-|C|-|-
+            -|-|E|-|-
+            -|-|-|-|-
+            -|-|-|-|-
+        """)
+        let newBoard = Board(pattern: """
+            -|-|A|-|-
+            -|-|C|-|-
+            I|C|E|-|-
+            -|-|-|-|-
+            -|-|-|-|-
+        """)
+        let result = oldBoard.calculatePlacement(comparingWith: newBoard)
+        switch result {
+        case let .success(placement):
+            XCTAssertEqual(placement.mainPlacement.spots.alignment, .horizontal)
+            XCTAssertTrue(placement.horizontalIntersections.isEmpty)
+            XCTAssertTrue(placement.verticalIntersections.isEmpty)
+            XCTAssertEqual(placement.mainFaces, "ICE")
+        default: XCTFail("Expected success")
+        }
+    }
+
+    func testIsVerticalIfFilledColumnIntersectsWordFromBottom() {
+        let oldBoard = Board(pattern: """
+            -|-|-|-|-
+            -|-|-|-|-
+            A|C|E|-|-
+            -|-|-|-|-
+            -|-|-|-|-
+        """)
+        let newBoard = Board(pattern: """
+            -|-|-|-|-
+            -|-|-|-|-
+            A|C|E|-|-
+            -|-|A|-|-
+            -|-|R|-|-
+        """)
+        let result = oldBoard.calculatePlacement(comparingWith: newBoard)
+        switch result {
+        case let .success(placement):
+            XCTAssertEqual(placement.mainPlacement.spots.alignment, .vertical)
+            XCTAssertTrue(placement.horizontalIntersections.isEmpty)
+            XCTAssertTrue(placement.verticalIntersections.isEmpty)
+            XCTAssertEqual(placement.mainFaces, "EAR")
+        default: XCTFail("Expected success")
+        }
+    }
+
+    func testIsVerticalIfFilledColumnIntersectsWordFromTop() {
+        let oldBoard = Board(pattern: """
+            -|-|-|-|-
+            -|-|-|-|-
+            A|C|E|-|-
+            -|-|-|-|-
+            -|-|-|-|-
+        """)
+        let newBoard = Board(pattern: """
+            -|-|I|-|-
+            -|-|C|-|-
+            A|C|E|-|-
+            -|-|-|-|-
+            -|-|-|-|-
+        """)
+        let result = oldBoard.calculatePlacement(comparingWith: newBoard)
+        switch result {
+        case let .success(placement):
+            XCTAssertEqual(placement.mainPlacement.spots.alignment, .vertical)
+            XCTAssertTrue(placement.horizontalIntersections.isEmpty)
+            XCTAssertTrue(placement.verticalIntersections.isEmpty)
+            XCTAssertEqual(placement.mainFaces, "ICE")
+        default: XCTFail("Expected success")
+        }
+    }
+
     func testAdjacentColumnIfNewlyFilledRow() {
         let oldBoard = Board(pattern: """
             -|A|-
@@ -257,9 +361,9 @@ class PlacementTests: XCTestCase {
             let result = oldBoard.calculatePlacement(comparingWith: newBoard)
             switch result {
             case let .success(placement):
-                XCTAssertEqual(placement.mainPlacement.horizontal.faces, horizontal, file: file, line: line)
+                XCTAssertEqual(placement.mainPlacement.horizontal.faces.sorted(), horizontal.sorted(), file: file, line: line)
                 XCTAssertTrue(placement.mainPlacement.vertical.faces.isEmpty, file: file, line: line)
-                XCTAssertEqual(placement.verticalFaces, verticalFaces, file: file, line: line)
+                XCTAssertEqual(placement.verticalFaces.sorted(), verticalFaces.sorted(), file: file, line: line)
                 XCTAssertTrue(placement.horizontalFaces.isEmpty, placement.horizontalFaces.joined(separator: ", "), file: file, line: line)
             default:
                 XCTFail("Expected success", file: file, line: line)
@@ -344,7 +448,7 @@ class PlacementTests: XCTestCase {
             verticalFaces: ["AR", "RE"],
             for: Board(pattern: """
                 -|-|-|-|-|-|-
-                -|-|-|S|T|I|R
+                -|-|-|S|T|A|R
                 -|-|-|A|-|-|-
                 -|-|-|U|-|-|-
                 -|-|-|T|-|-|-
@@ -372,9 +476,9 @@ class PlacementTests: XCTestCase {
             let result = oldBoard.calculatePlacement(comparingWith: newBoard)
             switch result {
             case let .success(placement):
-                XCTAssertEqual(placement.mainPlacement.vertical.faces, vertical, file: file, line: line)
+                XCTAssertEqual(placement.mainPlacement.vertical.faces.sorted(), vertical.sorted(), file: file, line: line)
                 XCTAssertTrue(placement.mainPlacement.horizontal.faces.isEmpty, file: file, line: line)
-                XCTAssertEqual(placement.horizontalFaces, horizontalFaces, file: file, line: line)
+                XCTAssertEqual(placement.horizontalFaces.sorted(), horizontalFaces.sorted(), file: file, line: line)
                 XCTAssertTrue(placement.verticalFaces.isEmpty, placement.verticalFaces.joined(separator: ", "), file: file, line: line)
             default:
                 XCTFail("Expected success", file: file, line: line)
@@ -463,7 +567,7 @@ class PlacementTests: XCTestCase {
                 -|-|-|-|-|-|-
                 -|S|A|U|T|E|-
                 -|T|-|-|-|-|-
-                -|I|-|-|-|-|-
+                -|A|-|-|-|-|-
                 -|R|-|-|-|-|-
             """),
             newBoard: Board(pattern: """

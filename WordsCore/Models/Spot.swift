@@ -36,6 +36,10 @@ public struct Spot: Equatable, Hashable, Comparable, Codable, Identifiable {
         return multiplier * (tile?.value ?? 1)
     }
 
+    func sameAs(_ spot: Spot) -> Bool {
+        row == spot.row && column == spot.column
+    }
+
     public init(
         row: Int,
         column: Int,
@@ -81,42 +85,43 @@ extension Sequence where Element == Spot {
         column != nil
     }
 
-    private func newlyFilled(_ newSpots: [Spot]) -> [Spot] {
-        newSpots.filter { newSpot in
-            guard let oldSpot = self.first(where: { $0.row == newSpot.row && $0.column == newSpot.column }) else {
-                return true
-            }
-            return oldSpot.tile == nil && newSpot.tile != nil
+    private func zip(with spots: [Spot]) -> [(oldSpot: Spot?, newSpot: Spot?)] {
+        map { oldSpot in
+            (oldSpot, spots.first { newSpot in
+                oldSpot.sameAs(newSpot)
+            })
+        } + spots.map { newSpot in
+            (self.first { oldSpot in
+                oldSpot.sameAs(newSpot)
+            }, newSpot)
         }
+    }
+
+    private func newlyFilled(_ newSpots: [Spot]) -> [Spot] {
+        Set(zip(with: newSpots).compactMap {
+            $0?.tile == nil && $1?.tile != nil ? $1 : nil
+        }).sorted()
     }
 
     private func unionFilled(_ newSpots: [Spot]) -> [Spot] {
-        let unionLeft = filter { oldSpot in
-            guard let newSpot = self.first(where: { $0.row == oldSpot.row && $0.column == oldSpot.column }) else {
-                return true
-            }
-            return (oldSpot.tile ?? newSpot.tile) != nil
-        }
-
-        let unionRight = newSpots.filter { newSpot in
-            guard let oldSpot = self.first(where: { $0.row == newSpot.row && $0.column == newSpot.column }) else {
-                return true
-            }
-            return (oldSpot.tile ?? newSpot.tile) != nil
-        }
-
-        return Set(unionLeft + unionRight).sorted()
+        Set(zip(with: newSpots).compactMap {
+            ($0?.tile != nil) ? $0 : ($1?.tile != nil) ? $1 : nil
+        }).sorted()
     }
 
     func placement(newSpots: [Spot]) -> Placement {
-        let newlyFilled = self.newlyFilled(newSpots)
-        let unionFilled = self.unionFilled(newSpots)
+        let newlyFilled = self.newlyFilled(newSpots).sorted()
+        let sequentialColumn: [Spot]
+        let sequentialRow: [Spot]
 
-        let matchingRow = newlyFilled.row.map { row in unionFilled.filter { $0.row == row } }?.sorted() ?? []
-        let matchingColumn = newlyFilled.column.map { column in unionFilled.filter { $0.column == column } }?.sorted() ?? []
-
-        let sequentialColumn = matchingRow.horizontal
-        let sequentialRow = matchingColumn.vertical
+        if newlyFilled.count == 1 {
+            let unionFilled = self.unionFilled(newSpots)
+            sequentialColumn = (newlyFilled.row.map { row in unionFilled.filter { $0.row == row } }?.sorted() ?? []).horizontal
+            sequentialRow = (newlyFilled.column.map { column in unionFilled.filter { $0.column == column } }?.sorted() ?? []).vertical
+        } else {
+            sequentialColumn = newlyFilled.horizontal
+            sequentialRow = newlyFilled.vertical
+        }
 
         switch (sequentialColumn.count, sequentialRow.count) {
         case (1..., 1): return Placement(horizontal: sequentialColumn, vertical: [])
