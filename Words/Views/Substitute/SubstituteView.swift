@@ -10,6 +10,14 @@ import Redux
 import SwiftUI
 import WordsCore
 
+extension Array {
+    func chunked(into size: Int) -> [[Element]] {
+        return stride(from: 0, to: count, by: size).map {
+            Array(self[$0..<Swift.min($0 + size, count)])
+        }
+    }
+}
+
 struct SubstituteView: ConnectedView {
     typealias R = GameReducer
 
@@ -25,10 +33,10 @@ struct SubstituteView: ConnectedView {
     @EnvironmentObject var device: Device
 
     func map(state: GameState, send: @escaping (GameAction) -> Void) -> Props {
-        Props(elements: state.substituteTiles.enumerated().map { index, tile in
-            Props.Element(id: index, tile: tile)
-        }.split(whereSeparator: { $0.id % device.columns == 0 }).map(Array.init), selection: { send(RackAction.Substitute(tile: $0))
-        })
+        Props(
+            elements: state.substituteTiles.enumerated().map(Props.Element.init).chunked(into: device.columns),
+            selection: { send(RackAction.Substitute(tile: $0)) }
+        )
     }
 
     func innerBody(props: Props) -> some View {

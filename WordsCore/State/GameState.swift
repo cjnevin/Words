@@ -37,7 +37,7 @@ public struct GameState: Codable {
     }
 
     public var substituteTiles: [Tile] {
-        isSubstituting ? TileBag.defaultDistribution.elements.map { Tile(face: $0.face, value: 0) } : []
+        isSubstituting ? TileBag.defaultDistribution.elements.map { Tile(face: $0.face, value: 0) }.filter { $0.face != "?" } : []
     }
 
     var isTakeOverShown: Bool {
