@@ -36,29 +36,36 @@ public struct GameState: Codable {
         }
     }
 
+    public var substituteTiles: [Tile] {
+        isSubstituting ? TileBag.defaultDistribution.elements.map { Tile(face: $0.face, value: 0) } : []
+    }
+
+    var isTakeOverShown: Bool {
+        isSubstituting || isExchanging
+    }
+
+    public var isSubstituting: Bool {
+        turn.heldTile?.face == "?"
+    }
+
     public var isExchanging: Bool {
         turn.isExchanging
     }
 
     public var rackTiles: [Tile] {
-        let playerTiles = currentPlayer?.tiles ?? []
-        if isExchanging {
-            return playerTiles.filter { !turn.exchangingTiles.contains($0) }
-        } else {
-            return playerTiles
-        }
+        let playerTiles = (currentPlayer?.tiles ?? [])
+            .compactMap { $0 == heldTile ? heldTile : $0 }
+        return isExchanging
+            ? playerTiles.filter { !turn.exchangingTiles.contains($0) }
+            : playerTiles
     }
 
     public var selectedTiles: [Tile] {
-        if isExchanging {
-            return turn.exchangingTiles
-        } else {
-            return turn.heldTile.map { [$0] } ?? []
-        }
+        isExchanging ? turn.exchangingTiles : turn.heldTile.map { [$0] } ?? []
     }
 
     public var words: [String] {
-        turn.words
+        isTakeOverShown ? [] : turn.words
     }
 
     public var tentativeScore: Int {
@@ -66,7 +73,7 @@ public struct GameState: Codable {
     }
 
     public var spots: [[Spot]] {
-        turn.board.spots
+        isTakeOverShown ? [] : turn.board.spots
     }
 
     var heldTile: Tile? {

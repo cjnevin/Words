@@ -9,8 +9,11 @@
 import Foundation
 
 public struct Tile: Equatable, Hashable, Codable, Identifiable {
+    public static func == (lhs: Tile, rhs: Tile) -> Bool {
+        return lhs.id == rhs.id
+    }
     public let id: String
-    public let face: String
+    public internal(set) var face: String
     public let value: Int
     public internal(set) var movable: Bool
 }

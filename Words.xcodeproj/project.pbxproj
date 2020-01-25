@@ -31,6 +31,7 @@
 		83AAB2382377568600901526 /* ExchangeRackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AAB2372377568600901526 /* ExchangeRackView.swift */; };
 		83AAB23A23775C5A00901526 /* GameMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AAB23923775C5A00901526 /* GameMenuView.swift */; };
 		83AAB2432377613400901526 /* AnagramDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AAB2422377613400901526 /* AnagramDictionary.swift */; };
+		83E3599E23DC8FBD0036C63E /* SubstituteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E3599D23DC8FBD0036C63E /* SubstituteView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -113,6 +114,7 @@
 		83AAB23923775C5A00901526 /* GameMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameMenuView.swift; sourceTree = "<group>"; };
 		83AAB2422377613400901526 /* AnagramDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnagramDictionary.swift; sourceTree = "<group>"; };
 		83AAB24623776CE400901526 /* Words.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Words.entitlements; sourceTree = "<group>"; };
+		83E3599D23DC8FBD0036C63E /* SubstituteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubstituteView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -203,6 +205,7 @@
 				83AAB23D2377600300901526 /* Exchange */,
 				83AAB23F2377601B00901526 /* Rack */,
 				83AAB2402377602600901526 /* Scoreboard */,
+				83E3599B23DC8F7E0036C63E /* Substitute */,
 				83747489237313A3005A4B06 /* GameView.swift */,
 				83AAB23923775C5A00901526 /* GameMenuView.swift */,
 				837475072373749E005A4B06 /* Stack.swift */,
@@ -262,6 +265,14 @@
 				83AAB2422377613400901526 /* AnagramDictionary.swift */,
 			);
 			path = Dependencies;
+			sourceTree = "<group>";
+		};
+		83E3599B23DC8F7E0036C63E /* Substitute */ = {
+			isa = PBXGroup;
+			children = (
+				83E3599D23DC8FBD0036C63E /* SubstituteView.swift */,
+			);
+			path = Substitute;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -379,6 +390,7 @@
 				837475082373749E005A4B06 /* Stack.swift in Sources */,
 				83747486237313A3005A4B06 /* AppDelegate.swift in Sources */,
 				837474E52373226D005A4B06 /* RowView.swift in Sources */,
+				83E3599E23DC8FBD0036C63E /* SubstituteView.swift in Sources */,
 				837474FC23735FB0005A4B06 /* Device.swift in Sources */,
 				837474F623734BE0005A4B06 /* PlayerView.swift in Sources */,
 				83AAB23A23775C5A00901526 /* GameMenuView.swift in Sources */,

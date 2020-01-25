@@ -32,6 +32,14 @@ public enum RackAction {
         }
     }
 
+    public struct Substitute: GameAction {
+        let tile: Tile
+        
+        public init(tile: Tile) {
+            self.tile = tile
+        }
+    }
+
     public struct Return: GameAction {
         let spot: Spot
 

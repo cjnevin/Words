@@ -19,6 +19,9 @@ public struct GameReducer: Reducer {
             guard var player = state.currentPlayer else {
                 preconditionFailure("No current player.")
             }
+            if placeTile.spot.tile?.face == "?" {
+                preconditionFailure("Must select a letter.")
+            }
             guard let heldTile = state.turn.heldTile else {
                 return .none
             }
@@ -33,6 +36,10 @@ public struct GameReducer: Reducer {
             state.turn.heldTile = nil
             state.turn.placementError = nil
             return .validate(state: state)
+
+        case let substitute as RackAction.Substitute:
+            state.turn.heldTile?.face = substitute.tile.face
+            return .none
 
         case is RackAction.Drop:
             precondition(state.turn.heldTile != nil)
@@ -51,13 +58,16 @@ public struct GameReducer: Reducer {
             guard var player = state.currentPlayer else {
                 preconditionFailure("No current player.")
             }
-            guard let tile = returnTile.spot.tile else {
+            guard var tile = returnTile.spot.tile else {
                 preconditionFailure("Return tile should not be null.")
             }
             guard tile.movable else {
                 return .none
             }
             var spot = returnTile.spot
+            if tile.value == 0 {
+                tile.face = "?"
+            }
             spot.tile = nil
             state.turn.board.spots[returnTile.spot.row][returnTile.spot.column] = spot
             state.turn.placementError = nil

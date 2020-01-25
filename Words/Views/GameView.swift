@@ -15,19 +15,22 @@ struct GameView: ConnectedView {
 
     struct Props {
         let isExchanging: Bool
+        let isSubstituting: Bool
     }
 
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @EnvironmentObject var device: Device
 
     func map(state: GameState, send: @escaping (GameAction) -> Void) -> Props {
-        return Props(isExchanging: state.isExchanging)
+        return Props(isExchanging: state.isExchanging, isSubstituting: state.isSubstituting)
     }
 
     @ViewBuilder
     func content(props: Props) -> some View {
         if props.isExchanging {
             ExchangeView()
+        } else if props.isSubstituting {
+            SubstituteView()
         } else {
             Stack {
                 ScoreboardView()
