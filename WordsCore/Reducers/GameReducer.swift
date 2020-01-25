@@ -127,9 +127,9 @@ public struct GameReducer: Reducer {
 
         case let invalid as ValidationAction.Invalid:
             state.turn.board.spots = state.turn.board.spots
+                .update(spots: state.turn.board.spots.doesNotContainStatus(.fixed), status: .invalid)
                 .update(spots: state.board.spots.status(.fixed), status: .fixed)
                 .update(spots: state.board.spots.status([.fixed, .valid]), status: [.fixed, .valid])
-                .update(spots: state.turn.board.spots.doesNotContainStatus(.fixed), status: .invalid)
             state.turn.words = []
             state.turn.placementError = invalid.error
             state.turn.score = 0

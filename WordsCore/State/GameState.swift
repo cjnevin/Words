@@ -95,8 +95,9 @@ public struct GameState: Codable {
     }
 
     mutating func restoreRack() {
-        let tiles = board.rightDiff(against: turn.board).compactMap { $0.tile }
-        currentPlayer?.tiles.append(contentsOf: tiles)
+        let unfixedSpots = turn.board.spots.doesNotContainStatus(.fixed)
+        let tiles = board.spots.newlyFilled(unfixedSpots).flatMap { $0.compactMap { $0.tile?.movable == true ? $0.tile : nil } }
+        currentPlayer?.tiles.append(contentsOf: tiles.unique)
     }
 
     mutating func nextPlayer() {

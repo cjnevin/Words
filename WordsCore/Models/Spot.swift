@@ -325,7 +325,9 @@ extension Sequence where Element == Spot {
     func update(spots: [Spot], status: Spot.Status) -> [Spot] {
         self.map { column in
             var copy = column
-            if spots.contains(where: { $0.sameAs(column) }) {
+            if column.tile == nil {
+                copy.status = []
+            } else if spots.contains(where: { $0.sameAs(column) }) {
                 copy.status = status
             }
             return copy
