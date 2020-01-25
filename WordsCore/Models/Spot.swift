@@ -124,7 +124,7 @@ extension Sequence where Element == Spot {
                     break
                 }
                 index -= 1
-            } while index > minColumn
+            } while index >= minColumn
         }
         items.append(contentsOf: inRow.filter { $0.column > min.column && $0.column < max.column })
         if let maxColumn = inRow.columns.max() {
@@ -136,7 +136,7 @@ extension Sequence where Element == Spot {
                     break
                 }
                 index += 1
-            } while index < maxColumn
+            } while index <= maxColumn
         }
         return items.horizontal.sorted()
     }
@@ -156,7 +156,7 @@ extension Sequence where Element == Spot {
                     break
                 }
                 index -= 1
-            } while index > minRow
+            } while index >= minRow
         }
         items.append(contentsOf: inColumn.filter { $0.row > min.row && $0.row < max.row })
         if let maxRow = inColumn.rows.max() {
@@ -168,7 +168,7 @@ extension Sequence where Element == Spot {
                     break
                 }
                 index += 1
-            } while index < maxRow
+            } while index <= maxRow
         }
         return items.vertical.sorted()
     }
