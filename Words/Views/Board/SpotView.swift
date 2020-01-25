@@ -86,7 +86,11 @@ private extension Spot {
     }
 
     var foregroundColor: Color {
-        return Color(name + "Foreground")
+        if name == "tile", status.contains(.fixed), status.contains(.valid) {
+            return Color("recentTileForeground")
+        } else {
+            return Color(name + "Foreground")
+        }
     }
 
     var lineColor: Color {

@@ -107,19 +107,28 @@ public struct GameReducer: Reducer {
             state.turn.exchangingTiles = []
 
         case let incorrect as ValidationAction.Incorrect:
-            state.update(candidates: incorrect.candidates, status: .invalid)
+            state.turn.board.spots = state.turn.board.spots
+                .update(spots: state.board.spots.status(.fixed), status: .fixed)
+                .update(spots: state.board.spots.status([.fixed, .valid]), status: [.fixed, .valid])
+                .update(spots: incorrect.candidates.spots, status: .invalid)
             state.turn.words = []
             state.turn.placementError = nil
             state.turn.score = 0
 
         case let invalid as ValidationAction.Invalid:
-            state.update(candidates: [], status: .default)
+            state.turn.board.spots = state.turn.board.spots
+                .update(spots: state.board.spots.status(.fixed), status: .fixed)
+                .update(spots: state.turn.board.spots.filled, status: .invalid)
+                .update(spots: state.board.spots.status([.fixed, .valid]), status: [.fixed, .valid])
             state.turn.words = []
             state.turn.placementError = invalid.error
             state.turn.score = 0
 
         case let valid as ValidationAction.Valid:
-            state.update(candidates: valid.candidates, status: .valid)
+            state.turn.board.spots = state.turn.board.spots
+                .update(spots: state.board.spots.status(.fixed), status: .fixed)
+                .update(spots: state.board.spots.status([.fixed, .valid]), status: [.fixed, .valid])
+                .update(spots: valid.candidates.spots, status: .valid)
             state.turn.words = valid.candidates.words
             state.turn.score = valid.score
             state.turn.placementError = nil
@@ -132,7 +141,10 @@ public struct GameReducer: Reducer {
             player.score += state.turn.score
             state.tileBag.replenish(player: &player)
             state.currentPlayer = player
-            state.update(candidates: [], status: .default)
+            let valid = state.turn.board.spots.status(.valid)
+            state.turn.board.spots = state.turn.board.spots
+                .update(spots: state.board.spots.status([.fixed, .valid]), status: .fixed)
+                .update(spots: valid, status: [.fixed, .valid])
             state.board = state.turn.board
             state.board.lock()
             state.nextPlayer()
@@ -160,21 +172,5 @@ public struct GameReducer: Reducer {
             break
         }
         return .none
-    }
-}
-
-extension GameState {
-    mutating func update(candidates: [Candidate], status: Spot.Status) {
-        turn.board.spots = turn.board.spots.map { row in
-            row.map { column in
-                var copy = column
-                if candidates.spots.contains(where: { $0.sameAs(column) }) {
-                    copy.status = status
-                } else {
-                    copy.status = .default
-                }
-                return copy
-            }
-        }
     }
 }
