@@ -48,7 +48,7 @@ struct RackView: ConnectedView {
         case .mac:
             return AnyView(
                 VStack {
-                    content(props: props)
+                    content(props: props).animation(.easeInOut(duration: 0.2))
                 }.frame(idealWidth: dimension, maxWidth: dimension)
             )
         default:
@@ -56,7 +56,7 @@ struct RackView: ConnectedView {
                 Stack(verticalIfPortrait: false,
                       idealDimension: dimension,
                       maximumDimension: dimension) {
-                        content(props: props)
+                        content(props: props).animation(.easeInOut(duration: 0.2))
                 }
             )
         }

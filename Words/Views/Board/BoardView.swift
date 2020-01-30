@@ -34,7 +34,7 @@ struct BoardView: ConnectedView {
             ForEach(props.rows) { row in
                 RowView(onSpotSelection: props.select, spots: row)
             }
-        }.aspectRatio(1, contentMode: .fit)
+        }.aspectRatio(1, contentMode: .fit).animation(.easeInOut(duration: 0.2))
     }
 }
 

@@ -80,6 +80,7 @@ struct ExchangeView: ConnectedView {
         Color("background")
             .edgesIgnoringSafeArea(.all)
             .overlay(innerBody(props: props))
+            .animation(.easeInOut(duration: 0.2))
     }
 }
 
