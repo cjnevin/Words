@@ -86,6 +86,7 @@ public struct GameReducer: Reducer {
 
         case is RackAction.Exchange.Begin:
             state.turn.isExchanging = true
+            return reduce(state: &state, action: RackAction.ReturnAll())
 
         case let toggle as RackAction.Exchange.Toggle:
             precondition(state.turn.isExchanging, "You must be exchanging to call this action.")
