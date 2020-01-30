@@ -27,10 +27,15 @@ struct RackView: ConnectedView {
             selectedTiles: state.selectedTiles,
             unselectedTiles: state.rackTiles,
             toggle: { tile in
-                send(state.selectedTiles.contains(tile)
-                    ? RackAction.Drop()
-                    : RackAction.PickUp(tile: tile))
-        })
+                if state.selectedTiles.contains(tile) {
+                    send(RackAction.Drop())
+                } else if let first = state.selectedTiles.first {
+                    send(RackAction.SwapPosition(from: first, to: tile))
+                } else {
+                    send(RackAction.PickUp(tile: tile))
+                }
+            }
+        )
     }
 
     @ViewBuilder

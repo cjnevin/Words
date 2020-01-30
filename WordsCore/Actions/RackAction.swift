@@ -21,6 +21,16 @@ public enum RackAction {
         public init() { }
     }
 
+    public struct SwapPosition: GameAction {
+        let first: Tile
+        let second: Tile
+
+        public init(from: Tile, to: Tile) {
+            self.first = from
+            self.second = to
+        }
+    }
+
     public struct PickUp: GameAction {
         let tile: Tile
 

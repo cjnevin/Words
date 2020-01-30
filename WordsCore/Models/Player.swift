@@ -34,6 +34,14 @@ extension Player {
         }
     }
 
+    mutating func swapPosition(from: Tile, to: Tile) {
+        guard let a = tiles.firstIndex(of: from), let b = tiles.firstIndex(of: to) else {
+            return
+        }
+        tiles[a] = to
+        tiles[b] = from
+    }
+
     mutating func swap(tiles toRemove: [Tile], replenish: @escaping () -> Tile?) {
         remove(tiles: toRemove)
         tiles += (0..<toRemove.count).compactMap { _ in replenish() }

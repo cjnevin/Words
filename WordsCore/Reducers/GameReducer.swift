@@ -81,6 +81,10 @@ public struct GameReducer: Reducer {
             state.turn.placementError = nil
             return .validate(state: state)
 
+        case let swap as RackAction.SwapPosition:
+            state.currentPlayer?.swapPosition(from: swap.first, to: swap.second)
+            state.turn.heldTile = nil
+
         case is RackAction.Shuffle:
             state.currentPlayer?.shuffle()
 
